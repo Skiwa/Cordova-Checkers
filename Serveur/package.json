@@ -1,0 +1,33 @@
+{
+  "name": "cordova-checkers-server",
+  "version": "1.0.0",
+  "description": "Serveur Node.js et Express pour l'application Cordova de jeu de dames",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Skiwa/Cordova-Checkers.git"
+  },
+  "author": "Julien Haegman",
+  "contributors":[
+    {
+      "name": "Nicolas Gau"
+    },
+    {
+      "name": "Bettina Grimard"
+    },
+    {
+      "name": "Martin Nicollet"
+    },
+    {
+      "name": "Julien Haegman"
+    }
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Skiwa/Cordova-Checkers/issues"
+  },
+  "homepage": "https://github.com/Skiwa/Cordova-Checkers#readme"
+}
