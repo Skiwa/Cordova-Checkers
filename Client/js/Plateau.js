@@ -1,4 +1,4 @@
-var Plateau = (function () {
+var Plateau = /** @class */ (function () {
     function Plateau(taille) {
         console.log("Nouveau plateau: " + taille + "*" + taille);
         this.taille = taille;

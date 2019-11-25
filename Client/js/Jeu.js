@@ -1,4 +1,4 @@
-var Jeu = (function () {
+var Jeu = /** @class */ (function () {
     function Jeu() {
         this.taillePlateau = 10;
         //Initialisation du plateau
@@ -24,9 +24,10 @@ var Jeu = (function () {
         if (position) {
             //Récupère le pion actuel si il existe
             var pion = this.getPionFromPosition(position);
-            //-Si il y a un pion à cet endroit
+            //TODO: -Si il y a un pion à cet endroit
             if (pion !== 0) {
             }
+            //TODO: -Si il n'y a pas de pion à cet endroit
             else {
             }
             console.log(pion.toString());
@@ -41,6 +42,7 @@ var Jeu = (function () {
         if (e.target.tagName === 'circle') {
             var caseCible = e.target.parentElement.parentElement;
         }
+        //-Si la cible est une case
         else {
             var caseCible = e.target;
         }
