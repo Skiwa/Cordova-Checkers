@@ -1,0 +1,42 @@
+/* Global */
+.main{
+    height: 100vh;
+}
+
+
+
+/* Plateau */
+.plateau{
+    border:red solid 1px;
+}
+.plateau .plateau--case{
+    height:50px;
+    width:50px;
+}
+.plateau .plateau--case.plateau--case__possible{
+}
+.plateau .plateau--case.plateau--case__blanche{
+    background-color: rgb(240, 211, 182);
+}
+.plateau .plateau--case.plateau--case__noire{
+    background-color: #7F4810;
+}
+
+
+
+/* Pions */
+.pion{
+    cursor:pointer;
+    transition: all 1s;
+}
+.pion.pion__select{
+    stroke-width: 10;
+    stroke:red;
+}
+.pion.pion__blanc{
+    fill:white;
+}
+
+.pion.pion__noir{
+    fill:black;
+}

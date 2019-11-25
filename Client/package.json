@@ -11,7 +11,7 @@
     "url": "git+https://github.com/Skiwa/Cordova-Checkers.git"
   },
   "author": "Julien Haegman",
-  "contributors":[
+  "contributors": [
     {
       "name": "Nicolas Gau"
     },
@@ -29,5 +29,9 @@
   "bugs": {
     "url": "https://github.com/Skiwa/Cordova-Checkers/issues"
   },
-  "homepage": "https://github.com/Skiwa/Cordova-Checkers#readme"
+  "homepage": "https://github.com/Skiwa/Cordova-Checkers#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "typescript": "^2.1.6"
+  }
 }
