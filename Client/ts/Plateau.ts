@@ -4,7 +4,6 @@ class Plateau{
     taille:number;
 
     constructor(taille:number){
-        console.log("Nouveau plateau: "+taille+"*"+taille);
         this.taille = taille;
         this.initialisePlateau();
     }
@@ -72,10 +71,46 @@ class Plateau{
     }
 
     /**
+     * Déplace un pion
+     * @param pion 
+     * @param position 
+     */
+    deplacePionAtPosition(pion:Pion,nouvellePosition:{x:number,y:number}){
+        let anciennePosition = this.getPositionFromPion(pion);
+
+        this.plateau[anciennePosition.x][anciennePosition.y] = 0;
+        this.plateau[nouvellePosition.x][nouvellePosition.y] = pion;
+    }
+
+    /**
      * Retourne le pion situé à une position x et y
      * @param position 
      */
     getPionFromPosition(position:{x:number,y:number}){
         return this.plateau[position.x][position.y];
+    }
+
+    /**
+     * Retourne la position x et y d'un pion
+     * @param position 
+     */
+    getPositionFromPion(pion:Pion):{x:number,y:number}{
+        for (let i = 0; i < this.plateau.length; i++) {
+            for(let j = 0; j < this.plateau.length; j++){
+                if(this.plateau[i][j]===pion){
+                    return {x:i,y:j}
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Transforme un pion en reine
+     * @param pion 
+     */
+    pionDevientReine(pion:Pion){
+        let position = this.getPositionFromPion(pion);
+        this.plateau[position.x][position.y].devientReine();
     }
 }

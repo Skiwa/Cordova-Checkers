@@ -1,4 +1,4 @@
-var Pion = /** @class */ (function () {
+var Pion = (function () {
     /**
      * Crée un pion en fonction de son charactère
      * @param char b|B|n|N
@@ -24,9 +24,9 @@ var Pion = /** @class */ (function () {
         return (this.reine ? char.toUpperCase() : char);
     };
     /**
-     * Transforme le pion en dame
+     * Transforme le pion en reine
      */
-    Pion.prototype.devientDame = function () {
+    Pion.prototype.devientReine = function () {
         this.reine = true;
     };
     Pion.prototype.toString = function () {

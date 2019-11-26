@@ -1,6 +1,5 @@
-var Plateau = /** @class */ (function () {
+var Plateau = (function () {
     function Plateau(taille) {
-        console.log("Nouveau plateau: " + taille + "*" + taille);
         this.taille = taille;
         this.initialisePlateau();
     }
@@ -61,11 +60,43 @@ var Plateau = /** @class */ (function () {
         return res;
     };
     /**
+     * Déplace un pion
+     * @param pion
+     * @param position
+     */
+    Plateau.prototype.deplacePionAtPosition = function (pion, nouvellePosition) {
+        var anciennePosition = this.getPositionFromPion(pion);
+        this.plateau[anciennePosition.x][anciennePosition.y] = 0;
+        this.plateau[nouvellePosition.x][nouvellePosition.y] = pion;
+    };
+    /**
      * Retourne le pion situé à une position x et y
      * @param position
      */
     Plateau.prototype.getPionFromPosition = function (position) {
         return this.plateau[position.x][position.y];
+    };
+    /**
+     * Retourne la position x et y d'un pion
+     * @param position
+     */
+    Plateau.prototype.getPositionFromPion = function (pion) {
+        for (var i = 0; i < this.plateau.length; i++) {
+            for (var j = 0; j < this.plateau.length; j++) {
+                if (this.plateau[i][j] === pion) {
+                    return { x: i, y: j };
+                }
+            }
+        }
+        return null;
+    };
+    /**
+     * Transforme un pion en reine
+     * @param pion
+     */
+    Plateau.prototype.pionDevientReine = function (pion) {
+        var position = this.getPositionFromPion(pion);
+        this.plateau[position.x][position.y].devientReine();
     };
     return Plateau;
 }());

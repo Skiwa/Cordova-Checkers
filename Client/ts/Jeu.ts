@@ -2,6 +2,8 @@ class Jeu{
 
     plateau: Plateau;
     taillePlateau:number = 10;
+    tour:number = 1;
+    pionSelectionne:Pion;
 
     constructor(){
         //Initialisation du plateau
@@ -32,19 +34,32 @@ class Jeu{
 
         if(position){
 
-            //Récupère le pion actuel si il existe
+            //Récupère le pion cliqué si il existe
             let pion = this.getPionFromPosition(position);
-            
-            //TODO: -Si il y a un pion à cet endroit
+
+            //-Si il y a un pion à cet endroit
             if(pion!==0){
 
-            }
-            //TODO: -Si il n'y a pas de pion à cet endroit
-            else{
+                //- Si aucun pion n'est déjà selectionné ou si un pion de la couleur du joueur est déjà selectionné
+                //- Et si le pion cible est de la couleur du joueur
+                if((!this.pionSelectionne || (this.pionSelectionne && ((this.pionSelectionne.couleur === 'blanc' && (this.tour%2 === 0)) ||this.pionSelectionne.couleur === 'noir' && (this.tour%2 === 1))))&&((pion.couleur==='blanc' && (this.tour%2 === 0)) ||(pion.couleur==='noir' && (this.tour%2 === 1)))){
+                    this.selectPion(pion);
+                }
 
             }
-            
-            console.log(pion.toString());
+            //-Si il n'y a pas de pion à cet endroit
+            else{
+                //-Si un pion est selectionné et si la case est noire
+                if(this.pionSelectionne && e.target.classList.contains('plateau--case__noire')){
+                    
+                    //Déplace le pion
+                    this.deplacePionAtPosition(this.pionSelectionne,position);
+
+                    //Tour suivant
+                    this.tourSuivant();
+
+                }
+            }
         }
     }
 
@@ -83,5 +98,83 @@ class Jeu{
         return this.plateau.getPionFromPosition(position);
     }
 
-    
+    /**
+     * Selectionne un pion
+     * @param pion
+     */
+    selectPion(pion:Pion){        
+        //Enlève le style du dernier pion si il existe
+        if(this.pionSelectionne){
+            let positionAncienPion = this.plateau.getPositionFromPion(this.pionSelectionne);
+            document.querySelector('.plateau tr:nth-child('+(positionAncienPion.y+1)+') td:nth-child('+(positionAncienPion.x+1)+') svg').classList.remove('pion__select');
+        }
+
+        //Sauvegarde le pion selectionné
+        this.pionSelectionne=pion;
+
+        let positionPion = this.plateau.getPositionFromPion(pion);
+
+        //Met à jour le style du pion
+        document.querySelector('.plateau tr:nth-child('+(positionPion.y+1)+') td:nth-child('+(positionPion.x+1)+') svg').classList.add('pion__select');
+    }
+
+    /**
+     * Deselectionne un pion
+     * @param pion
+     */
+    deselectPion(pion:Pion){        
+        //Enlève le style du pion
+        let positionPion = this.plateau.getPositionFromPion(pion);
+        document.querySelector('.plateau tr:nth-child('+(positionPion.y+1)+') td:nth-child('+(positionPion.x+1)+') svg').classList.remove('pion__select');
+        this.pionSelectionne = null;
+    }
+
+    /**
+     * Déplace un pion
+     * @param pion 
+     * @param position 
+     */
+    deplacePionAtPosition(pion:Pion,position:{x:number,y:number}){
+        let anciennePosition = this.plateau.getPositionFromPion(pion);
+        
+        //Déselectionne le pion actuel
+        this.deselectPion(pion);
+
+        //Clone le pion de son ancienne à sa nouvelle position
+        let pionElement = document.querySelector('.plateau tr:nth-child('+(anciennePosition.y+1)+') td:nth-child('+(anciennePosition.x+1)+') svg');
+        document.querySelector('.plateau tr:nth-child('+(position.y+1)+') td:nth-child('+(position.x+1)+')').appendChild(pionElement);
+        
+        //Déplace le pion dans le jeu
+        this.plateau.deplacePionAtPosition(pion,position);
+
+        //Teste si le pion devient une reine
+        if((position.y === 0 && this.tour%2===1) || (position.y === this.taillePlateau-1 && this.tour%2===0)){
+            this.pionDevientReine(pion);
+        }
+
+        //log
+        console.log(this.plateau.toString());
+    }
+
+
+    /**
+     * Pion devient reine
+     * @param pion 
+     */
+    pionDevientReine(pion:Pion){
+        let position = this.plateau.getPositionFromPion(pion);
+
+        //Mise à jour graphique
+        document.querySelector('.plateau tr:nth-child('+(position.y+1)+') td:nth-child('+(position.x+1)+') svg').classList.add('pion__reine');
+        
+        //Mise à jour du jeu
+        this.plateau.pionDevientReine(pion);
+    }
+
+    /**
+     * Changement de tour
+     */
+    tourSuivant(){
+        this.tour++;
+    }
 }

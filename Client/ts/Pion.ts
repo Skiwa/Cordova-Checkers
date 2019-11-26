@@ -28,12 +28,11 @@ class Pion{
     }
     
     /**
-     * Transforme le pion en dame
+     * Transforme le pion en reine
      */
-    devientDame(){
+    devientReine(){
         this.reine = true;
     }
-
     
     toString():string{
         return ('Pion '+this.couleur + (this.reine ? ' reine':''));
