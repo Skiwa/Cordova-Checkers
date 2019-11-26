@@ -43,14 +43,19 @@ class Jeu{
                 //- Si aucun pion n'est déjà selectionné ou si un pion de la couleur du joueur est déjà selectionné
                 //- Et si le pion cible est de la couleur du joueur
                 if((!this.pionSelectionne || (this.pionSelectionne && ((this.pionSelectionne.couleur === 'blanc' && (this.tour%2 === 0)) ||this.pionSelectionne.couleur === 'noir' && (this.tour%2 === 1))))&&((pion.couleur==='blanc' && (this.tour%2 === 0)) ||(pion.couleur==='noir' && (this.tour%2 === 1)))){
+                    
+                    //Selectionne le pion
                     this.selectPion(pion);
+
+                    //Affiche les déplacements possibles
+                    this.afficheDeplacementsPossiblesFromPion(pion);
                 }
 
             }
             //-Si il n'y a pas de pion à cet endroit
             else{
-                //-Si un pion est selectionné et si la case est noire
-                if(this.pionSelectionne && e.target.classList.contains('plateau--case__noire')){
+                //-Si un pion est selectionné et si la case est possible
+                if(this.pionSelectionne && e.target.classList.contains('plateau--case__possible')){
                     
                     //Déplace le pion
                     this.deplacePionAtPosition(this.pionSelectionne,position);
@@ -105,6 +110,11 @@ class Jeu{
     selectPion(pion:Pion){        
         //Enlève le style du dernier pion si il existe
         if(this.pionSelectionne){
+
+            //Efface les styles des cases où il pouvait aller
+            this.effaceDeplacementsPossibles();
+        
+            //Retire son style de selection
             let positionAncienPion = this.plateau.getPositionFromPion(this.pionSelectionne);
             document.querySelector('.plateau tr:nth-child('+(positionAncienPion.y+1)+') td:nth-child('+(positionAncienPion.x+1)+') svg').classList.remove('pion__select');
         }
@@ -127,6 +137,9 @@ class Jeu{
         let positionPion = this.plateau.getPositionFromPion(pion);
         document.querySelector('.plateau tr:nth-child('+(positionPion.y+1)+') td:nth-child('+(positionPion.x+1)+') svg').classList.remove('pion__select');
         this.pionSelectionne = null;
+
+        //Efface les styles des cases où le pion précedent pouvait aller
+        this.effaceDeplacementsPossibles();
     }
 
     /**
@@ -156,6 +169,31 @@ class Jeu{
         console.log(this.plateau.toString());
     }
 
+
+    /**
+     * Affiche les cases où le pion peut aller
+     * @param pion 
+     */
+    afficheDeplacementsPossiblesFromPion(pion:Pion){
+        //Récupère les déplacements possibles
+        let deplacementsPossibles = this.plateau.getDeplacementsPossiblesFromPion(pion);
+
+        //Ajoute du style aux cases concernées
+        deplacementsPossibles.forEach(deplacementPossible=>{
+            document.querySelector('.plateau tr:nth-child('+(deplacementPossible.y+1)+') td:nth-child('+(deplacementPossible.x+1)+')').classList.add('plateau--case__possible');
+        });
+    }
+
+    /**
+     * Enleve les styles des cases où un déplacement était possible
+     */
+    effaceDeplacementsPossibles(){
+        for(let i=0;i<this.taillePlateau;i++){
+            for(let j=0;j<this.taillePlateau;j++){
+                document.querySelector('.plateau tr:nth-child('+(i+1)+') td:nth-child('+(j+1)+')').classList.remove('plateau--case__possible');
+            }
+        }
+    }
 
     /**
      * Pion devient reine

@@ -98,5 +98,59 @@ var Plateau = (function () {
         var position = this.getPositionFromPion(pion);
         this.plateau[position.x][position.y].devientReine();
     };
+    /**
+     * Retourne les positions possibles pour un pion
+     * @param  {Pion} pion
+     * @returns {x:number,y:number}[]
+     */
+    Plateau.prototype.getDeplacementsPossiblesFromPion = function (pion) {
+        var positionPion = this.getPositionFromPion(pion);
+        var res = [];
+        try {
+            if (pion.couleur === 'noir') {
+                //Check haut gauche
+                if (this.plateau[positionPion.x + 1][positionPion.y - 1] === 0) {
+                    res.push({ x: positionPion.x + 1, y: positionPion.y - 1 });
+                }
+                else {
+                    if (this.plateau[positionPion.x + 2][positionPion.y - 2] === 0) {
+                        res.push({ x: positionPion.x + 2, y: positionPion.y - 2 });
+                    }
+                }
+                //Check haut droite
+                if (this.plateau[positionPion.x - 1][positionPion.y - 1] === 0) {
+                    res.push({ x: positionPion.x - 1, y: positionPion.y - 1 });
+                }
+                else {
+                    if (this.plateau[positionPion.x - 2][positionPion.y - 2] === 0) {
+                        res.push({ x: positionPion.x - 2, y: positionPion.y - 2 });
+                    }
+                }
+            }
+            if (pion.couleur === 'blanc') {
+                //Check bas gauche
+                if (this.plateau[positionPion.x + 1][positionPion.y + 1] === 0) {
+                    res.push({ x: positionPion.x + 1, y: positionPion.y + 1 });
+                }
+                else {
+                    if (this.plateau[positionPion.x + 2][positionPion.y + 2] === 0) {
+                        res.push({ x: positionPion.x + 2, y: positionPion.y + 2 });
+                    }
+                }
+                //Check bas droite
+                if (this.plateau[positionPion.x - 1][positionPion.y + 1] === 0) {
+                    res.push({ x: positionPion.x - 1, y: positionPion.y + 1 });
+                }
+                else {
+                    if (this.plateau[positionPion.x - 2][positionPion.y + 2] === 0) {
+                        res.push({ x: positionPion.x - 2, y: positionPion.y + 2 });
+                    }
+                }
+            }
+        }
+        catch (error) {
+        }
+        return res;
+    };
     return Plateau;
 }());

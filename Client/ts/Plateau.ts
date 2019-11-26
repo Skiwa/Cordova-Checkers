@@ -113,4 +113,65 @@ class Plateau{
         let position = this.getPositionFromPion(pion);
         this.plateau[position.x][position.y].devientReine();
     }
+
+    
+    /**
+     * Retourne les positions possibles pour un pion
+     * @param  {Pion} pion
+     * @returns {x:number,y:number}[]
+     */
+    getDeplacementsPossiblesFromPion(pion:Pion):{x:number,y:number}[]{
+
+        let positionPion = this.getPositionFromPion(pion);
+        let res = [];
+
+        try{
+            if(pion.couleur === 'noir'){
+                //Check haut gauche
+                if(this.plateau[positionPion.x+1][positionPion.y-1]===0){
+                    res.push({x:positionPion.x+1,y:positionPion.y-1})
+                }else{
+                    if(this.plateau[positionPion.x+2][positionPion.y-2]===0){
+                        res.push({x:positionPion.x+2,y:positionPion.y-2});
+                    }
+                }
+    
+                //Check haut droite
+                if(this.plateau[positionPion.x-1][positionPion.y-1]===0){
+                    res.push({x:positionPion.x-1,y:positionPion.y-1})
+                }else{
+                    if(this.plateau[positionPion.x-2][positionPion.y-2]===0){
+                        res.push({x:positionPion.x-2,y:positionPion.y-2});
+                    }
+                }
+            }
+    
+            if(pion.couleur === 'blanc'){
+                //Check bas gauche
+                if(this.plateau[positionPion.x+1][positionPion.y+1]===0){
+                    res.push({x:positionPion.x+1,y:positionPion.y+1})
+                }else{
+                    if(this.plateau[positionPion.x+2][positionPion.y+2]===0){
+                        res.push({x:positionPion.x+2,y:positionPion.y+2});
+                    }
+                }
+    
+                //Check bas droite
+                if(this.plateau[positionPion.x-1][positionPion.y+1]===0){
+                    res.push({x:positionPion.x-1,y:positionPion.y+1})
+                }else{
+                    if(this.plateau[positionPion.x-2][positionPion.y+2]===0){
+                        res.push({x:positionPion.x-2,y:positionPion.y+2});
+                    }
+                }
+            }
+
+            //TODO:manger en arrière
+            //TODO:déplacement reines
+
+        }catch(error){
+            //On a dépasse les index des tableaux en faisant les tests (évite de planter)
+        }
+        return res;
+    }
 }
