@@ -32,7 +32,7 @@
     transition: all .2s;
 }
 .pion.pion__select{
-    filter: drop-shadow(  0px 0px 5px rgba(247,8,32,1));
+    filter: drop-shadow(  0px 0px 5px rgb(235, 251, 0));
 }
 .pion.pion__blanc{
     fill:white;
@@ -43,4 +43,7 @@
 .pion.pion__reine{
     stroke-width: 10;
     stroke:green;
+}
+.pion.pion__mangeable{
+    filter: drop-shadow(  0px 0px 5px rgba(247,8,32,1));
 }

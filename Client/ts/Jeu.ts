@@ -178,19 +178,34 @@ class Jeu{
         //Récupère les déplacements possibles
         let deplacementsPossibles = this.plateau.getDeplacementsPossiblesFromPion(pion);
 
-        //Ajoute du style aux cases concernées
+        //Ajoute du style aux éléments concernées
         deplacementsPossibles.forEach(deplacementPossible=>{
+            //Style des cases où un déplacement est possible
             document.querySelector('.plateau tr:nth-child('+(deplacementPossible.y+1)+') td:nth-child('+(deplacementPossible.x+1)+')').classList.add('plateau--case__possible');
+            
+            //Style des pions ennemis pouvant être mangés
+            if(deplacementPossible.mange){
+                let positionPionMangeable = this.plateau.getPositionFromPion(deplacementPossible.mange);
+                document.querySelector('.plateau tr:nth-child('+(positionPionMangeable.y+1)+') td:nth-child('+(positionPionMangeable.x+1)+') svg').classList.add('pion__mangeable');
+            }
         });
     }
 
     /**
-     * Enleve les styles des cases où un déplacement était possible
+     * Enleve les styles des cases où un déplacement était possible et des pions qui pouvaient être mangés
      */
     effaceDeplacementsPossibles(){
+        let caseElement,pionElement;
         for(let i=0;i<this.taillePlateau;i++){
             for(let j=0;j<this.taillePlateau;j++){
-                document.querySelector('.plateau tr:nth-child('+(i+1)+') td:nth-child('+(j+1)+')').classList.remove('plateau--case__possible');
+                //Cases avec déplacement possible
+                if(caseElement = document.querySelector('.plateau tr:nth-child('+(i+1)+') td:nth-child('+(j+1)+')')){
+                    caseElement.classList.remove('plateau--case__possible');
+                }
+                //Pions mangeables
+                if(pionElement = document.querySelector('.plateau tr:nth-child('+(i+1)+') td:nth-child('+(j+1)+') svg')){
+                    pionElement.classList.remove('pion__mangeable');
+                }
             }
         }
     }

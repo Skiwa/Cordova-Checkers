@@ -118,9 +118,9 @@ class Plateau{
     /**
      * Retourne les positions possibles pour un pion
      * @param  {Pion} pion
-     * @returns {x:number,y:number}[]
+     * @returns {x:number,y:number,mange:Pion}[]
      */
-    getDeplacementsPossiblesFromPion(pion:Pion):{x:number,y:number}[]{
+    getDeplacementsPossiblesFromPion(pion:Pion):{x:number,y:number, mange?:Pion}[]{
 
         let positionPion = this.getPositionFromPion(pion);
         let res = [];
@@ -131,8 +131,8 @@ class Plateau{
                 if(this.plateau[positionPion.x+1][positionPion.y-1]===0){
                     res.push({x:positionPion.x+1,y:positionPion.y-1})
                 }else{
-                    if(this.plateau[positionPion.x+2][positionPion.y-2]===0){
-                        res.push({x:positionPion.x+2,y:positionPion.y-2});
+                    if(this.plateau[positionPion.x+2][positionPion.y-2]===0 && this.plateau[positionPion.x+1][positionPion.y-1].couleur==='blanc'){
+                        res.push({x:positionPion.x+2,y:positionPion.y-2, mange:this.getPionFromPosition({x:positionPion.x+1,y:positionPion.y-1})});
                     }
                 }
     
@@ -140,8 +140,8 @@ class Plateau{
                 if(this.plateau[positionPion.x-1][positionPion.y-1]===0){
                     res.push({x:positionPion.x-1,y:positionPion.y-1})
                 }else{
-                    if(this.plateau[positionPion.x-2][positionPion.y-2]===0){
-                        res.push({x:positionPion.x-2,y:positionPion.y-2});
+                    if(this.plateau[positionPion.x-2][positionPion.y-2]===0 && this.plateau[positionPion.x-1][positionPion.y-1].couleur==='blanc'){
+                        res.push({x:positionPion.x-2,y:positionPion.y-2,mange:this.getPionFromPosition({x:positionPion.x-1,y:positionPion.y-1})});
                     }
                 }
             }
@@ -151,8 +151,8 @@ class Plateau{
                 if(this.plateau[positionPion.x+1][positionPion.y+1]===0){
                     res.push({x:positionPion.x+1,y:positionPion.y+1})
                 }else{
-                    if(this.plateau[positionPion.x+2][positionPion.y+2]===0){
-                        res.push({x:positionPion.x+2,y:positionPion.y+2});
+                    if(this.plateau[positionPion.x+2][positionPion.y+2]===0  && this.plateau[positionPion.x+1][positionPion.y+1].couleur==='noir'){
+                        res.push({x:positionPion.x+2,y:positionPion.y+2,mange:this.getPionFromPosition({x:positionPion.x+1,y:positionPion.y+1})});
                     }
                 }
     
@@ -160,12 +160,13 @@ class Plateau{
                 if(this.plateau[positionPion.x-1][positionPion.y+1]===0){
                     res.push({x:positionPion.x-1,y:positionPion.y+1})
                 }else{
-                    if(this.plateau[positionPion.x-2][positionPion.y+2]===0){
-                        res.push({x:positionPion.x-2,y:positionPion.y+2});
+                    if(this.plateau[positionPion.x-2][positionPion.y+2]===0 && this.plateau[positionPion.x-1][positionPion.y+1].couleur==='noir'){
+                        res.push({x:positionPion.x-2,y:positionPion.y+2,mange:this.getPionFromPosition({x:positionPion.x-1,y:positionPion.y+1})});
                     }
                 }
             }
 
+            //TODO:manger
             //TODO:manger en arrière
             //TODO:déplacement reines
 

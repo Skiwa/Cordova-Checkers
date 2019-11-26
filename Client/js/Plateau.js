@@ -1,4 +1,4 @@
-var Plateau = (function () {
+var Plateau = /** @class */ (function () {
     function Plateau(taille) {
         this.taille = taille;
         this.initialisePlateau();
@@ -101,7 +101,7 @@ var Plateau = (function () {
     /**
      * Retourne les positions possibles pour un pion
      * @param  {Pion} pion
-     * @returns {x:number,y:number}[]
+     * @returns {x:number,y:number,mange:Pion}[]
      */
     Plateau.prototype.getDeplacementsPossiblesFromPion = function (pion) {
         var positionPion = this.getPositionFromPion(pion);
@@ -113,8 +113,8 @@ var Plateau = (function () {
                     res.push({ x: positionPion.x + 1, y: positionPion.y - 1 });
                 }
                 else {
-                    if (this.plateau[positionPion.x + 2][positionPion.y - 2] === 0) {
-                        res.push({ x: positionPion.x + 2, y: positionPion.y - 2 });
+                    if (this.plateau[positionPion.x + 2][positionPion.y - 2] === 0 && this.plateau[positionPion.x + 1][positionPion.y - 1].couleur === 'blanc') {
+                        res.push({ x: positionPion.x + 2, y: positionPion.y - 2, mange: this.getPionFromPosition({ x: positionPion.x + 1, y: positionPion.y - 1 }) });
                     }
                 }
                 //Check haut droite
@@ -122,8 +122,8 @@ var Plateau = (function () {
                     res.push({ x: positionPion.x - 1, y: positionPion.y - 1 });
                 }
                 else {
-                    if (this.plateau[positionPion.x - 2][positionPion.y - 2] === 0) {
-                        res.push({ x: positionPion.x - 2, y: positionPion.y - 2 });
+                    if (this.plateau[positionPion.x - 2][positionPion.y - 2] === 0 && this.plateau[positionPion.x - 1][positionPion.y - 1].couleur === 'blanc') {
+                        res.push({ x: positionPion.x - 2, y: positionPion.y - 2, mange: this.getPionFromPosition({ x: positionPion.x - 1, y: positionPion.y - 1 }) });
                     }
                 }
             }
@@ -133,8 +133,8 @@ var Plateau = (function () {
                     res.push({ x: positionPion.x + 1, y: positionPion.y + 1 });
                 }
                 else {
-                    if (this.plateau[positionPion.x + 2][positionPion.y + 2] === 0) {
-                        res.push({ x: positionPion.x + 2, y: positionPion.y + 2 });
+                    if (this.plateau[positionPion.x + 2][positionPion.y + 2] === 0 && this.plateau[positionPion.x + 1][positionPion.y + 1].couleur === 'noir') {
+                        res.push({ x: positionPion.x + 2, y: positionPion.y + 2, mange: this.getPionFromPosition({ x: positionPion.x + 1, y: positionPion.y + 1 }) });
                     }
                 }
                 //Check bas droite
@@ -142,13 +142,17 @@ var Plateau = (function () {
                     res.push({ x: positionPion.x - 1, y: positionPion.y + 1 });
                 }
                 else {
-                    if (this.plateau[positionPion.x - 2][positionPion.y + 2] === 0) {
-                        res.push({ x: positionPion.x - 2, y: positionPion.y + 2 });
+                    if (this.plateau[positionPion.x - 2][positionPion.y + 2] === 0 && this.plateau[positionPion.x - 1][positionPion.y + 1].couleur === 'noir') {
+                        res.push({ x: positionPion.x - 2, y: positionPion.y + 2, mange: this.getPionFromPosition({ x: positionPion.x - 1, y: positionPion.y + 1 }) });
                     }
                 }
             }
+            //TODO:manger
+            //TODO:manger en arrière
+            //TODO:déplacement reines
         }
         catch (error) {
+            //On a dépasse les index des tableaux en faisant les tests (évite de planter)
         }
         return res;
     };

@@ -1,4 +1,4 @@
-var Jeu = (function () {
+var Jeu = /** @class */ (function () {
     function Jeu() {
         this.taillePlateau = 10;
         this.tour = 1;
@@ -36,6 +36,7 @@ var Jeu = (function () {
                     this.afficheDeplacementsPossiblesFromPion(pion);
                 }
             }
+            //-Si il n'y a pas de pion à cet endroit
             else {
                 //-Si un pion est selectionné et si la case est possible
                 if (this.pionSelectionne && e.target.classList.contains('plateau--case__possible')) {
@@ -56,6 +57,7 @@ var Jeu = (function () {
         if (e.target.tagName === 'circle') {
             var caseCible = e.target.parentElement.parentElement;
         }
+        //-Si la cible est une case
         else {
             var caseCible = e.target;
         }
@@ -135,20 +137,35 @@ var Jeu = (function () {
      * @param pion
      */
     Jeu.prototype.afficheDeplacementsPossiblesFromPion = function (pion) {
+        var _this = this;
         //Récupère les déplacements possibles
         var deplacementsPossibles = this.plateau.getDeplacementsPossiblesFromPion(pion);
-        //Ajoute du style aux cases concernées
+        //Ajoute du style aux éléments concernées
         deplacementsPossibles.forEach(function (deplacementPossible) {
+            //Style des cases où un déplacement est possible
             document.querySelector('.plateau tr:nth-child(' + (deplacementPossible.y + 1) + ') td:nth-child(' + (deplacementPossible.x + 1) + ')').classList.add('plateau--case__possible');
+            //Style des pions ennemis pouvant être mangés
+            if (deplacementPossible.mange) {
+                var positionPionMangeable = _this.plateau.getPositionFromPion(deplacementPossible.mange);
+                document.querySelector('.plateau tr:nth-child(' + (positionPionMangeable.y + 1) + ') td:nth-child(' + (positionPionMangeable.x + 1) + ') svg').classList.add('pion__mangeable');
+            }
         });
     };
     /**
-     * Enleve les styles des cases où un déplacement était possible
+     * Enleve les styles des cases où un déplacement était possible et des pions qui pouvaient être mangés
      */
     Jeu.prototype.effaceDeplacementsPossibles = function () {
+        var caseElement, pionElement;
         for (var i = 0; i < this.taillePlateau; i++) {
             for (var j = 0; j < this.taillePlateau; j++) {
-                document.querySelector('.plateau tr:nth-child(' + (i + 1) + ') td:nth-child(' + (j + 1) + ')').classList.remove('plateau--case__possible');
+                //Cases avec déplacement possible
+                if (caseElement = document.querySelector('.plateau tr:nth-child(' + (i + 1) + ') td:nth-child(' + (j + 1) + ')')) {
+                    caseElement.classList.remove('plateau--case__possible');
+                }
+                //Pions mangeables
+                if (pionElement = document.querySelector('.plateau tr:nth-child(' + (i + 1) + ') td:nth-child(' + (j + 1) + ') svg')) {
+                    pionElement.classList.remove('pion__mangeable');
+                }
             }
         }
     };

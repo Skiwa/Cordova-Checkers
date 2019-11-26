@@ -1,4 +1,4 @@
-var Pion = (function () {
+var Pion = /** @class */ (function () {
     /**
      * Crée un pion en fonction de son charactère
      * @param char b|B|n|N
