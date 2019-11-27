@@ -1,9 +1,9 @@
-var Pion = /** @class */ (function () {
+class Pion {
     /**
      * Crée un pion en fonction de son charactère
      * @param char b|B|n|N
      */
-    function Pion(char) {
+    constructor(char) {
         this.reine = false;
         if (char === char.toUpperCase()) {
             this.reine = true;
@@ -19,18 +19,17 @@ var Pion = /** @class */ (function () {
      * Renvoie la couleur du pion comme un char. En majuscule si c'est une reine
      * @returns string b|B|n|N
      */
-    Pion.prototype.getChar = function () {
-        var char = this.couleur === 'blanc' ? 'b' : 'n';
+    getChar() {
+        let char = this.couleur === 'blanc' ? 'b' : 'n';
         return (this.reine ? char.toUpperCase() : char);
-    };
+    }
     /**
      * Transforme le pion en reine
      */
-    Pion.prototype.devientReine = function () {
+    devientReine() {
         this.reine = true;
-    };
-    Pion.prototype.toString = function () {
+    }
+    toString() {
         return ('Pion ' + this.couleur + (this.reine ? ' reine' : ''));
-    };
-    return Pion;
-}());
+    }
+}

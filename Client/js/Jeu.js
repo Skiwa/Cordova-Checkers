@@ -1,7 +1,8 @@
-var Jeu = /** @class */ (function () {
-    function Jeu() {
+class Jeu {
+    constructor() {
         this.taillePlateau = 10;
         this.tour = 1;
+        this.pionsMangeables = [];
         //Initialisation du plateau
         this.plateau = new Plateau(10);
         //Capture les clics utilisateur
@@ -9,22 +10,21 @@ var Jeu = /** @class */ (function () {
         //Affiche le plateau dans la console
         console.log(this.plateau.toString());
     }
-    Jeu.prototype.setClickEventListener = function () {
-        var _this = this;
-        document.querySelector('.plateau').addEventListener('click', function (event) {
-            _this.onClickPlateau(event);
+    setClickEventListener() {
+        document.querySelector('.plateau').addEventListener('click', (event) => {
+            this.onClickPlateau(event);
         });
-    };
+    }
     /**
      * Gère le clic utilisateur sur le terrain
      * @param e Evènement du clic
      */
-    Jeu.prototype.onClickPlateau = function (e) {
+    onClickPlateau(e) {
         //Récupère la position de la case cliquée
-        var position = this.getPositionFromEvent(e);
+        let position = this.getPositionFromEvent(e);
         if (position) {
             //Récupère le pion cliqué si il existe
-            var pion = this.getPionFromPosition(position);
+            let pion = this.getPionFromPosition(position);
             //-Si il y a un pion à cet endroit
             if (pion !== 0) {
                 //- Si aucun pion n'est déjà selectionné ou si un pion de la couleur du joueur est déjà selectionné
@@ -36,10 +36,11 @@ var Jeu = /** @class */ (function () {
                     this.afficheDeplacementsPossiblesFromPion(pion);
                 }
             }
-            //-Si il n'y a pas de pion à cet endroit
             else {
                 //-Si un pion est selectionné et si la case est possible
                 if (this.pionSelectionne && e.target.classList.contains('plateau--case__possible')) {
+                    //Mange un pion
+                    this.mangePion(this.pionSelectionne, position);
                     //Déplace le pion
                     this.deplacePionAtPosition(this.pionSelectionne, position);
                     //Tour suivant
@@ -47,17 +48,16 @@ var Jeu = /** @class */ (function () {
                 }
             }
         }
-    };
+    }
     /**
      * Renvoie la position x et y de la case cliquée
      * @param e Evènement du clic
      */
-    Jeu.prototype.getPositionFromEvent = function (e) {
+    getPositionFromEvent(e) {
         //-Si la cible est une balise <circle>, remonte chercher la case dans les parents
         if (e.target.tagName === 'circle') {
             var caseCible = e.target.parentElement.parentElement;
         }
-        //-Si la cible est une case
         else {
             var caseCible = e.target;
         }
@@ -72,56 +72,60 @@ var Jeu = /** @class */ (function () {
         else {
             return null;
         }
-    };
+    }
     /**
      * Récupère un pion à une position x et y
      * @param position
      */
-    Jeu.prototype.getPionFromPosition = function (position) {
+    getPionFromPosition(position) {
         return this.plateau.getPionFromPosition(position);
-    };
+    }
     /**
      * Selectionne un pion
      * @param pion
      */
-    Jeu.prototype.selectPion = function (pion) {
+    selectPion(pion) {
         //Enlève le style du dernier pion si il existe
         if (this.pionSelectionne) {
             //Efface les styles des cases où il pouvait aller
             this.effaceDeplacementsPossibles();
+            //Efface les pions qu'il pouvait manger
+            this.effacePionsMangeables();
             //Retire son style de selection
-            var positionAncienPion = this.plateau.getPositionFromPion(this.pionSelectionne);
+            let positionAncienPion = this.plateau.getPositionFromPion(this.pionSelectionne);
             document.querySelector('.plateau tr:nth-child(' + (positionAncienPion.y + 1) + ') td:nth-child(' + (positionAncienPion.x + 1) + ') svg').classList.remove('pion__select');
         }
         //Sauvegarde le pion selectionné
         this.pionSelectionne = pion;
-        var positionPion = this.plateau.getPositionFromPion(pion);
+        let positionPion = this.plateau.getPositionFromPion(pion);
         //Met à jour le style du pion
         document.querySelector('.plateau tr:nth-child(' + (positionPion.y + 1) + ') td:nth-child(' + (positionPion.x + 1) + ') svg').classList.add('pion__select');
-    };
+    }
     /**
      * Deselectionne un pion
      * @param pion
      */
-    Jeu.prototype.deselectPion = function (pion) {
+    deselectPion(pion) {
         //Enlève le style du pion
-        var positionPion = this.plateau.getPositionFromPion(pion);
+        let positionPion = this.plateau.getPositionFromPion(pion);
         document.querySelector('.plateau tr:nth-child(' + (positionPion.y + 1) + ') td:nth-child(' + (positionPion.x + 1) + ') svg').classList.remove('pion__select');
         this.pionSelectionne = null;
         //Efface les styles des cases où le pion précedent pouvait aller
         this.effaceDeplacementsPossibles();
-    };
+        //Efface les styles des pions qui pouvaient être mangés
+        this.effacePionsMangeables();
+    }
     /**
      * Déplace un pion
      * @param pion
      * @param position
      */
-    Jeu.prototype.deplacePionAtPosition = function (pion, position) {
-        var anciennePosition = this.plateau.getPositionFromPion(pion);
+    deplacePionAtPosition(pion, position) {
+        let anciennePosition = this.plateau.getPositionFromPion(pion);
         //Déselectionne le pion actuel
         this.deselectPion(pion);
         //Clone le pion de son ancienne à sa nouvelle position
-        var pionElement = document.querySelector('.plateau tr:nth-child(' + (anciennePosition.y + 1) + ') td:nth-child(' + (anciennePosition.x + 1) + ') svg');
+        let pionElement = document.querySelector('.plateau tr:nth-child(' + (anciennePosition.y + 1) + ') td:nth-child(' + (anciennePosition.x + 1) + ') svg');
         document.querySelector('.plateau tr:nth-child(' + (position.y + 1) + ') td:nth-child(' + (position.x + 1) + ')').appendChild(pionElement);
         //Déplace le pion dans le jeu
         this.plateau.deplacePionAtPosition(pion, position);
@@ -131,60 +135,104 @@ var Jeu = /** @class */ (function () {
         }
         //log
         console.log(this.plateau.toString());
-    };
+    }
     /**
      * Affiche les cases où le pion peut aller
      * @param pion
      */
-    Jeu.prototype.afficheDeplacementsPossiblesFromPion = function (pion) {
-        var _this = this;
+    afficheDeplacementsPossiblesFromPion(pion) {
         //Récupère les déplacements possibles
-        var deplacementsPossibles = this.plateau.getDeplacementsPossiblesFromPion(pion);
+        let deplacementsPossibles = this.plateau.getDeplacementsPossiblesFromPion(pion);
         //Ajoute du style aux éléments concernées
-        deplacementsPossibles.forEach(function (deplacementPossible) {
+        deplacementsPossibles.forEach(deplacementPossible => {
             //Style des cases où un déplacement est possible
             document.querySelector('.plateau tr:nth-child(' + (deplacementPossible.y + 1) + ') td:nth-child(' + (deplacementPossible.x + 1) + ')').classList.add('plateau--case__possible');
             //Style des pions ennemis pouvant être mangés
             if (deplacementPossible.mange) {
-                var positionPionMangeable = _this.plateau.getPositionFromPion(deplacementPossible.mange);
+                //Enregistre le pion dans le tableau des pions mangeables
+                this.pionsMangeables.push(deplacementPossible.mange);
+                //Efface le style
+                let positionPionMangeable = this.plateau.getPositionFromPion(deplacementPossible.mange);
                 document.querySelector('.plateau tr:nth-child(' + (positionPionMangeable.y + 1) + ') td:nth-child(' + (positionPionMangeable.x + 1) + ') svg').classList.add('pion__mangeable');
             }
         });
-    };
+    }
     /**
-     * Enleve les styles des cases où un déplacement était possible et des pions qui pouvaient être mangés
+     * Enleve les styles des cases où un déplacement était possible
      */
-    Jeu.prototype.effaceDeplacementsPossibles = function () {
-        var caseElement, pionElement;
-        for (var i = 0; i < this.taillePlateau; i++) {
-            for (var j = 0; j < this.taillePlateau; j++) {
+    effaceDeplacementsPossibles() {
+        let caseElement;
+        for (let i = 0; i < this.taillePlateau; i++) {
+            for (let j = 0; j < this.taillePlateau; j++) {
                 //Cases avec déplacement possible
                 if (caseElement = document.querySelector('.plateau tr:nth-child(' + (i + 1) + ') td:nth-child(' + (j + 1) + ')')) {
                     caseElement.classList.remove('plateau--case__possible');
                 }
-                //Pions mangeables
+            }
+        }
+    }
+    /**
+     * Enleve les styles des pions qui pouvaient être mangés
+     */
+    effacePionsMangeables() {
+        this.pionsMangeables = [];
+        let pionElement;
+        for (let i = 0; i < this.taillePlateau; i++) {
+            for (let j = 0; j < this.taillePlateau; j++) {
                 if (pionElement = document.querySelector('.plateau tr:nth-child(' + (i + 1) + ') td:nth-child(' + (j + 1) + ') svg')) {
                     pionElement.classList.remove('pion__mangeable');
                 }
             }
         }
-    };
+    }
+    /**
+     * Teste si le pion peut manger un autre pion situé entre lui et sa nouvelle position
+     * @param pion
+     * @param position
+     */
+    mangePion(pion, position) {
+        let pionMange; //pionMangé*
+        if (pion.couleur === 'blanc') {
+            if (this.pionsMangeables.includes(this.plateau.getPionFromPosition({ x: position.x + 1, y: position.y - 1 }))) {
+                pionMange = this.plateau.getPionFromPosition({ x: position.x + 1, y: position.y - 1 });
+            }
+            if (this.pionsMangeables.includes(this.plateau.getPionFromPosition({ x: position.x - 1, y: position.y - 1 }))) {
+                pionMange = this.plateau.getPionFromPosition({ x: position.x - 1, y: position.y - 1 });
+            }
+        }
+        else if (pion.couleur === 'noir') {
+            if (this.pionsMangeables.includes(this.plateau.getPionFromPosition({ x: position.x + 1, y: position.y + 1 }))) {
+                pionMange = this.plateau.getPionFromPosition({ x: position.x + 1, y: position.y + 1 });
+            }
+            if (this.pionsMangeables.includes(this.plateau.getPionFromPosition({ x: position.x - 1, y: position.y + 1 }))) {
+                pionMange = this.plateau.getPionFromPosition({ x: position.x - 1, y: position.y + 1 });
+            }
+        }
+        if (pionMange) {
+            let position = this.plateau.getPositionFromPion(pionMange);
+            //Retire le pion graphiquement
+            let pionElement = document.querySelector('.plateau tr:nth-child(' + (position.y + 1) + ') td:nth-child(' + (position.x + 1) + ') svg');
+            pionElement.parentNode.removeChild(pionElement);
+            //Retire le pion dans le jeu
+            this.plateau.retirePion(pionMange);
+        }
+        //TODO: tester avec des reines
+    }
     /**
      * Pion devient reine
      * @param pion
      */
-    Jeu.prototype.pionDevientReine = function (pion) {
-        var position = this.plateau.getPositionFromPion(pion);
+    pionDevientReine(pion) {
+        let position = this.plateau.getPositionFromPion(pion);
         //Mise à jour graphique
         document.querySelector('.plateau tr:nth-child(' + (position.y + 1) + ') td:nth-child(' + (position.x + 1) + ') svg').classList.add('pion__reine');
         //Mise à jour du jeu
         this.plateau.pionDevientReine(pion);
-    };
+    }
     /**
      * Changement de tour
      */
-    Jeu.prototype.tourSuivant = function () {
+    tourSuivant() {
         this.tour++;
-    };
-    return Jeu;
-}());
+    }
+}

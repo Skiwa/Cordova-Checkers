@@ -87,7 +87,11 @@ class Plateau{
      * @param position 
      */
     getPionFromPosition(position:{x:number,y:number}){
-        return this.plateau[position.x][position.y];
+        try{
+            return this.plateau[position.x][position.y];
+        }catch(e){
+            return null;
+        }
     }
 
     /**
@@ -103,6 +107,15 @@ class Plateau{
             }
         }
         return null;
+    }
+
+    /**
+     * Retire un pion
+     * @param pion 
+     */
+    retirePion(pion:Pion){
+        let position = this.getPositionFromPion(pion);
+        this.plateau[position.x][position.y] = 0;
     }
 
     /**

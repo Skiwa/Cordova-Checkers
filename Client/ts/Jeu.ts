@@ -4,6 +4,7 @@ class Jeu{
     taillePlateau:number = 10;
     tour:number = 1;
     pionSelectionne:Pion;
+    pionsMangeables:Pion[] = [];
 
     constructor(){
         //Initialisation du plateau
@@ -57,12 +58,14 @@ class Jeu{
                 //-Si un pion est selectionné et si la case est possible
                 if(this.pionSelectionne && e.target.classList.contains('plateau--case__possible')){
                     
+                    //Mange un pion
+                    this.mangePion(this.pionSelectionne,position);
+
                     //Déplace le pion
                     this.deplacePionAtPosition(this.pionSelectionne,position);
 
                     //Tour suivant
                     this.tourSuivant();
-
                 }
             }
         }
@@ -110,10 +113,12 @@ class Jeu{
     selectPion(pion:Pion){        
         //Enlève le style du dernier pion si il existe
         if(this.pionSelectionne){
-
             //Efface les styles des cases où il pouvait aller
             this.effaceDeplacementsPossibles();
         
+            //Efface les pions qu'il pouvait manger
+            this.effacePionsMangeables();
+
             //Retire son style de selection
             let positionAncienPion = this.plateau.getPositionFromPion(this.pionSelectionne);
             document.querySelector('.plateau tr:nth-child('+(positionAncienPion.y+1)+') td:nth-child('+(positionAncienPion.x+1)+') svg').classList.remove('pion__select');
@@ -140,6 +145,9 @@ class Jeu{
 
         //Efface les styles des cases où le pion précedent pouvait aller
         this.effaceDeplacementsPossibles();
+
+        //Efface les styles des pions qui pouvaient être mangés
+        this.effacePionsMangeables();
     }
 
     /**
@@ -185,6 +193,9 @@ class Jeu{
             
             //Style des pions ennemis pouvant être mangés
             if(deplacementPossible.mange){
+                //Enregistre le pion dans le tableau des pions mangeables
+                this.pionsMangeables.push(deplacementPossible.mange);
+                //Efface le style
                 let positionPionMangeable = this.plateau.getPositionFromPion(deplacementPossible.mange);
                 document.querySelector('.plateau tr:nth-child('+(positionPionMangeable.y+1)+') td:nth-child('+(positionPionMangeable.x+1)+') svg').classList.add('pion__mangeable');
             }
@@ -192,22 +203,72 @@ class Jeu{
     }
 
     /**
-     * Enleve les styles des cases où un déplacement était possible et des pions qui pouvaient être mangés
+     * Enleve les styles des cases où un déplacement était possible
      */
     effaceDeplacementsPossibles(){
-        let caseElement,pionElement;
+        let caseElement;
         for(let i=0;i<this.taillePlateau;i++){
             for(let j=0;j<this.taillePlateau;j++){
                 //Cases avec déplacement possible
                 if(caseElement = document.querySelector('.plateau tr:nth-child('+(i+1)+') td:nth-child('+(j+1)+')')){
                     caseElement.classList.remove('plateau--case__possible');
                 }
-                //Pions mangeables
+            }
+        }
+    }
+
+    /**
+     * Enleve les styles des pions qui pouvaient être mangés
+     */
+    effacePionsMangeables(){
+        this.pionsMangeables=[];
+
+        let pionElement;
+        for(let i=0;i<this.taillePlateau;i++){
+            for(let j=0;j<this.taillePlateau;j++){
                 if(pionElement = document.querySelector('.plateau tr:nth-child('+(i+1)+') td:nth-child('+(j+1)+') svg')){
                     pionElement.classList.remove('pion__mangeable');
                 }
             }
         }
+    }
+
+    /**
+     * Teste si le pion peut manger un autre pion situé entre lui et sa nouvelle position
+     * @param pion 
+     * @param position 
+     */
+    mangePion(pion:Pion,position:{x:number,y:number}){
+        let pionMange:Pion; //pionMangé*
+
+        if(pion.couleur==='blanc'){
+            if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x+1,y:position.y-1}))){
+                pionMange = this.plateau.getPionFromPosition({x:position.x+1,y:position.y-1});
+            }
+            if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x-1,y:position.y-1}))){
+                pionMange = this.plateau.getPionFromPosition({x:position.x-1,y:position.y-1});
+            }
+        }else if(pion.couleur==='noir'){
+            if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x+1,y:position.y+1}))){
+                pionMange = this.plateau.getPionFromPosition({x:position.x+1,y:position.y+1});
+            }
+            if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x-1,y:position.y+1}))){
+                pionMange = this.plateau.getPionFromPosition({x:position.x-1,y:position.y+1});
+            }
+        }
+
+        if(pionMange){
+            let position = this.plateau.getPositionFromPion(pionMange);
+
+            //Retire le pion graphiquement
+            let pionElement = document.querySelector('.plateau tr:nth-child('+(position.y+1)+') td:nth-child('+(position.x+1)+') svg');
+            pionElement.parentNode.removeChild(pionElement);
+            
+            //Retire le pion dans le jeu
+            this.plateau.retirePion(pionMange);
+        }
+
+        //TODO: tester avec des reines
     }
 
     /**

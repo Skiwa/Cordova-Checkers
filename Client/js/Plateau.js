@@ -1,9 +1,9 @@
-var Plateau = /** @class */ (function () {
-    function Plateau(taille) {
+class Plateau {
+    constructor(taille) {
         this.taille = taille;
         this.initialisePlateau();
     }
-    Plateau.prototype.initialisePlateau = function () {
+    initialisePlateau() {
         //Initialise la grille
         this.plateau = new Array(this.taille);
         for (var i = 0; i < this.taille; i++) {
@@ -17,34 +17,34 @@ var Plateau = /** @class */ (function () {
         }
         /* -- Rempli la grille avec les pions par défaut -- */
         //blancs
-        for (var i_1 = 0; i_1 < 2; i_1++) {
+        for (let i = 0; i < 2; i++) {
             //décale d'une position aux lignes paires
-            if (i_1 % 2 == 0) {
+            if (i % 2 == 0) {
                 j = 0;
             }
             else {
                 j = 1;
             }
             for (j; j < this.taille; j += 2) {
-                this.plateau[j][i_1] = new Pion('b'); //pose un pion blanc
+                this.plateau[j][i] = new Pion('b'); //pose un pion blanc
             }
         }
         //noirs
-        for (var i_2 = this.taille - 1; i_2 > this.taille - 3; i_2--) {
+        for (let i = this.taille - 1; i > this.taille - 3; i--) {
             //décale d'une position aux lignes paires
-            if (i_2 % 2 == 0)
+            if (i % 2 == 0)
                 j = 0;
             else
                 j = 1;
             for (j; j < this.taille; j += 2) {
-                this.plateau[j][i_2] = new Pion('n'); //pose un pion noir
+                this.plateau[j][i] = new Pion('n'); //pose un pion noir
             }
         }
-    };
+    }
     /**
      * Renvoie le plateau en string pour la console
      */
-    Plateau.prototype.toString = function () {
+    toString() {
         var res = "";
         for (var i = 0; i < this.taille; i++) {
             for (var j = 0; j < this.taille; j++) {
@@ -58,54 +58,67 @@ var Plateau = /** @class */ (function () {
             res += "\n";
         }
         return res;
-    };
+    }
     /**
      * Déplace un pion
      * @param pion
      * @param position
      */
-    Plateau.prototype.deplacePionAtPosition = function (pion, nouvellePosition) {
-        var anciennePosition = this.getPositionFromPion(pion);
+    deplacePionAtPosition(pion, nouvellePosition) {
+        let anciennePosition = this.getPositionFromPion(pion);
         this.plateau[anciennePosition.x][anciennePosition.y] = 0;
         this.plateau[nouvellePosition.x][nouvellePosition.y] = pion;
-    };
+    }
     /**
      * Retourne le pion situé à une position x et y
      * @param position
      */
-    Plateau.prototype.getPionFromPosition = function (position) {
-        return this.plateau[position.x][position.y];
-    };
+    getPionFromPosition(position) {
+        try {
+            return this.plateau[position.x][position.y];
+        }
+        catch (e) {
+            return null;
+        }
+    }
     /**
      * Retourne la position x et y d'un pion
      * @param position
      */
-    Plateau.prototype.getPositionFromPion = function (pion) {
-        for (var i = 0; i < this.plateau.length; i++) {
-            for (var j = 0; j < this.plateau.length; j++) {
+    getPositionFromPion(pion) {
+        for (let i = 0; i < this.plateau.length; i++) {
+            for (let j = 0; j < this.plateau.length; j++) {
                 if (this.plateau[i][j] === pion) {
                     return { x: i, y: j };
                 }
             }
         }
         return null;
-    };
+    }
+    /**
+     * Retire un pion
+     * @param pion
+     */
+    retirePion(pion) {
+        let position = this.getPositionFromPion(pion);
+        this.plateau[position.x][position.y] = 0;
+    }
     /**
      * Transforme un pion en reine
      * @param pion
      */
-    Plateau.prototype.pionDevientReine = function (pion) {
-        var position = this.getPositionFromPion(pion);
+    pionDevientReine(pion) {
+        let position = this.getPositionFromPion(pion);
         this.plateau[position.x][position.y].devientReine();
-    };
+    }
     /**
      * Retourne les positions possibles pour un pion
      * @param  {Pion} pion
      * @returns {x:number,y:number,mange:Pion}[]
      */
-    Plateau.prototype.getDeplacementsPossiblesFromPion = function (pion) {
-        var positionPion = this.getPositionFromPion(pion);
-        var res = [];
+    getDeplacementsPossiblesFromPion(pion) {
+        let positionPion = this.getPositionFromPion(pion);
+        let res = [];
         try {
             if (pion.couleur === 'noir') {
                 //Check haut gauche
@@ -147,14 +160,9 @@ var Plateau = /** @class */ (function () {
                     }
                 }
             }
-            //TODO:manger
-            //TODO:manger en arrière
-            //TODO:déplacement reines
         }
         catch (error) {
-            //On a dépasse les index des tableaux en faisant les tests (évite de planter)
         }
         return res;
-    };
-    return Plateau;
-}());
+    }
+}
