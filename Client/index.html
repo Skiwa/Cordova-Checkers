@@ -217,5 +217,15 @@
     <script src="js/Jeu.js"></script>
     <script src="js/Pion.js"></script>
     <script src="js/main.js"></script>
+    <!--permet de gérer la communication avec le serveur du côté du client -->
+    <script src="/socket.io/socket.io.js"></script> 
+    <script>
+        //pour se connecter au serveur
+        var socket = io.connect('http://localhost:8080'); 
+        //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
+        socket.on('message', function(message) {
+            alert('Le serveur a un message pour vous : ' + message);
+        })
+    </script>
 </body>
 </html>
