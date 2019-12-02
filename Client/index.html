@@ -302,8 +302,13 @@
       //pour se connecter au serveur
       var socket = io.connect("http://localhost:3000");
       //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
-      socket.on("message", function(message) {
+      socket.on("connection_ok", function(message) {
         alert("Le serveur a un message pour vous : " + message);
+        let pseudo = prompt("Utilisateur");
+        socket.emit("login", pseudo);
+        socket.on("ready", function(msg) {
+          console.log(msg);
+        });
       });
     </script>
   </body>

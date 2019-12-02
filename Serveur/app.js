@@ -12,5 +12,9 @@ console.log("hey");
 server.on("connection", function(socket) {
   console.log("un client s'est connecté");
   //permet l'envoie du message, 'message' = le type, 'Vous ...' = le contenu
-  socket.emit("message", "Vous êtes bien connecté !");
+  socket.emit("connection_ok", "Vous êtes bien connecté !");
+  socket.on("login", function(pseudo) {
+    // console.log(pseudo);
+    socket.emit("ready", pseudo + " ready pour attendre !");
+  });
 });
