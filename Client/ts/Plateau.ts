@@ -140,47 +140,98 @@ class Plateau{
 
         try{
             if(pion.couleur === 'noir'){
-                //Check haut gauche
+                // Déplacement haut gauche
+                // - Si aucun pion à l'endroit visé, c'est bon
                 if(this.plateau[positionPion.x+1][positionPion.y-1]===0){
                     res.push({x:positionPion.x+1,y:positionPion.y-1})
-                }else{
-                    if(this.plateau[positionPion.x+2][positionPion.y-2]===0 && this.plateau[positionPion.x+1][positionPion.y-1].couleur==='blanc'){
+                }
+                // - Si un pion à l'endroit visé
+                else{
+                    // - Si personne a la case d'après et si le pion visé est adverse, c'est bon
+                    if(this.plateau[positionPion.x+2][positionPion.y-2]===0 && this.plateau[positionPion.x+1][positionPion.y-1].couleur!==pion.couleur){
                         res.push({x:positionPion.x+2,y:positionPion.y-2, mange:this.getPionFromPosition({x:positionPion.x+1,y:positionPion.y-1})});
                     }
                 }
-    
-                //Check haut droite
+
+                // Déplacement haut droite
+                // - Si aucun pion à l'endroit visé, c'est bon
                 if(this.plateau[positionPion.x-1][positionPion.y-1]===0){
                     res.push({x:positionPion.x-1,y:positionPion.y-1})
-                }else{
-                    if(this.plateau[positionPion.x-2][positionPion.y-2]===0 && this.plateau[positionPion.x-1][positionPion.y-1].couleur==='blanc'){
+                }
+                // - Si un pion à l'endroit visé
+                else{
+                    // - Si personne a la case d'après et si le pion visé est adverse, c'est bon
+                    if(this.plateau[positionPion.x-2][positionPion.y-2]===0 && this.plateau[positionPion.x-1][positionPion.y-1].couleur !== pion.couleur){
+                        res.push({x:positionPion.x-2,y:positionPion.y-2,mange:this.getPionFromPosition({x:positionPion.x-1,y:positionPion.y-1})});
+                    }
+                }
+
+                // Déplacement bas gauche
+                // - Si pion adverse en bas gauche 
+                if(this.plateau[positionPion.x+1][positionPion.y+1] !== 0 && this.plateau[positionPion.x+1][positionPion.y+1].couleur !== pion.couleur){
+                    // - Si case d'après libre
+                    if(this.plateau[positionPion.x+2][positionPion.y+2] === 0){
+                        res.push({x:positionPion.x+2,y:positionPion.y+2,mange:this.getPionFromPosition({x:positionPion.x+1,y:positionPion.y+1})});
+                    }
+                }
+
+                // Déplacement bas droite
+                // - Si pion adverse en bas droite 
+                if(this.plateau[positionPion.x-1][positionPion.y+1] !== 0 && this.plateau[positionPion.x-1][positionPion.y+1].couleur !== pion.couleur){
+                    // - Si case d'après libre
+                    if(this.plateau[positionPion.x-2][positionPion.y+2] === 0){
+                        res.push({x:positionPion.x-2,y:positionPion.y+2,mange:this.getPionFromPosition({x:positionPion.x-1,y:positionPion.y+1})});
+                    }
+                }
+
+
+            }else{
+                // Déplacement bas gauche
+                // - Si aucun pion à l'endroit visé, c'est bon
+                if(this.plateau[positionPion.x+1][positionPion.y+1]===0){
+                    res.push({x:positionPion.x+1,y:positionPion.y+1})
+                }
+                // - Si un pion à l'endroit visé
+                else{
+                    // - Si personne a la case d'après et si le pion visé est adverse, c'est bon
+                    if(this.plateau[positionPion.x+2][positionPion.y+2]===0 && this.plateau[positionPion.x+1][positionPion.y+1].couleur!==pion.couleur){
+                        res.push({x:positionPion.x+2,y:positionPion.y+2, mange:this.getPionFromPosition({x:positionPion.x+1,y:positionPion.y+1})});
+                    }
+                }
+
+                // Déplacement bas droite
+                // - Si aucun pion à l'endroit visé, c'est bon
+                if(this.plateau[positionPion.x-1][positionPion.y+1]===0){
+                    res.push({x:positionPion.x-1,y:positionPion.y+1})
+                }
+                // - Si un pion à l'endroit visé
+                else{
+                    // - Si personne a la case d'après et si le pion visé est adverse, c'est bon
+                    if(this.plateau[positionPion.x-2][positionPion.y+2]===0 && this.plateau[positionPion.x-1][positionPion.y+1].couleur !== pion.couleur){
+                        res.push({x:positionPion.x-2,y:positionPion.y+2,mange:this.getPionFromPosition({x:positionPion.x-1,y:positionPion.y+1})});
+                    }
+                }
+
+                // Déplacement haut gauche
+                // - Si pion adverse en bas gauche 
+                if(this.plateau[positionPion.x+1][positionPion.y-1] !== 0 && this.plateau[positionPion.x+1][positionPion.y-1].couleur !== pion.couleur){
+                    // - Si case d'après libre
+                    if(this.plateau[positionPion.x+2][positionPion.y-2] === 0){
+                        res.push({x:positionPion.x+2,y:positionPion.y-2,mange:this.getPionFromPosition({x:positionPion.x+1,y:positionPion.y-1})});
+                    }
+                }
+
+                // Déplacement haut droite
+                // - Si pion adverse en bas droite 
+                if(this.plateau[positionPion.x-1][positionPion.y-1] !== 0 && this.plateau[positionPion.x-1][positionPion.y-1].couleur !== pion.couleur){
+                    // - Si case d'après libre
+                    if(this.plateau[positionPion.x-2][positionPion.y-2] === 0){
                         res.push({x:positionPion.x-2,y:positionPion.y-2,mange:this.getPionFromPosition({x:positionPion.x-1,y:positionPion.y-1})});
                     }
                 }
             }
-    
-            if(pion.couleur === 'blanc'){
-                //Check bas gauche
-                if(this.plateau[positionPion.x+1][positionPion.y+1]===0){
-                    res.push({x:positionPion.x+1,y:positionPion.y+1})
-                }else{
-                    if(this.plateau[positionPion.x+2][positionPion.y+2]===0  && this.plateau[positionPion.x+1][positionPion.y+1].couleur==='noir'){
-                        res.push({x:positionPion.x+2,y:positionPion.y+2,mange:this.getPionFromPosition({x:positionPion.x+1,y:positionPion.y+1})});
-                    }
-                }
-    
-                //Check bas droite
-                if(this.plateau[positionPion.x-1][positionPion.y+1]===0){
-                    res.push({x:positionPion.x-1,y:positionPion.y+1})
-                }else{
-                    if(this.plateau[positionPion.x-2][positionPion.y+2]===0 && this.plateau[positionPion.x-1][positionPion.y+1].couleur==='noir'){
-                        res.push({x:positionPion.x-2,y:positionPion.y+2,mange:this.getPionFromPosition({x:positionPion.x-1,y:positionPion.y+1})});
-                    }
-                }
-            }
 
-            //TODO:manger
-            //TODO:manger en arrière
+            //TODO:déplacement bords
             //TODO:déplacement reines
 
         }catch(error){
