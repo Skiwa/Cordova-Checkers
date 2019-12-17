@@ -8,7 +8,7 @@ class Jeu {
         //Capture les clics utilisateur
         this.setClickEventListener();
         //Affiche le plateau dans la console
-        console.log(this.plateau.toString());
+        //console.log(this.plateau.toString());
     }
     setClickEventListener() {
         document.querySelector('.plateau').addEventListener('click', (event) => {
@@ -192,21 +192,18 @@ class Jeu {
      */
     mangePion(pion, position) {
         let pionMange; //pionMangé*
-        // if(pion.couleur==='blanc'){
         if (this.pionsMangeables.includes(this.plateau.getPionFromPosition({ x: position.x + 1, y: position.y - 1 }))) {
             pionMange = this.plateau.getPionFromPosition({ x: position.x + 1, y: position.y - 1 });
         }
         if (this.pionsMangeables.includes(this.plateau.getPionFromPosition({ x: position.x - 1, y: position.y - 1 }))) {
             pionMange = this.plateau.getPionFromPosition({ x: position.x - 1, y: position.y - 1 });
         }
-        // }else if(pion.couleur==='noir'){
         if (this.pionsMangeables.includes(this.plateau.getPionFromPosition({ x: position.x + 1, y: position.y + 1 }))) {
             pionMange = this.plateau.getPionFromPosition({ x: position.x + 1, y: position.y + 1 });
         }
         if (this.pionsMangeables.includes(this.plateau.getPionFromPosition({ x: position.x - 1, y: position.y + 1 }))) {
             pionMange = this.plateau.getPionFromPosition({ x: position.x - 1, y: position.y + 1 });
         }
-        // }
         if (pionMange) {
             let position = this.plateau.getPositionFromPion(pionMange);
             //Retire le pion graphiquement

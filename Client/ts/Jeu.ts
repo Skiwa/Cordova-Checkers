@@ -241,21 +241,18 @@ class Jeu{
     mangePion(pion:Pion,position:{x:number,y:number}){
         let pionMange:Pion; //pionMangé*
 
-        // if(pion.couleur==='blanc'){
             if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x+1,y:position.y-1}))){
                 pionMange = this.plateau.getPionFromPosition({x:position.x+1,y:position.y-1});
             }
             if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x-1,y:position.y-1}))){
                 pionMange = this.plateau.getPionFromPosition({x:position.x-1,y:position.y-1});
             }
-        // }else if(pion.couleur==='noir'){
             if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x+1,y:position.y+1}))){
                 pionMange = this.plateau.getPionFromPosition({x:position.x+1,y:position.y+1});
             }
             if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x-1,y:position.y+1}))){
                 pionMange = this.plateau.getPionFromPosition({x:position.x-1,y:position.y+1});
             }
-        // }
 
         if(pionMange){
             let position = this.plateau.getPositionFromPion(pionMange);

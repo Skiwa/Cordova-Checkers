@@ -299,28 +299,37 @@
     <script src="js/Jeu.js"></script>
     <script src="js/Pion.js"></script>
     <script src="js/main.js"></script>
-    <!--permet de gérer la communication avec le serveur du côté du client -->
     <script src="js/socket.io.js"></script>
     <script>
-      //pour se connecter au serveur
-      var socket = io.connect("http://localhost:3000");
-      //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
-      socket.on("connection_ok", function(message) {
-        alert("Le serveur a un message pour vous : " + message);
-        let pseudo = prompt("Utilisateur");
-        socket.emit("login", pseudo);
-        socket.on("notReady", function(msg) {
-          alert(msg);
+
+      //Changer à true pour tester le jeu de dames sans connexion
+      let devSolo = false;
+
+      if(!devSolo){
+        console.log('%c -- Jeu lancé en mode multijoueur -- ', 'background: #222; color: #AFDA54;font-size:1.2em');
+
+        //pour se connecter au serveur
+        var socket = io.connect("http://localhost:3000");
+        //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
+        socket.on("connection_ok", function(message) {
+          alert("Le serveur a un message pour vous : " + message);
+          let pseudo = prompt("Utilisateur");
+          socket.emit("login", pseudo);
+          socket.on("notReady", function(msg) {
+            alert(msg);
+          });
+          socket.on("ready", function(msg) {
+            alert(msg);
+          });
         });
-        socket.on("ready", function(msg) {
-          alert(msg);
-        });
-      });
-      // Lorsqu'on clique sur le bouton, on envoie un "message" au serveur
-      let btn = document.getElementById("poke");
-      btn.onclick = function () {
-        socket.emit('message', 'Salut serveur, ça va ?');
-      };
+        // Lorsqu'on clique sur le bouton, on envoie un "message" au serveur
+        let btn = document.getElementById("poke");
+        btn.onclick = function () {
+          socket.emit('message', 'Salut serveur, ça va ?');
+        };
+      }else{
+        console.log('%c -- Jeu lancé en mode solo --', 'background: #222; color: #AFDA54;font-size:1.25em');
+      }
     </script>
   </body>
 </html>
