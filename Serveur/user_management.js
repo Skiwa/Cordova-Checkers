@@ -21,6 +21,13 @@ class Joueur {
 // <----------------- Fonctions ----------------->
 function PlayerConnected(id, pseudo) {
   ListeAttentejoueurs.push({ id, pseudo });
+  console.log(ListeAttentejoueurs);
+  if (ListeAttentejoueurs.length < 2) {
+    // Peut pas jouer car solo, donc il doit attendre
+    console.log("notReady", "on attend un 2ème joueur");
+  } else {
+    console.log("ready", pseudo + " ready pour jouer !");
+  }
 }
 
 // Future fonction de suppression d'un joueur dans liste ListeAttentejoueurs
@@ -28,7 +35,6 @@ function PlayerDisconnected(id) {
   ListeAttentejoueurs = ListeAttentejoueurs.filter(function(el) {
     return el.id != id;
   });
-
   console.log(ListeAttentejoueurs);
 }
 
@@ -50,11 +56,11 @@ function addJoueur(pseudo, id) {
   }
   //Ajoute le joueur à la liste + retourne un objet Joueur et l'état de la liste
   PlayerConnected(id, newJoueur.pseudo);
-  let hisColor = ChooseColorGame();
+  // let hisColor = ChooseColorGame();
   return {
     newJoueur: newJoueur,
     listeAttente: ListeAttentejoueurs,
-    color: hisColor
+    // color: hisColor
   };
 }
 

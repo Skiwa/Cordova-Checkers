@@ -26,14 +26,21 @@ io.on("connection", function(socket) {
     // Lors du login, ajoute le pseudo du joueur + socketId
     var joueur = user_management.addJoueur(pseudo, socket.id);
     // console.log(joueur.listeAttente);
-
     if (joueur.listeAttente.length < 2) {
       // Peut pas jouer car solo, donc il doit attendre
-      socket.emit("not ready", "on attend un 2ème joueur");
+      socket.emit("notReady", "On attend un 2ème joueur !");
     } else {
-      socket.emit("ready", pseudo + " ready pour jouer !");
+      // io.emit envoie à tous les clients connectés
+      io.emit("ready", pseudo + " ready pour jouer !");
     }
   });
+
+   // Dès qu'on reçoit un "message" (clic sur le bouton), on le note dans la console
+   socket.on('message', function (message) {
+        // On récupère le pseudo de celui qui a cliqué dans les variables de session
+        console.log(socket.id + ' me parle ! Il me dit : ' + message);
+  }); 
+
   socket.on("disconnect", function() {
     // console.log("user " + socket.id + " disconnected");
     user_management.PlayerDisconnected(socket.id);
