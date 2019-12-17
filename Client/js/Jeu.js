@@ -8,7 +8,7 @@ class Jeu {
         //Capture les clics utilisateur
         this.setClickEventListener();
         //Affiche le plateau dans la console
-        console.log(this.plateau.toString());
+        //console.log(this.plateau.toString());
     }
     setClickEventListener() {
         document.querySelector('.plateau').addEventListener('click', (event) => {

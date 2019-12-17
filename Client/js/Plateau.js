@@ -144,9 +144,6 @@ class Plateau {
                                 }
                             }
                         }
-                        else {
-                            console.log(positionPion.x + (1 * j));
-                        }
                     }
                 }
             }
