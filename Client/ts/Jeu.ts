@@ -14,7 +14,7 @@ class Jeu{
         this.setClickEventListener();
         
         //Affiche le plateau dans la console
-        console.log(this.plateau.toString());
+        //console.log(this.plateau.toString());
     }
 
     setClickEventListener(){
