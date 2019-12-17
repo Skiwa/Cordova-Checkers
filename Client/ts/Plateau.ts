@@ -150,7 +150,7 @@ class Plateau{
                         j = _j === 0 ? -1 : 1;
 
                         // - Si l'endroit visé existe
-                        if(positionPion.x+(1*i) >= 0 && positionPion.x+(1*i) < this.taille-1 && positionPion.y+(1*j) >= 0 && positionPion.y+(1*j) < this.taille-1){
+                        if(positionPion.x+(1*i) >= 0 && positionPion.x+(1*i) < this.taille && positionPion.y+(1*j) >= 0 && positionPion.y+(1*j) < this.taille){
                             // - Si personne dans l'endroit visé
                             if(this.plateau[positionPion.x+(1*i)][positionPion.y+(1*j)]===0){
                                 // - Si le pion avance dans la bonne direction
@@ -160,14 +160,16 @@ class Plateau{
                             // - Si un pion à l'endroit visé
                             else{
                                 // - Si la case d'après existe
-                                if(positionPion.x+(2*i) >= 0 && positionPion.x+(2*i) < this.taille-1 && positionPion.y+(2*j) >= 0 && positionPion.y+(2*j) < this.taille-1){
+                                if(positionPion.x+(2*i) >= 0 && positionPion.x+(2*i) < this.taille && positionPion.y+(2*j) >= 0 && positionPion.y+(2*j) < this.taille){
                                     // - Si personne a la case d'après et si le pion visé est adverse, c'est bon
                                     if(this.plateau[positionPion.x+(2*i)][positionPion.y+(2*j)]===0 && this.plateau[positionPion.x+(1*i)][positionPion.y+(1*j)].couleur!==pion.couleur){
                                         res.push({x:positionPion.x+(2*i),y:positionPion.y+(2*j), mange:this.getPionFromPosition({x:positionPion.x+(1*i),y:positionPion.y+(1*j)})});
                                     }
                                 }
                             }
-                        }                        
+                        }else{
+                            console.log(positionPion.x+(1*j));
+                        }
                     }
                 }
             }else{

@@ -303,7 +303,7 @@
     <script>
 
       //Changer à true pour tester le jeu de dames sans connexion
-      let devSolo = false;
+      let devSolo = true;
 
       if(!devSolo){
         console.log('%c -- Jeu lancé en mode multijoueur -- ', 'background: #222; color: #AFDA54;font-size:1.2em');
@@ -313,7 +313,12 @@
         //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
         socket.on("connection_ok", function(message) {
           alert("Le serveur a un message pour vous : " + message);
-          let pseudo = prompt("Utilisateur");
+
+          let pseudo = '';
+          while(pseudo === ''){
+            pseudo = prompt("Utilisateur")
+          }
+
           socket.emit("login", pseudo);
           socket.on("notReady", function(msg) {
             alert(msg);
