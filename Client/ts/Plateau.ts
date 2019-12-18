@@ -10,7 +10,6 @@ class Plateau{
 
 
     initialisePlateau(){    
-
         //Initialise la grille
         this.plateau = new Array(this.taille);
         for (var i = 0; i < this.taille; i++) {
