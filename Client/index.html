@@ -11,19 +11,21 @@
     <div id="main"></div>
 
     <p><button id="poke">Embêter le serveur</button></p>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="js/Plateau.js"></script>
     <script src="js/Jeu.js"></script>
     <script src="js/Pion.js"></script>
     <script src="js/main.js"></script>
     <script src="js/socket.io.js"></script>
     <script>
-
       //Changer à true pour tester le jeu de dames sans connexion
-      let modeSolo = true;
+      let modeSolo = false;
 
-      if(!modeSolo){
-        console.log('%c -- Jeu lancé en mode multijoueur -- ', 'background: #222; color: #AFDA54;font-size:1.2em');
+      if (!modeSolo) {
+        console.log(
+          "%c -- Jeu lancé en mode multijoueur -- ",
+          "background: #222; color: #AFDA54;font-size:1.2em"
+        );
 
         //pour se connecter au serveur
         var socket = io.connect("http://localhost:3000");
@@ -31,28 +33,31 @@
         socket.on("connection_ok", function(message) {
           alert("Le serveur a un message pour vous : " + message);
 
-          let pseudo = '';
-          while(pseudo === ''){
-            pseudo = prompt("Utilisateur")
+          let pseudo = "";
+          while (pseudo === "") {
+            pseudo = prompt("Utilisateur");
           }
 
           socket.emit("login", pseudo);
           socket.on("notReady", function(msg) {
-            alert(msg);
+            console.log(msg);
           });
           socket.on("ready", function(msg) {
-            alert(msg);
+            console.log(msg);
             //Lance un jeu avec la couleur du joueur fixée par le serveur
-            new Jeu(modeSolo, "noir"); 
+            new Jeu(modeSolo, msg.color);
           });
         });
         // Lorsqu'on clique sur le bouton, on envoie un "message" au serveur
         let btn = document.getElementById("poke");
-        btn.onclick = function () {
-          socket.emit('message', 'Salut serveur, ça va ?');
-        };
-      }else{
-        console.log('%c -- Jeu lancé en mode solo --', 'background: #222; color: #AFDA54;font-size:1.25em');
+        btn.onclick = function() {
+          socket.emit("message", "Salut serveur, ça va ?");
+        };
+      } else {
+        console.log(
+          "%c -- Jeu lancé en mode solo --",
+          "background: #222; color: #AFDA54;font-size:1.25em"
+        );
         new Jeu(modeSolo);
       }
     </script>

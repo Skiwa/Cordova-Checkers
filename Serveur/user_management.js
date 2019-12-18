@@ -19,15 +19,9 @@ class Joueur {
 }
 
 // <----------------- Fonctions ----------------->
-function PlayerConnected(id, pseudo) {
-  ListeAttentejoueurs.push({ id, pseudo });
+function PlayerConnected(id, joueur) {
+  ListeAttentejoueurs.push({ id, joueur });
   console.log(ListeAttentejoueurs);
-  if (ListeAttentejoueurs.length < 2) {
-    // Peut pas jouer car solo, donc il doit attendre
-    console.log("notReady", "on attend un 2ème joueur");
-  } else {
-    console.log("ready", pseudo + " ready pour jouer !");
-  }
 }
 
 // Future fonction de suppression d'un joueur dans liste ListeAttentejoueurs
@@ -36,12 +30,6 @@ function PlayerDisconnected(id) {
     return el.id != id;
   });
   console.log(ListeAttentejoueurs);
-}
-
-// Fonction aléatoire de choix de couleur pour le joueur
-// 0 = Noir | 1 = Blanc
-function ChooseColorGame() {
-  return Math.floor(Math.random() * Math.floor(2));
 }
 
 function addJoueur(pseudo, id) {
@@ -55,12 +43,10 @@ function addJoueur(pseudo, id) {
     var newJoueur = new Joueur(pseudo);
   }
   //Ajoute le joueur à la liste + retourne un objet Joueur et l'état de la liste
-  PlayerConnected(id, newJoueur.pseudo);
-  // let hisColor = ChooseColorGame();
+  PlayerConnected(id, newJoueur);
   return {
     newJoueur: newJoueur,
-    listeAttente: ListeAttentejoueurs,
-    // color: hisColor
+    listeAttente: ListeAttentejoueurs
   };
 }
 
