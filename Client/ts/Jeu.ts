@@ -7,6 +7,9 @@ class Jeu{
     pionsMangeables:Pion[] = [];
 
     constructor(){
+        //Création graphique du plateau
+        this.creerPlateauGraphiquement();
+
         //Initialisation du plateau
         this.plateau = new Plateau(10);
 
@@ -290,4 +293,54 @@ class Jeu{
     tourSuivant(){
         this.tour++;
     }
+
+
+    creerPlateauGraphiquement(){
+
+        let ligne;
+        let carre;
+        let pionSvg,pionCercle;
+        let plateau = document.createElement("table");
+        plateau.classList.add("plateau");
+
+        let plateau_body = document.createElement("tbody");
+
+
+        for(let i = 0; i < this.taillePlateau ; i++){
+            ligne = document.createElement("tr");
+            
+            for(let j = 0; j < this.taillePlateau; j++){
+
+                //Crée les cases
+                carre = document.createElement("td");
+                carre.classList.add("plateau--case");
+                carre.classList.add((i+j)%2 == 0 ? "plateau--case__noire" : "plateau--case__blanche")
+
+                //Crée les pions
+                if((i < 2 || i > 7) && ((i+j)%2 === 0)){
+                    //Conteneur svg
+                    pionSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    pionSvg.classList.add("pion");
+                    pionSvg.classList.add((i < 2 ? "pion__blanc" : "pion__noir"));
+                    pionSvg.setAttribute("viewBox", "0 0 100 100"); 
+                    pionSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg"); 
+
+                    //Cercle svg
+                    pionCercle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    pionCercle.setAttribute("cx", "50"); 
+                    pionCercle.setAttribute("cy", "50"); 
+                    pionCercle.setAttribute("r", "40"); 
+
+                    pionSvg.appendChild(pionCercle);
+                    carre.appendChild(pionSvg);
+                }
+                ligne.appendChild(carre);
+            }
+
+            plateau_body.appendChild(ligne);
+        }
+        plateau.appendChild(plateau_body);
+        document.getElementById("main").appendChild(plateau);
+    }
+
 }

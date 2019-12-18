@@ -1,5 +1,5 @@
 /* Global */
-.main{
+.main,.main2{
     height: 100vh;
 }
 
@@ -10,8 +10,8 @@
     border:red solid 1px;
 }
 .plateau .plateau--case{
-    height:50px;
-    width:50px;
+    height:5vh;
+    width:5vh;
 }
 .plateau .plateau--case.plateau--case__possible{
     box-shadow: inset 0px 0px 20px 3px rgb(71, 109, 211);
