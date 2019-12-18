@@ -20,9 +20,9 @@
     <script>
 
       //Changer à true pour tester le jeu de dames sans connexion
-      let devSolo = true;
+      let modeSolo = true;
 
-      if(!devSolo){
+      if(!modeSolo){
         console.log('%c -- Jeu lancé en mode multijoueur -- ', 'background: #222; color: #AFDA54;font-size:1.2em');
 
         //pour se connecter au serveur
@@ -42,7 +42,8 @@
           });
           socket.on("ready", function(msg) {
             alert(msg);
-            new Jeu();
+            //Lance un jeu avec la couleur du joueur fixée par le serveur
+            new Jeu(modeSolo, "noir"); 
           });
         });
         // Lorsqu'on clique sur le bouton, on envoie un "message" au serveur
@@ -52,7 +53,7 @@
         };
       }else{
         console.log('%c -- Jeu lancé en mode solo --', 'background: #222; color: #AFDA54;font-size:1.25em');
-        new Jeu();
+        new Jeu(modeSolo);
       }
     </script>
   </body>

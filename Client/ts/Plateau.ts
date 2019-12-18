@@ -2,9 +2,11 @@ class Plateau{
 
     plateau: any[][];
     taille:number;
+    couleurJoueur:String;
 
-    constructor(taille:number){
+    constructor(taille:number, couleurJoueur:String){
         this.taille = taille;
+        this.couleurJoueur = couleurJoueur;
         this.initialisePlateau();
     }
 
@@ -27,7 +29,11 @@ class Plateau{
         for(let i = 0; i < this.taille ; i++){            
             for(let j = 0; j < this.taille; j++){
                 if((i < 2 || i > 7) && ((i+j)%2 === 0)){
-                    this.plateau[j][i] = new Pion(i < 2 ? 'b' : 'n');
+                    if(i < 2){
+                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'n' : 'b');
+                    }else{
+                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'b' : 'n');
+                    }
                 }
             }
         }
@@ -117,6 +123,7 @@ class Plateau{
     getDeplacementsPossiblesFromPion(pion:Pion):{x:number,y:number, mange?:Pion}[]{
 
         let positionPion = this.getPositionFromPion(pion);
+        console.log("Deplacement possibles for ", positionPion);
         let res = [];
         let i,j;
 
@@ -133,7 +140,7 @@ class Plateau{
                             // - Si personne dans l'endroit visé
                             if(this.plateau[positionPion.x+(1*i)][positionPion.y+(1*j)]===0){
                                 // - Si le pion avance dans la bonne direction
-                                if((pion.couleur === "noir" && j === -1) ||(pion.couleur === "blanc" && j === 1))
+                                if((pion.couleur === this.couleurJoueur && j === -1) ||(pion.couleur !== this.couleurJoueur && j === 1))
                                     res.push({x:positionPion.x+(1*i),y:positionPion.y+(1*j)})
                             }
                             // - Si un pion à l'endroit visé

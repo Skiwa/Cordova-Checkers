@@ -5,19 +5,28 @@ class Jeu{
     tour:number = 1;
     pionSelectionne:Pion;
     pionsMangeables:Pion[] = [];
+    couleurJoueur:String;
 
-    constructor(){
+    /**
+     * Crée un nouveau jeu
+     * @param modeSolo 
+     * @param couleurJoueur Défini de manière random par defaut. Peut être renseignée 
+     */
+    constructor(modeSolo:Boolean, couleurJoueur:String = Math.random() >= 0.5 ? "noir" : "blanc"){
+        
+        //Fixe la couleur du joueur
+        this.couleurJoueur = couleurJoueur;
+        console.log("Couleur joueur : ", this.couleurJoueur);
+        console.log("Les noirs commencent");
+        
         //Création graphique du plateau
         this.creerPlateauGraphiquement();
 
         //Initialisation du plateau
-        this.plateau = new Plateau(10);
+        this.plateau = new Plateau(10, this.couleurJoueur);
 
         //Capture les clics utilisateur
         this.setClickEventListener();
-        
-        //Affiche le plateau dans la console
-        //console.log(this.plateau.toString());
     }
 
     setClickEventListener(){
@@ -46,8 +55,10 @@ class Jeu{
 
                 //- Si aucun pion n'est déjà selectionné ou si un pion de la couleur du joueur est déjà selectionné
                 //- Et si le pion cible est de la couleur du joueur
+                //TODO: supprimer les parenthèses compliquées en mode mult
                 if((!this.pionSelectionne || (this.pionSelectionne && ((this.pionSelectionne.couleur === 'blanc' && (this.tour%2 === 0)) ||this.pionSelectionne.couleur === 'noir' && (this.tour%2 === 1))))&&((pion.couleur==='blanc' && (this.tour%2 === 0)) ||(pion.couleur==='noir' && (this.tour%2 === 1)))){
                     
+                    console.log("select pion : ",pion);
                     //Selectionne le pion
                     this.selectPion(pion);
 
@@ -175,9 +186,6 @@ class Jeu{
         if((position.y === 0 && this.tour%2===1) || (position.y === this.taillePlateau-1 && this.tour%2===0)){
             this.pionDevientReine(pion);
         }
-
-        //log
-        console.log(this.plateau.toString());
     }
 
 
@@ -295,22 +303,20 @@ class Jeu{
     }
 
 
+    /**
+     * Génére les éléments du plateau et ajoute le tout à la page principale
+     */
     creerPlateauGraphiquement(){
-
         let ligne;
         let carre;
         let pionSvg,pionCercle;
         let plateau = document.createElement("table");
         plateau.classList.add("plateau");
-
         let plateau_body = document.createElement("tbody");
-
 
         for(let i = 0; i < this.taillePlateau ; i++){
             ligne = document.createElement("tr");
-            
             for(let j = 0; j < this.taillePlateau; j++){
-
                 //Crée les cases
                 carre = document.createElement("td");
                 carre.classList.add("plateau--case");
@@ -321,7 +327,14 @@ class Jeu{
                     //Conteneur svg
                     pionSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                     pionSvg.classList.add("pion");
-                    pionSvg.classList.add((i < 2 ? "pion__blanc" : "pion__noir"));
+
+                    //Fixe les pions du joueur en bas
+                    if(i<2){
+                        pionSvg.classList.add((this.couleurJoueur === "blanc" ? "pion__noir" : "pion__blanc"));
+                    }else{
+                        pionSvg.classList.add((this.couleurJoueur === "blanc" ? "pion__blanc" : "pion__noir"));
+                    }
+
                     pionSvg.setAttribute("viewBox", "0 0 100 100"); 
                     pionSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg"); 
 
@@ -336,7 +349,6 @@ class Jeu{
                 }
                 ligne.appendChild(carre);
             }
-
             plateau_body.appendChild(ligne);
         }
         plateau.appendChild(plateau_body);

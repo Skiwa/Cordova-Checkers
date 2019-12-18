@@ -1,2 +1,1 @@
-//VSCode: ctrl shift b > typescript watch
-//new Jeu();
+//VSCode: ctrl shift b > typescript watch 
