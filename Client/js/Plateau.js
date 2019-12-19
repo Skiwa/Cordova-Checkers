@@ -121,9 +121,7 @@ class Plateau {
                             // - Si personne dans l'endroit visé
                             if (this.plateau[positionPion.x + (1 * i)][positionPion.y + (1 * j)] === 0) {
                                 // - Si le pion avance dans la bonne direction
-                                if ((this.jeu.peutJouer(pion.couleur) && j === -1) || (!this.jeu.peutJouer(pion.couleur) && j === -1) && j === 1)
-                                    ;
-                                {
+                                if ((pion.couleur === "blanc" && j === -1) || (pion.couleur === "noir" && j === 1)) {
                                     res.push({ x: positionPion.x + (1 * i), y: positionPion.y + (1 * j) });
                                 }
                             }
