@@ -16,14 +16,13 @@ class Jeu{
         
         //Fixe la couleur du joueur
         this.couleurJoueur = couleurJoueur;
-        console.log("Couleur joueur : ", this.couleurJoueur);
-        console.log("Les noirs commencent");
+        console.log("Tour "+this.tour + ", les noirs commencent");
         
         //Création graphique du plateau
         this.creerPlateauGraphiquement();
 
         //Initialisation du plateau
-        this.plateau = new Plateau(10, this.couleurJoueur);
+        this.plateau = new Plateau(10, this.couleurJoueur, this);
 
         //Capture les clics utilisateur
         this.setClickEventListener();
@@ -56,9 +55,7 @@ class Jeu{
                 //- Si aucun pion n'est déjà selectionné ou si un pion de la couleur du joueur est déjà selectionné
                 //- Et si le pion cible est de la couleur du joueur
                 //TODO: supprimer les parenthèses compliquées en mode mult
-                if((!this.pionSelectionne || (this.pionSelectionne && ((this.pionSelectionne.couleur === 'blanc' && (this.tour%2 === 0)) ||this.pionSelectionne.couleur === 'noir' && (this.tour%2 === 1))))&&((pion.couleur==='blanc' && (this.tour%2 === 0)) ||(pion.couleur==='noir' && (this.tour%2 === 1)))){
-                    
-                    console.log("select pion : ",pion);
+                if(this.peutJouer(pion.couleur)){
                     //Selectionne le pion
                     this.selectPion(pion);
 
@@ -300,6 +297,8 @@ class Jeu{
      */
     tourSuivant(){
         this.tour++;
+        this.couleurJoueur = this.tour%2 === 0 ? "blanc" : "noir";
+        this.plateau.couleurJoueur = this.couleurJoueur;
     }
 
 
@@ -355,4 +354,8 @@ class Jeu{
         document.getElementById("main").appendChild(plateau);
     }
 
+
+    peutJouer(couleur:String):boolean{
+        return (couleur === 'blanc' && (this.tour%2 === 0) || couleur === 'noir' && (this.tour%2 === 1));
+    }
 }

@@ -3,11 +3,14 @@ class Plateau{
     plateau: any[][];
     taille:number;
     couleurJoueur:String;
+    tour:number;
+    jeu:Jeu;
 
-    constructor(taille:number, couleurJoueur:String){
+    constructor(taille:number, couleurJoueur:String, jeu:Jeu){
         this.taille = taille;
         this.couleurJoueur = couleurJoueur;
         this.initialisePlateau();
+        this.jeu = jeu;
     }
 
 
@@ -30,9 +33,9 @@ class Plateau{
             for(let j = 0; j < this.taille; j++){
                 if((i < 2 || i > 7) && ((i+j)%2 === 0)){
                     if(i < 2){
-                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'n' : 'b');
+                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'N' : 'B');
                     }else{
-                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'b' : 'n');
+                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'B' : 'N');
                     }
                 }
             }
@@ -123,7 +126,7 @@ class Plateau{
     getDeplacementsPossiblesFromPion(pion:Pion):{x:number,y:number, mange?:Pion}[]{
 
         let positionPion = this.getPositionFromPion(pion);
-        console.log("Deplacement possibles for ", positionPion);
+        console.log("Deplacement possibles for ", positionPion, this.jeu.peutJouer(pion.couleur));
         let res = [];
         let i,j;
 
@@ -140,8 +143,9 @@ class Plateau{
                             // - Si personne dans l'endroit visé
                             if(this.plateau[positionPion.x+(1*i)][positionPion.y+(1*j)]===0){
                                 // - Si le pion avance dans la bonne direction
-                                if((pion.couleur === this.couleurJoueur && j === -1) ||(pion.couleur !== this.couleurJoueur && j === 1))
+                                if((this.jeu.peutJouer(pion.couleur) && j === -1) || (!this.jeu.peutJouer(pion.couleur) && j === -1) && j === 1)){
                                     res.push({x:positionPion.x+(1*i),y:positionPion.y+(1*j)})
+                                }
                             }
                             // - Si un pion à l'endroit visé
                             else{
@@ -157,30 +161,53 @@ class Plateau{
                     }
                 }
             }else{
-                //TODO: Mouvement des dames
-                // let peutContinuer;
-                // let decalage;
-                // //Si c'est une dame : 
-                
-                // // - Check haut gauche
-                // peutContinuer = true;
-                // decalage = 1;
-                // while(false){
-                //     console.log("check haut gauche",decalage);
-                //     //Si la case existe
-                //     // //TODO: check si sorti du tableau (exception)
-                //     // if(this.plateau[positionPion.x - decalage][positionPion.y - decalage]){
-                //     //     res.push({x:positionPion.x - decalage, y: positionPion.y - decalage});
-                //     //     decalage++;
-                //     // }else{
-                //     //     peutContinuer = false;
-                //     // }
-                // }
+
+                let aRencontrePion;
+
+                for(let _i = 0; _i<2; _i++){
+                    for(let _j = 0; _j<2; _j++){
+                        
+                        i = _i === 0 ? -1 : 1;
+                        j = _j === 0 ? -1 : 1;
+
+                        aRencontrePion = false;
+                        for(let k = 1; k < 10; k++){
+                             // - Si la case existe
+                            if(positionPion.x+(k*i) >= 0 && positionPion.x+(k*i) < this.taille && positionPion.y+(k*j) >= 0 && positionPion.y+(k*j) < this.taille){
+
+                                // - Si la case est vide 
+                                if(this.plateau[positionPion.x+(k*i)][positionPion.y+(k*j)] === 0){
+                                    res.push({x:positionPion.x+(k*i),y:positionPion.y+(k*j)});
+                                }
+                                // - Si la case contient un pion
+                                else{
+                                    aRencontrePion=true;
+                                }
+
+                                // - Si on a rencontré un pion avant et si la case actuelle est vide
+                                if(aRencontrePion && this.plateau[positionPion.x+(k*i)][positionPion.y+(k*j)] === 0){
+                                    // - Si c'était un pion ennemi
+                                    if(!this.jeu.peutJouer(this.plateau[positionPion.x+((k-1)*i)][positionPion.y+((k-1)*j)].couleur)){
+                                        console.log("mangeable : ", this.getPionFromPosition({x:positionPion.x+((k-1)*i),y:positionPion.y+((k-1)*j)}));
+                                        res.push({x:positionPion.x+(k*i),y:positionPion.y+(k*j), mange:this.getPionFromPosition({x:positionPion.x+((k-1)*i),y:positionPion.y+((k-1)*j)})});
+                                    }
+
+                                    break;
+                                }
+
+                        }
+                        
+                    }
+                }
             }
-        }catch(error){
+        }}catch(error){
             //Dépassement d'index de tableau
             console.log("err",error);
         }
         return res;
     }
+
+    // peutJouer(couleur:String):boolean{
+    //     return couleur === 'blanc' && (this.tour%2 === 0);
+    // }
 }
