@@ -180,7 +180,7 @@ class Jeu{
         this.plateau.deplacePionAtPosition(pion,position);
 
         //Teste si le pion devient une reine
-        if((position.y === 0 && this.tour%2===1) || (position.y === this.taillePlateau-1 && this.tour%2===0)){
+        if((position.y === 0 && this.tour%2===0) || (position.y === this.taillePlateau-1 && this.tour%2===1)){
             this.pionDevientReine(pion);
         }
     }
