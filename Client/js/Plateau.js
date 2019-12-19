@@ -22,10 +22,10 @@ class Plateau {
             for (let j = 0; j < this.taille; j++) {
                 if ((i < 2 || i > 7) && ((i + j) % 2 === 0)) {
                     if (i < 2) {
-                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'N' : 'B');
+                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'n' : 'b');
                     }
                     else {
-                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'B' : 'N');
+                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'b' : 'n');
                     }
                 }
             }
@@ -108,7 +108,6 @@ class Plateau {
      */
     getDeplacementsPossiblesFromPion(pion) {
         let positionPion = this.getPositionFromPion(pion);
-        console.log("Deplacement possibles for ", positionPion, this.jeu.peutJouer(pion.couleur));
         let res = [];
         let i, j;
         try {
@@ -162,7 +161,6 @@ class Plateau {
                                 if (aRencontrePion && this.plateau[positionPion.x + (k * i)][positionPion.y + (k * j)] === 0) {
                                     // - Si c'était un pion ennemi
                                     if (!this.jeu.peutJouer(this.plateau[positionPion.x + ((k - 1) * i)][positionPion.y + ((k - 1) * j)].couleur)) {
-                                        console.log("mangeable : ", this.getPionFromPosition({ x: positionPion.x + ((k - 1) * i), y: positionPion.y + ((k - 1) * j) }));
                                         res.push({ x: positionPion.x + (k * i), y: positionPion.y + (k * j), mange: this.getPionFromPosition({ x: positionPion.x + ((k - 1) * i), y: positionPion.y + ((k - 1) * j) }) });
                                     }
                                     break;

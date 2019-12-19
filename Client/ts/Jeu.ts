@@ -246,21 +246,17 @@ class Jeu{
      * @param pion 
      * @param position 
      */
-    mangePion(pion:Pion,position:{x:number,y:number}){
+    mangePion(pion:Pion,positionPionMange:{x:number,y:number}){
         let pionMange:Pion; //pionMangé*
         let i,j;
+        let positionPionMangeur = this.plateau.getPositionFromPion(pion);
 
-        //Vérifie si le pion mangé est compris dans la liste des pions mangeables
-        for(let _i = 0; _i<2; _i++){
-            for(let _j = 0; _j<2; _j++){
-                
-                i = _i === 0 ? -1 : 1;
-                j = _j === 0 ? -1 : 1;
+        //Vérifie si le pion mangé existe
+        i = positionPionMangeur.x > positionPionMange.x ? 1 : -1;
+        j = positionPionMangeur.x > positionPionMange.y ? 1 : -1;
 
-                if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:position.x+(1*i),y:position.y+(1*j)}))){
-                    pionMange = this.plateau.getPionFromPosition({x:position.x+(1*i),y:position.y+(1*j)});
-                }
-            }
+        if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:positionPionMange.x+i,y:positionPionMange.y+j}))){
+            pionMange = this.plateau.getPionFromPosition({x:positionPionMange.x+i,y:positionPionMange.y+j});
         }
 
         //Si il existe, supprime le pion
@@ -274,8 +270,6 @@ class Jeu{
             //Retire le pion dans le jeu
             this.plateau.retirePion(pionMange);
         }
-
-        //TODO: tester avec des reines
     }
 
     /**
