@@ -6,7 +6,8 @@ class Jeu{
     pionSelectionne:Pion;
     pionsMangeables:Pion[] = [];
     couleurJoueur:String;
-
+    couleurJoueurEnCours:String = "noir";
+    modeSolo:Boolean;
     /**
      * Crée un nouveau jeu
      * @param modeSolo 
@@ -14,10 +15,17 @@ class Jeu{
      */
     constructor(modeSolo:Boolean, couleurJoueur:String = Math.random() >= 0.5 ? "noir" : "blanc"){
         
+        this.modeSolo = modeSolo;
+
         //Fixe la couleur du joueur
         this.couleurJoueur = couleurJoueur;
-        console.log("Tour "+this.tour + ", les noirs commencent");
-        
+
+        if(!this.modeSolo){
+            console.log("Vous jouez les "+couleurJoueur);
+        }
+
+        console.log("Les noirs commencent");
+
         //Création graphique du plateau
         this.creerPlateauGraphiquement();
 
@@ -44,42 +52,45 @@ class Jeu{
         //Récupère la position de la case cliquée
         let position = this.getPositionFromEvent(e);
 
-        if(position){
+        if(this.peutJouer()){
+            if(position){
 
-            //Récupère le pion cliqué si il existe
-            let pion = this.getPionFromPosition(position);
-
-            //-Si il y a un pion à cet endroit
-            if(pion!==0){
-
-                //- Si aucun pion n'est déjà selectionné ou si un pion de la couleur du joueur est déjà selectionné
-                //- Et si le pion cible est de la couleur du joueur
-                //TODO: supprimer les parenthèses compliquées en mode mult
-                if(this.peutJouer(pion.couleur)){
-                    //Selectionne le pion
-                    this.selectPion(pion);
-
-                    //Affiche les déplacements possibles
-                    this.afficheDeplacementsPossiblesFromPion(pion);
+                //Récupère le pion cliqué si il existe
+                let pion = this.getPionFromPosition(position);
+    
+                //-Si il y a un pion à cet endroit
+                if(pion!==0){
+    
+                    //- Si aucun pion n'est déjà selectionné ou si un pion de la couleur du joueur est déjà selectionné
+                    //- Et si le pion cible est de la couleur du joueur
+                    if(pion.couleur === this.couleurJoueurEnCours){
+                        //Selectionne le pion
+                        this.selectPion(pion);
+    
+                        //Affiche les déplacements possibles
+                        this.afficheDeplacementsPossiblesFromPion(pion);
+                    }
+    
                 }
-
-            }
-            //-Si il n'y a pas de pion à cet endroit
-            else{
-                //-Si un pion est selectionné et si la case est possible
-                if(this.pionSelectionne && e.target.classList.contains('plateau--case__possible')){
-                    
-                    //Mange un pion
-                    this.mangePion(this.pionSelectionne,position);
-
-                    //Déplace le pion
-                    this.deplacePionAtPosition(this.pionSelectionne,position);
-
-                    //Tour suivant
-                    this.tourSuivant();
+                //-Si il n'y a pas de pion à cet endroit
+                else{
+                    //-Si un pion est selectionné et si la case est possible
+                    if(this.pionSelectionne && e.target.classList.contains('plateau--case__possible')){
+                        
+                        //Mange un pion
+                        this.mangePion(this.pionSelectionne,position);
+    
+                        //Déplace le pion
+                        this.deplacePionAtPosition(this.pionSelectionne,position);
+    
+                        //Tour suivant
+                        this.tourSuivant();
+                    }
                 }
             }
         }
+
+        
     }
 
 
@@ -253,7 +264,7 @@ class Jeu{
 
         //Vérifie si le pion mangé existe
         i = positionPionMangeur.x > positionPionMange.x ? 1 : -1;
-        j = positionPionMangeur.x > positionPionMange.y ? 1 : -1;
+        j = positionPionMangeur.y > positionPionMange.y ? 1 : -1;
 
         if(this.pionsMangeables.includes(this.plateau.getPionFromPosition({x:positionPionMange.x+i,y:positionPionMange.y+j}))){
             pionMange = this.plateau.getPionFromPosition({x:positionPionMange.x+i,y:positionPionMange.y+j});
@@ -291,8 +302,8 @@ class Jeu{
      */
     tourSuivant(){
         this.tour++;
-        this.couleurJoueur = this.tour%2 === 0 ? "blanc" : "noir";
-        this.plateau.couleurJoueur = this.couleurJoueur;
+        this.couleurJoueurEnCours = this.couleurJoueurEnCours === "blanc" ? "noir" : "blanc";
+        console.log("Tour du joueur", this.couleurJoueurEnCours);
     }
 
 
@@ -349,7 +360,11 @@ class Jeu{
     }
 
 
-    peutJouer(couleur:String):boolean{
-        return (couleur === 'blanc' && (this.tour%2 === 0) || couleur === 'noir' && (this.tour%2 === 1));
+    peutJouer():boolean{
+        if(this.modeSolo){
+            return (this.couleurJoueurEnCours === 'blanc' && (this.tour%2 === 0) || this.couleurJoueurEnCours === 'noir' && (this.tour%2 === 1));
+        }else{
+            return((this.couleurJoueur === this.couleurJoueurEnCours) && (this.couleurJoueurEnCours === 'blanc' && (this.tour%2 === 0) || this.couleurJoueurEnCours === 'noir' && (this.tour%2 === 1)));
+        }
     }
 }

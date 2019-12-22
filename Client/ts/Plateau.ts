@@ -34,8 +34,10 @@ class Plateau{
                 if((i < 2 || i > 7) && ((i+j)%2 === 0)){
                     if(i < 2){
                         this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'n' : 'b');
+                        // this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'N' : 'B');
                     }else{
                         this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'b' : 'n');
+                        // this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'B' : 'N');
                     }
                 }
             }
@@ -128,7 +130,6 @@ class Plateau{
         let positionPion = this.getPositionFromPion(pion);
         let res = [];
         let i,j;
-
         try{
             if(!pion.reine){
                 for(let _i = 0; _i<2; _i++){
@@ -142,7 +143,7 @@ class Plateau{
                             // - Si personne dans l'endroit visé
                             if(this.plateau[positionPion.x+(1*i)][positionPion.y+(1*j)]===0){
                                 // - Si le pion avance dans la bonne direction
-                                if((pion.couleur === "blanc" && j === -1) || (pion.couleur === "noir" && j === 1)){
+                                if((pion.couleur === "blanc" && j === 1) || (pion.couleur === "noir" && j === -1)){
                                     res.push({x:positionPion.x+(1*i),y:positionPion.y+(1*j)})
                                 }
                             }
@@ -186,7 +187,7 @@ class Plateau{
                                 // - Si on a rencontré un pion avant et si la case actuelle est vide
                                 if(aRencontrePion && this.plateau[positionPion.x+(k*i)][positionPion.y+(k*j)] === 0){
                                     // - Si c'était un pion ennemi
-                                    if(!this.jeu.peutJouer(this.plateau[positionPion.x+((k-1)*i)][positionPion.y+((k-1)*j)].couleur)){
+                                    if(this.plateau[positionPion.x+((k-1)*i)][positionPion.y+((k-1)*j)].couleur !== this.jeu.couleurJoueurEnCours){
                                         res.push({x:positionPion.x+(k*i),y:positionPion.y+(k*j), mange:this.getPionFromPosition({x:positionPion.x+((k-1)*i),y:positionPion.y+((k-1)*j)})});
                                     }
 

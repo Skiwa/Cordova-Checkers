@@ -19,7 +19,7 @@
     <script src="js/socket.io.js"></script>
     <script>
       //Changer à true pour tester le jeu de dames sans connexion
-      let modeSolo = true;
+      let modeSolo = false;
 
       if (!modeSolo) {
         console.log(
@@ -31,7 +31,7 @@
         var socket = io.connect("http://localhost:3000");
         //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
         socket.on("connection_ok", function(message) {
-          alert("Le serveur a un message pour vous : " + message);
+          // alert("Le serveur a un message pour vous : " + message);
 
           let pseudo = "";
           while (pseudo === "") {
@@ -43,9 +43,9 @@
             console.log(msg);
           });
           socket.on("ready", function(msg) {
-            console.log(msg);
+            console.log(JSON.parse(msg));
             //Lance un jeu avec la couleur du joueur fixée par le serveur
-            new Jeu(modeSolo, msg.color);
+            new Jeu(modeSolo, JSON.parse(msg).color);
           });
         });
         // Lorsqu'on clique sur le bouton, on envoie un "message" au serveur

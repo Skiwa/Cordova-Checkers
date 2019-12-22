@@ -121,7 +121,7 @@ class Plateau {
                             // - Si personne dans l'endroit visé
                             if (this.plateau[positionPion.x + (1 * i)][positionPion.y + (1 * j)] === 0) {
                                 // - Si le pion avance dans la bonne direction
-                                if ((pion.couleur === "blanc" && j === -1) || (pion.couleur === "noir" && j === 1)) {
+                                if ((pion.couleur === "blanc" && j === 1) || (pion.couleur === "noir" && j === -1)) {
                                     res.push({ x: positionPion.x + (1 * i), y: positionPion.y + (1 * j) });
                                 }
                             }
@@ -158,7 +158,7 @@ class Plateau {
                                 // - Si on a rencontré un pion avant et si la case actuelle est vide
                                 if (aRencontrePion && this.plateau[positionPion.x + (k * i)][positionPion.y + (k * j)] === 0) {
                                     // - Si c'était un pion ennemi
-                                    if (!this.jeu.peutJouer(this.plateau[positionPion.x + ((k - 1) * i)][positionPion.y + ((k - 1) * j)].couleur)) {
+                                    if (this.plateau[positionPion.x + ((k - 1) * i)][positionPion.y + ((k - 1) * j)].couleur !== this.jeu.couleurJoueurEnCours) {
                                         res.push({ x: positionPion.x + (k * i), y: positionPion.y + (k * j), mange: this.getPionFromPosition({ x: positionPion.x + ((k - 1) * i), y: positionPion.y + ((k - 1) * j) }) });
                                     }
                                     break;
