@@ -286,7 +286,21 @@ class Jeu {
             plateau_body.appendChild(ligne);
         }
         plateau.appendChild(plateau_body);
+        document.getElementById("main").innerHTML = "";
         document.getElementById("main").appendChild(plateau);
+    }
+    /**
+     * Mouvement d'un ennemi
+     * @param anciennePosition
+     * @param nouvellePosition
+     */
+    ennemiJoue(anciennePosition, nouvellePosition) {
+        let pion = this.getPionFromPosition(anciennePosition);
+        this.selectPion(pion);
+        this.afficheDeplacementsPossiblesFromPion(pion);
+        this.mangePion(this.pionSelectionne, nouvellePosition);
+        this.deplacePionAtPosition(this.pionSelectionne, nouvellePosition);
+        this.tourSuivant();
     }
     peutJouer() {
         if (this.modeSolo) {
