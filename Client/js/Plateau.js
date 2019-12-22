@@ -1,31 +1,32 @@
 class Plateau {
-    constructor(taille, couleurJoueur, jeu) {
-        this.taille = taille;
-        this.couleurJoueur = couleurJoueur;
-        this.initialisePlateau();
+    constructor(jeu) {
         this.jeu = jeu;
+        this.initialisePlateau();
     }
+    /**
+     * Crée le plateau
+     */
     initialisePlateau() {
         //Initialise la grille
-        this.plateau = new Array(this.taille);
-        for (var i = 0; i < this.taille; i++) {
-            this.plateau[i] = new Array(this.taille);
+        this.plateau = new Array(this.jeu.taillePlateau);
+        for (var i = 0; i < this.jeu.taillePlateau; i++) {
+            this.plateau[i] = new Array(this.jeu.taillePlateau);
         }
         //Remplie la grille
-        for (var i = 0; i < this.taille; i++) {
-            for (var j = 0; j < this.taille; j++) {
+        for (var i = 0; i < this.jeu.taillePlateau; i++) {
+            for (var j = 0; j < this.jeu.taillePlateau; j++) {
                 this.plateau[i][j] = 0;
             }
         }
         //Ajoute les pions
-        for (let i = 0; i < this.taille; i++) {
-            for (let j = 0; j < this.taille; j++) {
+        for (let i = 0; i < this.jeu.taillePlateau; i++) {
+            for (let j = 0; j < this.jeu.taillePlateau; j++) {
                 if ((i < 2 || i > 7) && ((i + j) % 2 === 0)) {
                     if (i < 2) {
-                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'n' : 'b');
+                        this.plateau[j][i] = new Pion(this.jeu.couleurJoueur === "blanc" ? 'n' : 'b');
                     }
                     else {
-                        this.plateau[j][i] = new Pion(this.couleurJoueur === "blanc" ? 'b' : 'n');
+                        this.plateau[j][i] = new Pion(this.jeu.couleurJoueur === "blanc" ? 'b' : 'n');
                     }
                 }
             }
@@ -36,8 +37,8 @@ class Plateau {
      */
     toString() {
         var res = "";
-        for (var i = 0; i < this.taille; i++) {
-            for (var j = 0; j < this.taille; j++) {
+        for (var i = 0; i < this.jeu.taillePlateau; i++) {
+            for (var j = 0; j < this.jeu.taillePlateau; j++) {
                 if (this.plateau[j][i] instanceof Pion) {
                     res += this.plateau[j][i].getChar() + " ";
                 }
@@ -117,7 +118,7 @@ class Plateau {
                         i = _i === 0 ? -1 : 1;
                         j = _j === 0 ? -1 : 1;
                         // - Si l'endroit visé existe
-                        if (positionPion.x + (1 * i) >= 0 && positionPion.x + (1 * i) < this.taille && positionPion.y + (1 * j) >= 0 && positionPion.y + (1 * j) < this.taille) {
+                        if (positionPion.x + (1 * i) >= 0 && positionPion.x + (1 * i) < this.jeu.taillePlateau && positionPion.y + (1 * j) >= 0 && positionPion.y + (1 * j) < this.jeu.taillePlateau) {
                             // - Si personne dans l'endroit visé
                             if (this.plateau[positionPion.x + (1 * i)][positionPion.y + (1 * j)] === 0) {
                                 // - Si le pion avance dans la bonne direction
@@ -127,7 +128,7 @@ class Plateau {
                             }
                             else {
                                 // - Si la case d'après existe
-                                if (positionPion.x + (2 * i) >= 0 && positionPion.x + (2 * i) < this.taille && positionPion.y + (2 * j) >= 0 && positionPion.y + (2 * j) < this.taille) {
+                                if (positionPion.x + (2 * i) >= 0 && positionPion.x + (2 * i) < this.jeu.taillePlateau && positionPion.y + (2 * j) >= 0 && positionPion.y + (2 * j) < this.jeu.taillePlateau) {
                                     // - Si personne a la case d'après et si le pion visé est adverse, c'est bon
                                     if (this.plateau[positionPion.x + (2 * i)][positionPion.y + (2 * j)] === 0 && this.plateau[positionPion.x + (1 * i)][positionPion.y + (1 * j)].couleur !== pion.couleur) {
                                         res.push({ x: positionPion.x + (2 * i), y: positionPion.y + (2 * j), mange: this.getPionFromPosition({ x: positionPion.x + (1 * i), y: positionPion.y + (1 * j) }) });
@@ -147,7 +148,7 @@ class Plateau {
                         aRencontrePion = false;
                         for (let k = 1; k < 10; k++) {
                             // - Si la case existe
-                            if (positionPion.x + (k * i) >= 0 && positionPion.x + (k * i) < this.taille && positionPion.y + (k * j) >= 0 && positionPion.y + (k * j) < this.taille) {
+                            if (positionPion.x + (k * i) >= 0 && positionPion.x + (k * i) < this.jeu.taillePlateau && positionPion.y + (k * j) >= 0 && positionPion.y + (k * j) < this.jeu.taillePlateau) {
                                 // - Si la case est vide 
                                 if (this.plateau[positionPion.x + (k * i)][positionPion.y + (k * j)] === 0) {
                                     res.push({ x: positionPion.x + (k * i), y: positionPion.y + (k * j) });

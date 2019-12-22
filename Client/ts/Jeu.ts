@@ -1,41 +1,46 @@
 class Jeu{
 
-    plateau: Plateau;
-    taillePlateau:number = 10;
-    tour:number = 1;
-    pionSelectionne:Pion;
-    pionsMangeables:Pion[] = [];
-    couleurJoueur:String;
-    couleurJoueurEnCours:String = "noir";
-    modeSolo:Boolean;
+    plateau: Plateau;                       //Grille de pions
+    taillePlateau:number = 10;              //Taille fixée à 10
+    tour:number = 1;                        //Tour%2=1 -> Noirs sinon Blancs
+    pionSelectionne:Pion;                   //Pion séléctionné qui va peut être bouger
+    pionsMangeables:Pion[] = [];            //Pions mangeables pour un pion selectionné
+    couleurJoueur:String;                   //Couleur du joueur
+    couleurJoueurEnCours:String = "noir";   //Couleur du joueur en cours, change à chaque tour
+    modeSolo:Boolean;                       //Mode solo ou mode multijoueur
+    eventTarget = new EventTarget();        //EventTarget qui envoie des évènements de type "Joueur a joué"
+
     /**
      * Crée un nouveau jeu
      * @param modeSolo 
      * @param couleurJoueur Défini de manière random par defaut. Peut être renseignée 
      */
     constructor(modeSolo:Boolean, couleurJoueur:String = Math.random() >= 0.5 ? "noir" : "blanc"){
-        
-        this.modeSolo = modeSolo;
 
         //Fixe la couleur du joueur
         this.couleurJoueur = couleurJoueur;
 
+        //Fixe le mode de jeu
+        this.modeSolo = modeSolo;
         if(!this.modeSolo){
             console.log("Vous jouez les "+couleurJoueur);
         }
 
-        console.log("Les noirs commencent");
-
+        //Initialisation du plateau
+        this.plateau = new Plateau(this);
+        
         //Création graphique du plateau
         this.creerPlateauGraphiquement();
-
-        //Initialisation du plateau
-        this.plateau = new Plateau(10, this.couleurJoueur, this);
-
+        
         //Capture les clics utilisateur
         this.setClickEventListener();
+
+        console.log("Les noirs commencent");
     }
 
+    /**
+     * Ajoute un listener pour chaque clic sur le plateau
+     */
     setClickEventListener(){
         document.querySelector('.plateau').addEventListener('click', (event)=>{
             this.onClickPlateau(event);
@@ -52,37 +57,43 @@ class Jeu{
         //Récupère la position de la case cliquée
         let position = this.getPositionFromEvent(e);
 
+        //Regarde si c'est bien le tour du joueur actuel
         if(this.peutJouer()){
+            //Regarde si on a bien cliqué sur une case
             if(position){
-
                 //Récupère le pion cliqué si il existe
                 let pion = this.getPionFromPosition(position);
-    
-                //-Si il y a un pion à cet endroit
+                
+                //- Si il y a un pion à cet endroit
                 if(pion!==0){
-    
-                    //- Si aucun pion n'est déjà selectionné ou si un pion de la couleur du joueur est déjà selectionné
-                    //- Et si le pion cible est de la couleur du joueur
+                    //- Si c'est un pion de la couleur du joueur en cours
                     if(pion.couleur === this.couleurJoueurEnCours){
                         //Selectionne le pion
                         this.selectPion(pion);
     
-                        //Affiche les déplacements possibles
+                        //Affiche les déplacements possibles pour ce pion
                         this.afficheDeplacementsPossiblesFromPion(pion);
                     }
     
                 }
-                //-Si il n'y a pas de pion à cet endroit
+                //- Si il n'y a pas de pion à cet endroit
                 else{
-                    //-Si un pion est selectionné et si la case est possible
+                    //- Si un pion est selectionné et si le pion peut aller à cet endroit
                     if(this.pionSelectionne && e.target.classList.contains('plateau--case__possible')){
+                        //Récupère la position du pion selectionné
+                        let anciennePosition = this.plateau.getPositionFromPion(this.pionSelectionne);
                         
-                        //Mange un pion
+                        //Teste si on mange un pion
                         this.mangePion(this.pionSelectionne,position);
     
                         //Déplace le pion
                         this.deplacePionAtPosition(this.pionSelectionne,position);
     
+                        //Le jeu envoie un event de type "Le joueur a joué".
+                        //Il passe un objet contenant l'ancienne et la nouvelle position
+                        let event = new CustomEvent("jeu--deplacement", {detail:{anciennePosition:{x:anciennePosition.x,y:anciennePosition.y}, nouvellePosition:{x:position.x,y:position.y}}});
+                        this.eventTarget.dispatchEvent(event);
+
                         //Tour suivant
                         this.tourSuivant();
                     }
@@ -99,11 +110,11 @@ class Jeu{
      * @param e Evènement du clic
      */
     getPositionFromEvent(e){
-        //-Si la cible est une balise <circle>, remonte chercher la case dans les parents
+        //- Si la cible est une balise <circle>, remonte chercher la case dans les parents
         if(e.target.tagName==='circle'){
             var caseCible = e.target.parentElement.parentElement;
         }
-        //-Si la cible est une case
+        //- Si la cible est une case
         else{
             var caseCible = e.target;
         }
@@ -361,19 +372,29 @@ class Jeu{
     }
 
     /**
-     * Mouvement d'un ennemi
+     * Mouvement d'un ennemi.
+     * Appelé lorsque le serveur envoie le mouvement de l'adversaire
      * @param anciennePosition 
      * @param nouvellePosition 
      */
     ennemiJoue(anciennePosition:{x:number, y:number}, nouvellePosition:{x:number, y:number}){
+        //Récupère le pion qui va se déplacer
         let pion = this.getPionFromPosition(anciennePosition);
+        //Selectionne le pion
         this.selectPion(pion);
+        //Affiche les déplacements possibles du pion
         this.afficheDeplacementsPossiblesFromPion(pion);
+        //Teste si il peut manger un autre pion
         this.mangePion(this.pionSelectionne,nouvellePosition);
+        //Déplace le pion
         this.deplacePionAtPosition(this.pionSelectionne,nouvellePosition);
+        //Tour suivant
         this.tourSuivant();
     }
 
+    /**
+     * Vérifie si le joueur actuel peut jouer.
+     */
     peutJouer():boolean{
         if(this.modeSolo){
             return (this.couleurJoueurEnCours === 'blanc' && (this.tour%2 === 0) || this.couleurJoueurEnCours === 'noir' && (this.tour%2 === 1));

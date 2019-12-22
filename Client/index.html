@@ -44,9 +44,39 @@
           });
           socket.on("ready", function(msg) {
             console.log(JSON.parse(msg));
+
             //Lance un jeu avec la couleur du joueur fixée par le serveur
-            jeu = new Jeu(modeSolo, JSON.parse(msg).color);
+            jeu = new Jeu(modeSolo, JSON.parse(msg).color);        
+
+            
+            //Le jeu émet un évènement à chaque deplacement du joueur
+            jeu.eventTarget.addEventListener("jeu--deplacement", function(event){
+              console.log("Le joueur a joué : ", event.detail);
+
+              //Envoie le déplacement effectué au serveur
+              //Envoie un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
+              //TODO: - évènement à gérer
+              //      - déplacement à enregistrer en BD
+              //      - envoyer le déplacement au joueur ennemi
+              socket.emit("deplacement-joueur-envoi", event.detail);
+            })
+
+            
+            //Un ennemi a joué. 
+            //Recoit un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
+            //TODO:   - évènement à gérer
+            //        - déplacement à inverser
+            socket.on("deplacement-joueur-reception", function(deplacement){
+              jeu.ennemiJoue(deplacement);
+            });
+
           });
+
+
+
+
+
+
         });
         // Lorsqu'on clique sur le bouton, on envoie un "message" au serveur
         let btn = document.getElementById("poke");
