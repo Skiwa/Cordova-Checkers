@@ -139,9 +139,25 @@ class Plateau{
                         if(positionPion.x+(1*i) >= 0 && positionPion.x+(1*i) < this.jeu.taillePlateau && positionPion.y+(1*j) >= 0 && positionPion.y+(1*j) < this.jeu.taillePlateau){
                             // - Si personne dans l'endroit visé
                             if(this.plateau[positionPion.x+(1*i)][positionPion.y+(1*j)]===0){
+
                                 // - Si le pion avance dans la bonne direction
-                                if((pion.couleur === "blanc" && j === 1) || (pion.couleur === "noir" && j === -1)){
-                                    res.push({x:positionPion.x+(1*i),y:positionPion.y+(1*j)})
+                                if(this.jeu.modeSolo){
+                                    if(pion.couleur === this.jeu.couleurJoueurEnCours){
+
+                                        if(this.jeu.couleurJoueur === this.jeu.couleurJoueurEnCours){
+                                            if(j===-1){
+                                                res.push({x:positionPion.x+(1*i),y:positionPion.y+(1*j)})
+                                            }
+                                        }else{
+                                            if(j===1){
+                                                res.push({x:positionPion.x+(1*i),y:positionPion.y+(1*j)})
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    if((pion.couleur === this.jeu.couleurJoueur && j === -1) || (pion.couleur !== this.jeu.couleurJoueur && j === 1)){
+                                        res.push({x:positionPion.x+(1*i),y:positionPion.y+(1*j)})
+                                    }
                                 }
                             }
                             // - Si un pion à l'endroit visé
