@@ -19,12 +19,14 @@ class Joueur {
 }
 
 // <----------------- Fonctions ----------------->
+
+// Fonction d'ajout d'un joueur dans la liste d'attente
 function PlayerConnected(id, joueur) {
   ListeAttentejoueurs.push({ id, joueur });
   console.log(ListeAttentejoueurs);
 }
 
-// Future fonction de suppression d'un joueur dans liste ListeAttentejoueurs
+//Fonction de suppression d'un joueur dans liste d'attente
 function PlayerDisconnected(id) {
   ListeAttentejoueurs = ListeAttentejoueurs.filter(function(el) {
     return el.id != id;
@@ -33,19 +35,17 @@ function PlayerDisconnected(id) {
 }
 
 function addJoueur(pseudo, id) {
-  // Test de présence dans notre "BDD"
+  // Test de présence dans notre "BDD" sinon création d'un nouveau
   if ((joueur = listJoueur.find(joueur => joueur.pseudo === pseudo))) {
     console.log(joueur.pseudo + " est présent dans 'bdd'.");
     var newJoueur = joueur;
   } else {
-    // Création d'un nouveau joueur si non présent
     console.log("Non présent dans 'bdd'.");
     var newJoueur = new Joueur(pseudo);
   }
-  //Ajoute le joueur à la liste + retourne un objet Joueur et l'état de la liste
+  //Ajoute le joueur à la liste + retourne l'état de la liste
   PlayerConnected(id, newJoueur);
   return {
-    newJoueur: newJoueur,
     listeAttente: ListeAttentejoueurs
   };
 }

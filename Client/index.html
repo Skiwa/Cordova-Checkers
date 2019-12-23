@@ -10,7 +10,6 @@
   <body>
     <div id="main"></div>
 
-    <p><button id="poke">Embêter le serveur</button></p>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="js/Plateau.js"></script>
     <script src="js/Jeu.js"></script>
@@ -19,7 +18,7 @@
     <script src="js/socket.io.js"></script>
     <script>
       //Changer à true pour tester le jeu de dames sans connexion
-      let modeSolo = true;
+      let modeSolo = false;
       var jeu;
       if (!modeSolo) {
         console.log(
@@ -31,8 +30,6 @@
         var socket = io.connect("http://localhost:3000");
         //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
         socket.on("connection_ok", function(message) {
-          // alert("Le serveur a un message pour vous : " + message);
-
           let pseudo = "";
           while (pseudo === "") {
             pseudo = prompt("Utilisateur");
@@ -56,15 +53,11 @@
 
               //Envoie le déplacement effectué au serveur
               //Envoie un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
-              //TODO: - évènement à gérer
-              //      - envoyer le déplacement au joueur ennemi
               socket.emit("deplacement-joueur-envoi", event.detail);
             });
 
             //Un ennemi a joué.
             //Recoit un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
-            //TODO:   - évènement à gérer
-            //        - déplacement à inverser
             socket.on("deplacement-joueur-reception", function(deplacement) {
               // console.log(deplacement);
               jeu.ennemiJoue(
@@ -74,11 +67,6 @@
             });
           });
         });
-        // Lorsqu'on clique sur le bouton, on envoie un "message" au serveur
-        let btn = document.getElementById("poke");
-        btn.onclick = function() {
-          socket.emit("message", "Salut serveur, ça va ?");
-        };
       } else {
         console.log(
           "%c -- Jeu lancé en mode solo --",
