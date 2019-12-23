@@ -9,10 +9,24 @@
 .plateau{
     border:red solid 1px;
 }
-.plateau .plateau--case{
-    height:5vh;
-    width:5vh;
-}
+
+@media screen and (orientation: portrait) {
+    .plateau .plateau--case{
+        height:9vw;
+        width:9vw;
+    }
+  }
+
+  @media screen and (orientation: landscape) {
+    .plateau .plateau--case{
+        height:9vh;
+        width:9vh;
+    }
+  }
+
+
+    
+
 .plateau .plateau--case.plateau--case__possible{
     box-shadow: inset 0px 0px 20px 3px rgb(71, 109, 211);
     cursor:pointer;
