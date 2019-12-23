@@ -33,7 +33,7 @@ io.on("connection", function(socket) {
     listeAttente = obj.listeAttente;
   });
 
-  setTimeout(function() {
+  setInterval(function() {
     if (listeAttente.length >= 2) {
       game_management.newPartie(listeAttente[0].joueur, listeAttente[1].joueur);
       var color = game_management.selectColor();
