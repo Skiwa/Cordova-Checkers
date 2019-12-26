@@ -13,12 +13,12 @@ var listeAttente = [];
 server.listen(3000);
 
 // Reconnaissance de la partie Client
-app.use(express.static(path.join(__dirname, "../Client/www")));
+app.use(express.static(path.join(__dirname, "../Client")));
 
 //Lancement fichier index.html lors de l'arrivée sur localhost:3000
-//../Client/www/vues
+//../Client/vues
 app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "../Client/www/", "index.html"));
+  res.sendFile(path.join(__dirname, "../Client/", "index.html"));
 });
 
 // Quand un client se connecte au WebSocket, le serveur lui envoie un message
