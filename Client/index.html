@@ -59,7 +59,7 @@
             //Un ennemi a joué.
             //Recoit un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
             socket.on("deplacement-joueur-reception", function(deplacement) {
-              // console.log(deplacement);
+              console.log("Ennemi joue",deplacement);
               jeu.ennemiJoue(
                 deplacement.anciennePosition,
                 deplacement.nouvellePosition

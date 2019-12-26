@@ -200,10 +200,16 @@ class Jeu{
         
         //Déplace le pion dans le jeu
         this.plateau.deplacePionAtPosition(pion,position);
-
+        
         //Teste si le pion devient une reine
-        if((position.y === 0 && this.tour%2===0) || (position.y === this.taillePlateau-1 && this.tour%2===1)){
-            this.pionDevientReine(pion);
+        if(this.couleurJoueur === this.couleurJoueurEnCours){
+            if(position.y === 0){
+                this.pionDevientReine(pion);
+            }
+        }else{
+            if(position.y === this.taillePlateau -1){
+                this.pionDevientReine(pion);
+            }
         }
     }
 
