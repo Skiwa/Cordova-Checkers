@@ -27,7 +27,8 @@
         );
 
         //pour se connecter au serveur
-        var socket = io.connect("http://localhost:3000");
+        //Entrer ici l'adresse IP de la machine qui host le serveur nodejs. 'localhost' n'est pas accessible depuis un autre device tel qu'un mobile
+        var socket = io.connect("http://192.168.1.79:3000");
         //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
         socket.on("connection_ok", function(message) {
           let pseudo = "";

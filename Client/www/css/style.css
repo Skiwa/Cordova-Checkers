@@ -8,10 +8,12 @@
 /* Plateau */
 .plateau{
     border:red solid 1px;
+    
+
 }
 
 
-    .plateau .plateau--case{
+     .plateau--case{
         height:9vmin;
         width:9vmin;
     }
