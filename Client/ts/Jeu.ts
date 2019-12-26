@@ -356,7 +356,7 @@ class Jeu{
                         pionSvg.classList.add((this.couleurJoueur === "blanc" ? "pion__blanc" : "pion__noir"));
                     }
 
-                    pionSvg.setAttribute("viewBox", "0 0 100 100"); 
+                    pionSvg.setAttribute("viewBox", "0 0 100 92"); 
                     pionSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg"); 
 
                     //Cercle svg
