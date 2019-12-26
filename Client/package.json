@@ -1,37 +1,29 @@
 {
-  "name": "cordova-checkers-client",
+  "name": "com.checkers.cordova",
+  "displayName": "CordovaCheckers",
   "version": "1.0.0",
-  "description": "Client Cordova pour l'application Cordova de jeu de dames",
+  "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Skiwa/Cordova-Checkers.git"
-  },
-  "author": "Julien Haegman",
-  "contributors": [
-    {
-      "name": "Nicolas Gau"
-    },
-    {
-      "name": "Bettina Grimard"
-    },
-    {
-      "name": "Martin Nicollet"
-    },
-    {
-      "name": "Julien Haegman"
-    }
+  "keywords": [
+    "ecosystem:cordova"
   ],
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Skiwa/Cordova-Checkers/issues"
-  },
-  "homepage": "https://github.com/Skiwa/Cordova-Checkers#readme",
-  "devDependencies": {},
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
   "dependencies": {
-    "typescript": "^2.1.6"
+    "cordova-android": "^8.1.0"
+  },
+  "devDependencies": {
+    "cordova-plugin-whitelist": "^1.3.4"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {}
+    },
+    "platforms": [
+      "android"
+    ]
   }
 }
