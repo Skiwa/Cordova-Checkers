@@ -10,7 +10,85 @@ TODO
 
 ## Installation
 
-TODO ?
+### Construire et déployer l'application
+
++ Installer Cordova, Gradle, Android SDK, Java JDK, ...
+
++ `git clone https://github.com/Skiwa/Cordova-Checkers.git`
+
++ `npm install` dans
+    + Cordova-Checkers/Client
+    + Cordova-Checkers/Client/www
+    + Cordova-Checkers/Serveur
+
+
++ Dans Cordova-Checkers/Client/www/index.html:
+    + Ligne 31: Remplacer l'adresse IP présente par celle de l'appareil qui hébergera le serveur Node
+
+
++ Dans Cordova-Checkers/Client:
+    + `cordova platform add android` 
+    + (`cordova requirements` pour vérifier si tout est ok)
+    + `cordova build android`
+
++ Dans Cordova-Checkers/Serveur:
+    + `node app.js`
+
+
+### Accéder à l'application
+#### Via navigateur
+
++ Accéder à (http://localhost:3000/)
+
+
+#### Via mobile
+##### Installer l'app
+
++ Brancher le mobile par USB
+
++ Dans Cordova-Checkers/Client:
+    + `cordova run android`
+
+
+##### Utiliser l'app
+
++ Connecter les mobiles souhaités au même réseau wi-fi que l'appareil hébergeant le serveur.
+
++ Il n'est ensuite plus nécessaire de brancher le portable pour utiliser l'app tant que le portable est connecté au même wi-fi que le serveur. 
+
++ Si l'appareil hébergeant le serveur change, il est nécessaire de :
+    1. corriger l'adresse IP dans 'Cordova-Checkers/Client/www/index.html' avec celle du nouvel appareil
+    2. build à nouveau l'application avec `cordova build android`
+    3. la réinstaller avec `cordova run android` sur un mobile branché par USB.
+
+#### Via emulateur
+
++ Installer un emulateur
+
++ Dans Cordova-Checkers/Client:
+    + `cordova emulate android`
+
+
+### Ouvrir l'app dans Android-studio
+
++ Dans Android-studio:
+    + File -> New -> Import Project
+    + Naviguer à 'Cordova-Checkers/Client/platform'
+    + Selectionner le dossier "Android" et presser OK
+    
+    
+### Modifier l'app
+
++ Ajouter les modifications souhaitées dans Cordova-Checkers/Client/www
++ Dans 'Cordova-Checkers/Client' :
+    + `cordova build android`
++ Réinstaller l'app sur les mobiles
+
+
+
+
+
+
 
 ## Architecture
 
