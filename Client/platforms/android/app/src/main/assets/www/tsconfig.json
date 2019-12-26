@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+      "module": "commonjs",
+      "outDir": "js",
+      "rootDir": "ts",
+      "target": "es2016"
+  }
+}
