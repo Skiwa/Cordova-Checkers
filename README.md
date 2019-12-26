@@ -53,6 +53,7 @@ TODO
 ##### Utiliser l'app
 
 + Connecter les mobiles souhaités au même réseau wi-fi que l'appareil hébergeant le serveur.
+    + Il semble plus fiable d'utiliser un mobile comme hotspot wi-fi et de connecter l'ordinateur-serveur à ce réseau plutôt que de connecter les 2 appareil à un réseau wi-fi privé.
 
 + Il n'est ensuite plus nécessaire de brancher le portable pour utiliser l'app tant que le portable est connecté au même wi-fi que le serveur. 
 
