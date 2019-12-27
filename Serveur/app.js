@@ -19,7 +19,7 @@ console.log(
 // Quand un client se connecte au WebSocket, le serveur lui envoie un message
 io.on("connection", function (socket) {
   console.log("un client s'est connecté");
-
+  socket.emit("connection_ok");
   // Login du joueur entrant
   socket.on("login", function (pseudo) {
     var obj = user_management.addJoueur(pseudo, socket.id);

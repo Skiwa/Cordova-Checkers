@@ -32,7 +32,7 @@
         //Entrer ici l'adresse IP de la machine qui host le serveur nodejs. 'localhost' n'est pas accessible depuis un autre device tel qu'un mobile
         var socket = io.connect(adresseServeur + ":" + portServeur);
         //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
-        socket.on("connection_ok", function(message) {
+        socket.on("connection_ok", function() {
           let pseudo = "";
           while (pseudo === "") {
             pseudo = prompt("Utilisateur");
