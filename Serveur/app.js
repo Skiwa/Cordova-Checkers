@@ -1,26 +1,25 @@
 //Dépendances Node/npm
-var express = require("express");
-var app = express();
-var server = require("http").Server(app);
+var server = require("http")();
 const io = require("socket.io")(server);
-var os = require( 'os' );
+var os = require("os");
 
 //Dépendances locales
 var user_management = require("./user_management");
 var game_management = require("./game_management");
-
+var address_management = require("./address_management");
 
 const portServeur = 3000;
 var listeAttente = [];
 
 //Lance le serveur
 server.listen(portServeur);
-console.log("Serveur lancé sur les addresses : " + getAddressesIp());
+console.log(
+  "Serveur lancé sur les addresses : " + address_management.getAddressesIp()
+);
 
 // Quand un client se connecte au WebSocket, le serveur lui envoie un message
 io.on("connection", function(socket) {
   console.log("un client s'est connecté");
-  socket.emit("connection_ok", "Vous êtes bien connecté au serveur!");
 
   // Login du joueur entrant
   socket.on("login", function(pseudo) {
@@ -57,6 +56,7 @@ io.on("connection", function(socket) {
   socket.on("deplacement-joueur-envoi", function(move) {
     // Appel game module pour inversion des déplacements
     var inverseMove = game_management.inverseDeplacement(move);
+    // TODO : retravailler pour eviter le broadcast
     socket.broadcast.emit("deplacement-joueur-reception", inverseMove);
   });
 
@@ -69,25 +69,3 @@ io.on("connection", function(socket) {
     user_management.PlayerDisconnected(socket.id);
   });
 });
-
-
-
-/**
- * TODO : A isoler dans un fichier ? 
- * Récupère les addresses du serveur. 
- * Utile pour les logs et savoir à quelle addresse se connecter
- */
-function getAddressesIp(){  
-  var networkInterfaces = Object.values(os.networkInterfaces())
-      .reduce((r,a)=>{
-          r = r.concat(a)
-          return r;
-      }, [])
-      .filter(({family, address}) => {
-          return family.toLowerCase().indexOf('v4') >= 0 &&
-              address !== '127.0.0.1'
-      })
-      .map(({address}) => (address+":"+portServeur));
-  var ipAddresses = networkInterfaces.join(', ');
-  return(ipAddresses);
-}
