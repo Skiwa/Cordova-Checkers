@@ -1,7 +1,6 @@
 //Dépendances Node/npm
-var server = require("http")();
+var server = require("http").createServer();
 const io = require("socket.io")(server);
-var os = require("os");
 
 //Dépendances locales
 var user_management = require("./user_management");
@@ -14,21 +13,21 @@ var listeAttente = [];
 //Lance le serveur
 server.listen(portServeur);
 console.log(
-  "Serveur lancé sur les addresses : " + address_management.getAddressesIp()
+  "Serveur lancé sur les addresses : " + address_management.getAddressesIp(portServeur)
 );
 
 // Quand un client se connecte au WebSocket, le serveur lui envoie un message
-io.on("connection", function(socket) {
+io.on("connection", function (socket) {
   console.log("un client s'est connecté");
 
   // Login du joueur entrant
-  socket.on("login", function(pseudo) {
+  socket.on("login", function (pseudo) {
     var obj = user_management.addJoueur(pseudo, socket.id);
 
     listeAttente = obj.listeAttente;
   });
 
-  setInterval(function() {
+  setInterval(function () {
     if (listeAttente.length >= 2) {
       game_management.newPartie(listeAttente[0].joueur, listeAttente[1].joueur);
       var color = game_management.selectColor();
@@ -53,7 +52,7 @@ io.on("connection", function(socket) {
     }
   }, 5000);
 
-  socket.on("deplacement-joueur-envoi", function(move) {
+  socket.on("deplacement-joueur-envoi", function (move) {
     // Appel game module pour inversion des déplacements
     var inverseMove = game_management.inverseDeplacement(move);
     // TODO : retravailler pour eviter le broadcast
@@ -61,11 +60,11 @@ io.on("connection", function(socket) {
   });
 
   // TODO: Fin de game Victoire / Défaite
-  socket.on("finPartie", function(pseudo) {
+  socket.on("finPartie", function (pseudo) {
     console.log("Le joueur " + pseudo + " a gagné -> son nbVictoire++");
   });
 
-  socket.on("disconnect", function() {
+  socket.on("disconnect", function () {
     user_management.PlayerDisconnected(socket.id);
   });
 });
