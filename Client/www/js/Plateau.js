@@ -192,4 +192,23 @@ class Plateau {
         }
         return res;
     }
+    //Renvoie vrai si l'un des 2 joueurs n'a plus de pions
+    isFinPartie() {
+        let foundNoir = false;
+        let foundBlanc = false;
+        for (let i = 0; i < this.plateau.length; i++) {
+            for (let j = 0; j < this.plateau.length; j++) {
+                let c = this.plateau[i][j];
+                if (c instanceof Pion) {
+                    if (c.couleur === "blanc") {
+                        foundBlanc = true;
+                    }
+                    else {
+                        foundNoir = true;
+                    }
+                }
+            }
+        }
+        return (!foundNoir || !foundBlanc);
+    }
 }

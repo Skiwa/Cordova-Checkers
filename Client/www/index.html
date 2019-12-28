@@ -21,7 +21,7 @@
       const modeSolo = false; //jeu de dames en solo
       const adresseServeur = "http://192.168.1.79"; //Adresse du serveur
       const portServeur = 3000; //Port du serveur, par défaut à 3000
-      
+
       var jeu;
       if (!modeSolo) {
         console.log(
@@ -33,7 +33,6 @@
         var socket = io.connect(adresseServeur + ":" + portServeur);
         //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
         socket.on("connection_ok", function() {
-
           //Crée et affiche le formulaire de connexion
           let loginFormClass = new Login();
 
@@ -45,13 +44,13 @@
             let pseudo = form.pseudo.value;
             console.log("on a submit ! Bienvenue " + pseudo);
             socket.emit("login", pseudo);
-            
+
             socket.on("notReady", function(msg) {
               console.log(msg);
               //Affiche l'écran d'attente d'adversaire
               loginFormClass.attenteScreen();
             });
-            
+
             socket.on("ready", function(msg) {
               console.log(JSON.parse(msg));
 
@@ -67,6 +66,13 @@
                 //Envoie le déplacement effectué au serveur
                 //Envoie un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
                 socket.emit("deplacement-joueur-envoi", event.detail);
+
+                //Vérifie si la partie est terminée
+                if (jeu.isOver) {
+                  socket.emit("finPartie", pseudo);
+                  console.log("C'est fini vous avez gagné !");
+
+                }
               });
 
               //Un ennemi a joué.
@@ -77,11 +83,15 @@
                   deplacement.anciennePosition,
                   deplacement.nouvellePosition
                 );
+                //Vérifie si la partie est terminée
+                if (jeu.isOver) {
+                  console.log("C'est fini vous avez perdu !");
+                }
               });
             });
             //form.onsubmit retourne false pour empêcher le rafraîchissement de la page
             return false;
-          };  
+          };
         });
       } else {
         console.log(

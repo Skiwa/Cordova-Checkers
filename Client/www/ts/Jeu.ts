@@ -9,6 +9,7 @@ class Jeu{
     couleurJoueurEnCours:String = "noir";   //Couleur du joueur en cours, change à chaque tour
     modeSolo:Boolean;                       //Mode solo ou mode multijoueur
     eventTarget = new EventTarget();        //EventTarget qui envoie des évènements de type "Joueur a joué"
+    isOver:Boolean = false;                 //Définit si la partie est terminée
 
     /**
      * Crée un nouveau jeu
@@ -298,6 +299,9 @@ class Jeu{
             
             //Retire le pion dans le jeu
             this.plateau.retirePion(pionMange);
+
+            //Verifie s'il s'agissait du dernier pion du joueur
+            this.isOver = this.plateau.isFinPartie();
         }
     }
 

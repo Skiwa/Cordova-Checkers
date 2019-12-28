@@ -10,6 +10,7 @@ class Jeu {
         this.pionsMangeables = []; //Pions mangeables pour un pion selectionné
         this.couleurJoueurEnCours = "noir"; //Couleur du joueur en cours, change à chaque tour
         this.eventTarget = new EventTarget(); //EventTarget qui envoie des évènements de type "Joueur a joué"
+        this.isOver = false; //Définit si la partie est terminée
         //Fixe la couleur du joueur
         this.couleurJoueur = couleurJoueur;
         //Fixe le mode de jeu
@@ -240,6 +241,8 @@ class Jeu {
             pionElement.parentNode.removeChild(pionElement);
             //Retire le pion dans le jeu
             this.plateau.retirePion(pionMange);
+            //Verifie s'il s'agissait du dernier pion du joueur
+            this.isOver = this.plateau.isFinPartie();
         }
     }
     /**
