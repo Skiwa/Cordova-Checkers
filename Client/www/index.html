@@ -38,7 +38,7 @@
           let loginFormClass = new Login();
 
           //Récupère le formulaire dans le DOM
-          let form = document.getElementById("form-popup");
+          let form = document.getElementById("theForm");
 
           //Informe le serveur lorsqu'un pseudo a été entré
           form.onsubmit = function() {
@@ -47,9 +47,11 @@
             socket.emit("login", pseudo);
             
             socket.on("notReady", function(msg) {
-              //let recherchePartie = new recherchePartie()
               console.log(msg);
+              //Affiche l'écran d'attente d'adversaire
+              loginFormClass.attenteScreen();
             });
+            
             socket.on("ready", function(msg) {
               console.log(JSON.parse(msg));
 
