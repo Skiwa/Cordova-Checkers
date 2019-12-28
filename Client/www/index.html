@@ -14,16 +14,14 @@
     <script src="js/Plateau.js"></script>
     <script src="js/Jeu.js"></script>
     <script src="js/Pion.js"></script>
+    <script src="js/Login.js"></script>
     <script src="js/socket.io.js"></script>
     <script>
-      //Changer à true pour tester le jeu de dames sans connexion
-      let modeSolo = false;
-
       /* -- Options -- */
       const modeSolo = false; //jeu de dames en solo
-      const adresseServeur = "http://http://192.168.43.231"; //Adresse du serveur
+      const adresseServeur = "http://192.168.1.79"; //Adresse du serveur
       const portServeur = 3000; //Port du serveur, par défaut à 3000
-
+      
       var jeu;
       if (!modeSolo) {
         console.log(
@@ -32,46 +30,56 @@
         );
 
         //pour se connecter au serveur
-        //Entrer ici l'adresse IP de la machine qui host le serveur nodejs. 'localhost' n'est pas accessible depuis un autre device tel qu'un mobile
         var socket = io.connect(adresseServeur + ":" + portServeur);
         //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
-        socket.on("connection_ok", function(message) {
-          let pseudo = "";
-          while (pseudo === "") {
-            pseudo = prompt("Utilisateur");
-          }
+        socket.on("connection_ok", function() {
 
-          socket.emit("login", pseudo);
-          socket.on("notReady", function(msg) {
-            console.log(msg);
-          });
-          socket.on("ready", function(msg) {
-            console.log(JSON.parse(msg));
+          //Crée et affiche le formulaire de connexion
+          let loginFormClass = new Login();
 
-            //Lance un jeu avec la couleur du joueur fixée par le serveur
-            jeu = new Jeu(modeSolo, JSON.parse(msg).yourColor);
+          //Récupère le formulaire dans le DOM
+          let form = document.getElementById("form-popup");
 
-            //Le jeu émet un évènement à chaque deplacement du joueur
-            jeu.eventTarget.addEventListener("jeu--deplacement", function(
-              event
-            ) {
-              console.log("Le joueur a joué : ", event.detail);
-
-              //Envoie le déplacement effectué au serveur
-              //Envoie un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
-              socket.emit("deplacement-joueur-envoi", event.detail);
+          //Informe le serveur lorsqu'un pseudo a été entré
+          form.onsubmit = function() {
+            let pseudo = form.pseudo.value;
+            console.log("on a submit ! Bienvenue " + pseudo);
+            socket.emit("login", pseudo);
+            
+            socket.on("notReady", function(msg) {
+              //let recherchePartie = new recherchePartie()
+              console.log(msg);
             });
+            socket.on("ready", function(msg) {
+              console.log(JSON.parse(msg));
 
-            //Un ennemi a joué.
-            //Recoit un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
-            socket.on("deplacement-joueur-reception", function(deplacement) {
-              console.log("Ennemi joue", deplacement);
-              jeu.ennemiJoue(
-                deplacement.anciennePosition,
-                deplacement.nouvellePosition
-              );
+              //Lance un jeu avec la couleur du joueur fixée par le serveur
+              jeu = new Jeu(modeSolo, JSON.parse(msg).yourColor);
+
+              //Le jeu émet un évènement à chaque deplacement du joueur
+              jeu.eventTarget.addEventListener("jeu--deplacement", function(
+                event
+              ) {
+                console.log("Le joueur a joué : ", event.detail);
+
+                //Envoie le déplacement effectué au serveur
+                //Envoie un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
+                socket.emit("deplacement-joueur-envoi", event.detail);
+              });
+
+              //Un ennemi a joué.
+              //Recoit un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
+              socket.on("deplacement-joueur-reception", function(deplacement) {
+                console.log("Ennemi joue", deplacement);
+                jeu.ennemiJoue(
+                  deplacement.anciennePosition,
+                  deplacement.nouvellePosition
+                );
+              });
             });
-          });
+            //form.onsubmit retourne false pour empêcher le rafraîchissement de la page
+            return false;
+          };  
         });
       } else {
         console.log(

@@ -19,15 +19,13 @@ console.log(
 // Quand un client se connecte au WebSocket, le serveur lui envoie un message
 io.on("connection", function (socket) {
   console.log("un client s'est connecté");
-
+  socket.emit("connection_ok");
   // Login du joueur entrant
   socket.on("login", function (pseudo) {
     var obj = user_management.addJoueur(pseudo, socket.id);
 
     listeAttente = obj.listeAttente;
-  });
-
-  setInterval(function () {
+    
     if (listeAttente.length >= 2) {
       game_management.newPartie(listeAttente[0].joueur, listeAttente[1].joueur);
       var color = game_management.selectColor();
@@ -50,7 +48,32 @@ io.on("connection", function (socket) {
     } else {
       io.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
     }
-  }, 5000);
+  });
+
+  // setInterval(function () {
+  //   if (listeAttente.length >= 2) {
+  //     game_management.newPartie(listeAttente[0].joueur, listeAttente[1].joueur);
+  //     var color = game_management.selectColor();
+
+  //     io.to(`${listeAttente[0].id}`).emit(
+  //       "ready",
+  //       JSON.stringify({
+  //         adversaire: listeAttente[1].joueur.pseudo,
+  //         yourColor: color.color1
+  //       })
+  //     );
+  //     io.to(`${listeAttente[1].id}`).emit(
+  //       "ready",
+  //       JSON.stringify({
+  //         adversaire: listeAttente[0].joueur.pseudo,
+  //         yourColor: color.color2
+  //       })
+  //     );
+  //     listeAttente.splice(0, 2);
+  //   } else {
+  //     io.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
+  //   }
+  // }, 5000);
 
   socket.on("deplacement-joueur-envoi", function (move) {
     // Appel game module pour inversion des déplacements

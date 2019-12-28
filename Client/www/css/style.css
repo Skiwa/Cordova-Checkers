@@ -1,56 +1,95 @@
 /* Global */
-.main,.main2{
-    height: 100vh;
+.main,
+.main2 {
+  height: 100vh;
 }
-
-
 
 /* Plateau */
-.plateau{
-    border:red solid 1px;
-    
-
+.plateau {
+  border: red solid 1px;
 }
 
-
-     .plateau--case{
-        height:9vmin;
-        width:9vmin;
-    }
-  
-  
-
-.plateau .plateau--case.plateau--case__possible{
-    box-shadow: inset 0px 0px 20px 3px rgb(71, 109, 211);
-    cursor:pointer;
-}
-.plateau .plateau--case.plateau--case__blanche{
-    background-color: rgb(240, 211, 182);
-}
-.plateau .plateau--case.plateau--case__noire{
-    background-color: #7F4810;
+.plateau--case {
+  height: 9vmin;
+  width: 9vmin;
 }
 
-
+.plateau .plateau--case.plateau--case__possible {
+  box-shadow: inset 0px 0px 20px 3px rgb(71, 109, 211);
+  cursor: pointer;
+}
+.plateau .plateau--case.plateau--case__blanche {
+  background-color: rgb(240, 211, 182);
+}
+.plateau .plateau--case.plateau--case__noire {
+  background-color: #7f4810;
+}
 
 /* Pions */
-.pion{
-    cursor:pointer;
-    transition: all .2s;
+.pion {
+  cursor: pointer;
+  transition: all 0.2s;
 }
-.pion.pion__select{
-    filter: drop-shadow(  0px 0px 5px rgb(235, 251, 0));
+.pion.pion__select {
+  filter: drop-shadow(0px 0px 5px rgb(235, 251, 0));
 }
-.pion.pion__blanc{
-    fill:white;
+.pion.pion__blanc {
+  fill: white;
 }
-.pion.pion__noir{
-    fill:black;
+.pion.pion__noir {
+  fill: black;
 }
-.pion.pion__reine{
-    stroke-width: 10;
-    stroke:green;
+.pion.pion__reine {
+  stroke-width: 10;
+  stroke: green;
 }
-.pion.pion__mangeable{
-    filter: drop-shadow(  0px 0px 5px rgba(247,8,32,1));
+.pion.pion__mangeable {
+  filter: drop-shadow(0px 0px 5px rgba(247, 8, 32, 1));
 }
+
+/* Formulaire de connexion */
+#form-conteneur {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(127, 72, 16, 0.7);
+    transition: opacity 500ms;
+    opacity: 1;
+  }
+
+.form-popup {
+    position: relative;
+    margin:auto;
+    margin-top: 5vmin;
+    padding: 20px;
+    background: rgb(240, 211, 182);
+    border-radius: 5px;
+    width: 70vmin;
+    text-align: center;
+    
+}
+
+.form-popup>* {
+    border: none;
+    border-radius:3px;
+    font-weight: bold;
+    color: #333;
+    display:block;
+    margin:auto;
+    padding:0.5vmin;
+    font-family: Tahoma, Arial, sans-serif;
+}
+
+#submitBtn {
+    font-size: 0.8em;
+    border:solid 1px rgba(127, 72, 16, 0.7);;
+    padding: 1vmin;
+    margin-top: 2vmin;
+}
+
+
+
+
+
