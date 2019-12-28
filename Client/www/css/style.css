@@ -61,11 +61,11 @@
 .popup-conteneur {
     position: relative;
     margin:auto;
-    margin-top: 5vmin;
+    margin-top: 5vw;
     padding: 20px;
     background: rgb(240, 211, 182);
     border-radius: 5px;
-    width: 70vmin;
+    width: 70vw;
     text-align: center;
     
 }
@@ -77,15 +77,18 @@
     color: #333;
     display:block;
     margin:auto;
-    padding:0.5vmin;
+    padding:0.5vw;
     font-family: Tahoma, Arial, sans-serif;
 }
 
 #submitBtn {
     font-size: 0.8em;
-    border:solid 1px rgba(127, 72, 16, 0.7);;
-    padding: 1vmin;
-    margin-top: 2vmin;
+    border:solid 2px rgba(127, 72, 16, 0.7);
+    margin-top: 1vw;
+    min-width: 35px;
+    min-height: 35px;
+    width:5vmin;
+    height:5vmin;
 }
 
 
