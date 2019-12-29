@@ -59,7 +59,9 @@ io.on("connection", function (socket) {
 
   // TODO: Fin de game Victoire / Défaite
   socket.on("finPartie", function (pseudo) {
-    console.log("Le joueur " + pseudo + " a gagné -> son nbVictoire++");
+    user_management.addVictoires(pseudo, 1);
+    let nbWin = user_management.getNbVictoires(pseudo);
+    console.log("Le joueur " + pseudo + " a gagné " + nbWin + " fois");
   });
 
   socket.on("disconnect", function () {

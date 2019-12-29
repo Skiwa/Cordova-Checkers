@@ -20,6 +20,26 @@ class Joueur {
 
 // <----------------- Fonctions ----------------->
 
+//Retourne le nombre de victoires d'un joueur s'il sts présent en "BDD", sinon undefined
+function getNbVictoires(pseudo) {
+  let joueur = listJoueur.find(joueur => joueur.pseudo === pseudo)
+  if (joueur != undefined) {
+    return joueur.nbVictoire;
+  }
+  return undefined;
+}
+
+
+//Incrémente le nombre de victoires du joueur de pseudo "pseudo" de nbVictoires
+function addVictoires(pseudo, nbVictoires) {
+  let joueur = listJoueur.find(joueur => joueur.pseudo === pseudo)
+  if (joueur != undefined) {
+    joueur.nbVictoire += nbVictoires;
+    console.log("Nombre de victoire de " + joueur.pseudo + " augmenté de " + nbVictoires);
+  } 
+}
+
+
 // Fonction d'ajout d'un joueur dans la liste d'attente
 function PlayerConnected(id, joueur) {
   ListeAttentejoueurs.push({ id, joueur });
@@ -28,7 +48,7 @@ function PlayerConnected(id, joueur) {
 
 //Fonction de suppression d'un joueur dans liste d'attente
 function PlayerDisconnected(id) {
-  ListeAttentejoueurs = ListeAttentejoueurs.filter(function(el) {
+  ListeAttentejoueurs = ListeAttentejoueurs.filter(function (el) {
     return el.id != id;
   });
   console.log(ListeAttentejoueurs);
@@ -42,8 +62,10 @@ function addJoueur(pseudo, id) {
   } else {
     console.log("Non présent dans 'bdd'.");
     var newJoueur = new Joueur(pseudo);
+    listJoueur.push(newJoueur);
   }
   //Ajoute le joueur à la liste + retourne l'état de la liste
+
   PlayerConnected(id, newJoueur);
   return {
     listeAttente: ListeAttentejoueurs
@@ -53,3 +75,5 @@ function addJoueur(pseudo, id) {
 // <----------------- Exports ----------------->
 exports.addJoueur = addJoueur;
 exports.PlayerDisconnected = PlayerDisconnected;
+exports.getNbVictoires = getNbVictoires;
+exports.addVictoires = addVictoires;
