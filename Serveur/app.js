@@ -26,22 +26,22 @@ io.on("connection", function (socket) {
     var obj = user_management.addJoueur(pseudo, password, socket.id);
 
     listeAttente = obj.listeAttente;
-    
+
     if (listeAttente.length >= 2) {
-      game_management.newPartie(listeAttente[0].joueur, listeAttente[1].joueur);
+      game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur);
       var color = game_management.selectColor();
 
-      io.to(`${listeAttente[0].id}`).emit(
+      io.to(`${listeAttente[0].socketId}`).emit(
         "ready",
         JSON.stringify({
-          adversaire: listeAttente[1].joueur.pseudo,
+          adversaire: listeAttente[1].nomJoueur,
           yourColor: color.color1
         })
       );
-      io.to(`${listeAttente[1].id}`).emit(
+      io.to(`${listeAttente[1].socketId}`).emit(
         "ready",
         JSON.stringify({
-          adversaire: listeAttente[0].joueur.pseudo,
+          adversaire: listeAttente[0].nomJoueur,
           yourColor: color.color2
         })
       );
@@ -60,9 +60,12 @@ io.on("connection", function (socket) {
 
   // TODO: Fin de game Victoire / Défaite
   socket.on("finPartie", function (pseudo) {
-    user_management.addVictoires(pseudo, 1);
-    let nbWin = user_management.getNbVictoires(pseudo);
-    console.log("Le joueur " + pseudo + " a gagné " + nbWin + " fois");
+    // Récupère la promesse et travaille sur les données récoltés (ici _id et nbVictoire)
+    let promiseNbWin = user_management.getNbVictoires(pseudo);
+    promiseNbWin.then(function (data) {
+      console.log("Le joueur " + pseudo + " a gagné " + data[0].nbVictoire + " fois");
+    })
+    user_management.addVictoire(pseudo);
   });
 
   socket.on("disconnect", function () {
