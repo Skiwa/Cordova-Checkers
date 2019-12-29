@@ -15,8 +15,8 @@ class fin_match {
         <h1>Partie terminée </h1>
         <h3>` + this.messageFinal(isVictoire) + `</h3>
         <div class="btns-fin-jeu">
-        <button type="button" class="btn-fin-jeu" id="btn-fin-jeu-g">REJOUER</button>
-        <button type="button" class="btn-fin-jeu" id="btn-fin-jeu-d">SCORES</button>
+        <button type="button" class="btn-fin-jeu" id="btn-rejouer">REJOUER</button>
+        <button type="button" class="btn-fin-jeu" id="btn-scores">SCORES</button>
         </button>
         </div>
         `;

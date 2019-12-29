@@ -86,12 +86,11 @@ h3 {
     width: 70vw;
     max-width: 500px;
     text-align: center;
-    
+    border:none;
 }
 
 .popup-conteneur * {
     border: none;
-    border-radius:3px;
     font-weight: bold;
     color: #333;
     display:block;
@@ -126,23 +125,35 @@ margin-top: 1em;
 border-radius: 5px;
 border:solid 0.2em rgba(127, 72, 16);
 font-size: calc(16px + 1vw);
-
+box-shadow: 0 0.15em #999;
+border-style: outset;
 }
 
-#btn-fin-jeu-g {
+.btn-fin-jeu:active {
+  box-shadow: 0 0.05em #666;
+  transform: translateY(4px);
+}
+
+#btn-rejouer {
   background-color: rgba(127, 72, 16);
   align-self: flex-start;
   margin-right: 0.5em;
   color:rgb(240, 211, 182);
 }
 
-#btn-fin-jeu-d {
+#btn-rejouer:hover {
+  background-color: rgb(240, 211, 182);
+  color:rgba(127, 72, 16);
+}
+
+#btn-scores {
   background-color: rgb(240, 211, 182);
   align-self: flex-end;
   margin-left: 0.5em;
   color: rgba(127, 72, 16);
 }
 
-
-
-
+#btn-scores:hover {
+  background-color: rgba(127, 72, 16);
+  color:rgb(240, 211, 182);
+}
