@@ -6,6 +6,7 @@ const io = require("socket.io")(server);
 var user_management = require("./user_management");
 var game_management = require("./game_management");
 var address_management = require("./address_management");
+var bdd_connexion = require("./bdd_connexion");
 
 const portServeur = 3000;
 var listeAttente = [];
@@ -21,8 +22,8 @@ io.on("connection", function (socket) {
   console.log("un client s'est connecté");
   socket.emit("connection_ok");
   // Login du joueur entrant
-  socket.on("login", function (pseudo) {
-    var obj = user_management.addJoueur(pseudo, socket.id);
+  socket.on("login", function (pseudo, password) {
+    var obj = user_management.addJoueur(pseudo, password, socket.id);
 
     listeAttente = obj.listeAttente;
     
