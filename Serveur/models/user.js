@@ -1,4 +1,5 @@
-//Collection contenant les utilisateurs
+//<----------- Collection contenant les utilisateurs ----------->
+
 //Connexion à la base de données
 var bdd_connexion = require("../bdd_connexion");
 
@@ -7,11 +8,9 @@ var mongoose = require('mongoose');
 
 let Schema = mongoose.Schema;
 
-
 //Definition d'un schéma pour modéliser les données (<=> à une collection)
 var userSchema = new Schema({
-    id: Number,
-    name: {type: String, required: true}, 
+    name: { type: String, required: true },
     password: String,
     nbVictoire: Number
 });
@@ -20,4 +19,5 @@ var userSchema = new Schema({
 // Permettra d'insérer dans la base de données
 let Utilisateur = mongoose.model('Utilisateur', userSchema);
 
-Utilisateur.exports = Utilisateur;
+//<----------- Exports ----------->
+exports.Utilisateur = Utilisateur;
