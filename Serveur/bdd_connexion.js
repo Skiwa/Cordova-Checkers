@@ -2,24 +2,24 @@
 let mongoose = require('mongoose');
 
 // Serveur de la bdd
-const server = '127.0.0.1:27017'; 
+const server = '127.0.0.1:27017';
 // Nom de la bdd
-const database = 'dame-db';      
+const database = 'dame-db';
 
 class Database {
   constructor() {
     this._connect()
   }
 
-// Connexion à la base de données 
-_connect() {
-     mongoose.connect(`mongodb://${server}/${database}`)
-       .then(() => {
-         console.log('La connexion à la bdd a réussi.')
-       })
-       .catch(err => {
-         console.error('La connexion à la bdd a échoué.')
-       })
+  // Connexion à la base de données 
+  _connect() {
+    mongoose.connect(`mongodb://${server}/${database}`)
+      .then(() => {
+        console.log('La connexion à la bdd a réussi.')
+      })
+      .catch(err => {
+        console.error('La connexion à la bdd a échoué.')
+      })
   }
 }
 
