@@ -1,12 +1,20 @@
 /* Global */
-.main,
-.main2 {
+body {
+  background-color: rgb(240, 211, 182);
+}
+
+#main,
+#main2 {
   height: 100vh;
+  display: flex;
+  justify-content: center;
 }
 
 /* Plateau */
 .plateau {
-  border: red solid 1px;
+  background-color: white;
+  border: #7f4810 solid 4px;
+  border-radius: 5px;
 }
 
 .plateau--case {
