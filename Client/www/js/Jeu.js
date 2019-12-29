@@ -293,13 +293,13 @@ class Jeu {
                     else {
                         pionSvg.classList.add((this.couleurJoueur === "blanc" ? "pion__blanc" : "pion__noir"));
                     }
-                    pionSvg.setAttribute("viewBox", "0 0 100 92");
+                    pionSvg.setAttribute("viewBox", "0 0 100 88");
                     pionSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
                     //Cercle svg
                     pionCercle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                     pionCercle.setAttribute("cx", "50");
                     pionCercle.setAttribute("cy", "50");
-                    pionCercle.setAttribute("r", "40");
+                    pionCercle.setAttribute("r", "35");
                     pionSvg.appendChild(pionCercle);
                     carre.appendChild(pionSvg);
                 }

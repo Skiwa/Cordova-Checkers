@@ -15,11 +15,12 @@
     <script src="js/Jeu.js"></script>
     <script src="js/Pion.js"></script>
     <script src="js/Login.js"></script>
+    <script src="js/fin_match.js"></script>
     <script src="js/socket.io.js"></script>
     <script>
       /* -- Options -- */
       const modeSolo = false; //jeu de dames en solo
-      const adresseServeur = "http://192.168.1.18"; //Adresse du serveur
+      const adresseServeur = "http://192.168.1.79"; //Adresse du serveur
       const portServeur = 3000; //Port du serveur, par défaut à 3000
 
       var jeu;
@@ -73,7 +74,7 @@
                 if (jeu.isOver) {
                   socket.emit("finPartie", pseudo);
                   console.log("C'est fini vous avez gagné !");
-
+                  let finPartie = new fin_match(pseudo, true);
                 }
               });
 
@@ -88,6 +89,7 @@
                 //Vérifie si la partie est terminée
                 if (jeu.isOver) {
                   console.log("C'est fini vous avez perdu !");
+                  let finPartie = new fin_match(pseudo, false);
                 }
               });
             });
@@ -100,6 +102,9 @@
           "%c -- Jeu lancé en mode solo --",
           "background: #222; color: #AFDA54;font-size:1.25em"
         );
+        //Décommenter pour tester l'ecran de fin de partie en modeSolo
+        //let finPartie = new fin_match('Bernard', false);
+        
         jeu = new Jeu(modeSolo);
       }
     </script>
