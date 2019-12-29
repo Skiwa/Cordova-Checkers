@@ -19,7 +19,7 @@
     <script>
       /* -- Options -- */
       const modeSolo = false; //jeu de dames en solo
-      const adresseServeur = "http://192.168.1.79"; //Adresse du serveur
+      const adresseServeur = "http://192.168.1.18"; //Adresse du serveur
       const portServeur = 3000; //Port du serveur, par défaut à 3000
 
       var jeu;
@@ -41,9 +41,11 @@
 
           //Informe le serveur lorsqu'un pseudo a été entré
           form.onsubmit = function() {
+            // Récupération du pseudo et du mot de passe inséré par l'utilisateur
             let pseudo = form.pseudo.value;
+            let password = form.password.value;
             console.log("on a submit ! Bienvenue " + pseudo);
-            socket.emit("login", pseudo);
+            socket.emit("login", pseudo, password);
 
             socket.on("notReady", function(msg) {
               console.log(msg);
