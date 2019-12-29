@@ -12,14 +12,15 @@ body {
 
 /* Plateau */
 .plateau {
-  background-color: white;
-  border: #7f4810 solid 4px;
+  border: #55310d solid 1vmin;
   border-radius: 5px;
+  border-spacing:0px;
 }
 
 .plateau--case {
   height: 9vmin;
   width: 9vmin;
+  border-radius: 1px;
 }
 
 .plateau .plateau--case.plateau--case__possible {
