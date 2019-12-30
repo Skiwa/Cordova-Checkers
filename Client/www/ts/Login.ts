@@ -30,10 +30,12 @@ class Login {
 
   //Crée et affiche l'écran d'attente
   attenteScreen() {
-    this.divForm.innerHTML = `
+    document.getElementById("main").innerHTML = `
+    <div class="popup-fond">
       <div class="popup-conteneur">
       <h1>En attente d'un adversaire</h1>
       <img src="images/Loading100px.svg">
+      </div>
       </div>
       `;
   }

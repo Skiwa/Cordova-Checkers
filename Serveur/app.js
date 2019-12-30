@@ -47,7 +47,7 @@ io.on("connection", function (socket) {
       );
       listeAttente.splice(0, 2);
     } else {
-      io.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
+      socket.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
     }
   });
 

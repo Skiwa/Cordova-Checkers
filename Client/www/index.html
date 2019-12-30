@@ -24,6 +24,10 @@
       const portServeur = 3000; //Port du serveur, par défaut à 3000
 
       var jeu;
+      var loginFormClass;
+      var password;          //Permet de relancer une partie via emit("login",...) sans repasser par le formulaire
+      var pseudo;            //Idem
+
       if (!modeSolo) {
         console.log(
           "%c -- Jeu lancé en mode multijoueur -- ",
@@ -35,7 +39,7 @@
         //Lorsque des messages arrivent, appelle la fonction de callback qui affiche une boîte de dialogue
         socket.on("connection_ok", function() {
           //Crée et affiche le formulaire de connexion
-          let loginFormClass = new Login();
+          loginFormClass = new Login();
 
           //Récupère le formulaire dans le DOM
           let form = document.getElementById("theForm");
@@ -43,11 +47,13 @@
           //Informe le serveur lorsqu'un pseudo a été entré
           form.onsubmit = function() {
             // Récupération du pseudo et du mot de passe inséré par l'utilisateur
-            let pseudo = form.pseudo.value;
-            let password = form.password.value;
+            pseudo = form.pseudo.value;
+            password = form.password.value;
             console.log("on a submit ! Bienvenue " + pseudo);
             socket.emit("login", pseudo, password);
-
+            //form.onsubmit renvoie false pour empêcher le rafraîchissement de la page
+            return false;
+          };
             socket.on("notReady", function(msg) {
               console.log(msg);
               //Affiche l'écran d'attente d'adversaire
@@ -72,9 +78,7 @@
 
                 //Vérifie si la partie est terminée
                 if (jeu.isOver) {
-                  socket.emit("finPartie", pseudo);
-                  console.log("C'est fini vous avez gagné !");
-                  let finPartie = new fin_match(pseudo, true);
+                  callFinPartie(pseudo, true);       
                 }
               });
 
@@ -88,14 +92,11 @@
                 );
                 //Vérifie si la partie est terminée
                 if (jeu.isOver) {
-                  console.log("C'est fini vous avez perdu !");
-                  let finPartie = new fin_match(pseudo, false);
+                  callFinPartie(pseudo, false);       
                 }
               });
             });
-            //form.onsubmit retourne false pour empêcher le rafraîchissement de la page
-            return false;
-          };
+            
         });
       } else {
         console.log(
@@ -106,6 +107,26 @@
         let finPartie = new fin_match('Bernard', false);
         
         //jeu = new Jeu(modeSolo);
+      }
+
+
+//<------------------- Fonctions -------------------------->
+      //Gère la fin de partie
+      function callFinPartie(pseudo, isVainqueur) {
+
+        //Uniquement le vainqueur emmet au serveur
+        if (isVainqueur){
+        socket.emit("finPartie", pseudo);
+        }
+
+        //Génère l'écran de fin de match
+        let finPartie = new fin_match(pseudo, isVainqueur);
+        let rejouerBouton = document.getElementById("btn-rejouer");
+
+        //Cherche une nouvelle partie si le bouton "rejouer" est cliqué
+        rejouerBouton.onclick = function () {
+          socket.emit("login", pseudo, password);
+        }
       }
     </script>
   </body>
