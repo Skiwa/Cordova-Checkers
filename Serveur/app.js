@@ -58,7 +58,6 @@ io.on("connection", function (socket) {
     socket.broadcast.emit("deplacement-joueur-reception", inverseMove);
   });
 
-  // TODO: Fin de game Victoire / Défaite
   socket.on("finPartie", function (pseudo) {
     // Récupère la promesse et travaille sur les données récoltés (ici _id et nbVictoire)
     let promiseNbWin = user_management.getNbVictoires(pseudo);
