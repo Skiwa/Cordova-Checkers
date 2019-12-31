@@ -1,18 +1,30 @@
+// <----------------- Importations pour la base de données ----------------->
+var mongoose = require('mongoose');
+var partieModel = require('./models/partie');
+
 // <----------------- Variable Globales ----------------->
 
-// <----------------- Classes ----------------->
-class Partie {
-  constructor(J1, J2) {
-    this.J1 = J1;
-    this.J2 = J2;
-  }
-}
+// <----------------- Modèles ----------------->
+
+// Modèle Utilisateur pour insérer les utilisateurs
+var Partie = partieModel.Partie;
 
 // <----------------- Fonctions ----------------->
 
 // Fonctions création d'une partie (futur ajout dans bdd)
 function newPartie(Joueur1, Joueur2) {
-  var newPartie = new Partie(Joueur1, Joueur2);
+  let nouvellePartie = new Partie({
+    J1: Joueur1,
+    J2: Joueur2
+  });
+  // Sauvegarde de cette instance dans mongoDb
+  nouvellePartie.save()
+    .then(doc => {
+      console.log(doc) // affiche ce qui vient d'être ajouté
+    })
+    .catch(err => {
+      console.error(err) // affiche erreur si problème
+    });
 }
 
 function selectColor() {

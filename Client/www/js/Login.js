@@ -15,7 +15,7 @@ class Login {
         <label for="pseudo">Pseudo</label>
         <input type="text" placeholder="Votre pseudo" name="pseudo" required>
         <label for="password">Password</label>
-        <input type="password" placeholder="Votre password" name="password" >
+        <input type="password" placeholder="Votre password" name="password" required>
         <button type"submit" id="submitBtn">Ok</button>
         </form>
         </div>
