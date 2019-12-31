@@ -67,7 +67,7 @@ function addJoueur(pseudo, password, id) {
       let nouveauJoueur = new User({
         name: pseudo,
         password: password,
-        nbVictoire: 5
+        nbVictoire: 0
       });
       // Sauvegarde de cette instance dans mongoDb
       nouveauJoueur.save()
