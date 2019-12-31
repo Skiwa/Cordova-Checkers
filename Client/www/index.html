@@ -25,8 +25,8 @@
 
       var jeu;
       var loginFormClass;
-      var password;          //Permet de relancer une partie via emit("login",...) sans repasser par le formulaire
-      var pseudo;            //Idem
+      var password; //Permet de relancer une partie via emit("login",...) sans repasser par le formulaire
+      var pseudo; //Idem
 
       if (!modeSolo) {
         console.log(
@@ -54,49 +54,48 @@
             //form.onsubmit renvoie false pour empêcher le rafraîchissement de la page
             return false;
           };
-            socket.on("notReady", function(msg) {
-              console.log(msg);
-              //Affiche l'écran d'attente d'adversaire
-              loginFormClass.attenteScreen();
+          socket.on("notReady", function(msg) {
+            console.log(msg);
+            //Affiche l'écran d'attente d'adversaire
+            loginFormClass.attenteScreen();
+          });
+
+          socket.on("ready", function(msg) {
+            console.log(JSON.parse(msg));
+
+            //Lance un jeu avec la couleur du joueur fixée par le serveur
+            jeu = new Jeu(modeSolo, JSON.parse(msg).yourColor);
+
+            //Le jeu émet un évènement à chaque deplacement du joueur
+            jeu.eventTarget.addEventListener("jeu--deplacement", function(
+              event
+            ) {
+              console.log("Le joueur a joué : ", event.detail);
+
+              //Envoie le déplacement effectué au serveur
+              //Envoie un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
+              socket.emit("deplacement-joueur-envoi", event.detail);
+
+              //Vérifie si la partie est terminée
+              if (jeu.isOver) {
+                callFinPartie(pseudo, true);
+              }
             });
 
-            socket.on("ready", function(msg) {
-              console.log(JSON.parse(msg));
-
-              //Lance un jeu avec la couleur du joueur fixée par le serveur
-              jeu = new Jeu(modeSolo, JSON.parse(msg).yourColor);
-
-              //Le jeu émet un évènement à chaque deplacement du joueur
-              jeu.eventTarget.addEventListener("jeu--deplacement", function(
-                event
-              ) {
-                console.log("Le joueur a joué : ", event.detail);
-
-                //Envoie le déplacement effectué au serveur
-                //Envoie un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
-                socket.emit("deplacement-joueur-envoi", event.detail);
-
-                //Vérifie si la partie est terminée
-                if (jeu.isOver) {
-                  callFinPartie(pseudo, true);       
-                }
-              });
-
-              //Un ennemi a joué.
-              //Recoit un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
-              socket.on("deplacement-joueur-reception", function(deplacement) {
-                console.log("Ennemi joue", deplacement);
-                jeu.ennemiJoue(
-                  deplacement.anciennePosition,
-                  deplacement.nouvellePosition
-                );
-                //Vérifie si la partie est terminée
-                if (jeu.isOver) {
-                  callFinPartie(pseudo, false);       
-                }
-              });
+            //Un ennemi a joué.
+            //Recoit un objet de type {anciennePosition:{x: x, y: y},nouvellePosition:{x: x, y: y}}
+            socket.on("deplacement-joueur-reception", function(deplacement) {
+              console.log("Ennemi joue", deplacement);
+              jeu.ennemiJoue(
+                deplacement.anciennePosition,
+                deplacement.nouvellePosition
+              );
+              //Vérifie si la partie est terminée
+              if (jeu.isOver) {
+                callFinPartie(pseudo, false);
+              }
             });
-            
+          });
         });
       } else {
         console.log(
@@ -104,19 +103,17 @@
           "background: #222; color: #AFDA54;font-size:1.25em"
         );
         //Décommenter pour tester l'ecran de fin de partie en modeSolo
-        let finPartie = new fin_match('Bernard', false);
-        
+        let finPartie = new fin_match("Bernard", false);
+
         //jeu = new Jeu(modeSolo);
       }
 
-
-//<------------------- Fonctions -------------------------->
+      //<------------------- Fonctions -------------------------->
       //Gère la fin de partie
       function callFinPartie(pseudo, isVainqueur) {
-
         //Uniquement le vainqueur emmet au serveur
-        if (isVainqueur){
-        socket.emit("finPartie", pseudo);
+        if (isVainqueur) {
+          socket.emit("finPartie", pseudo);
         }
 
         //Génère l'écran de fin de match
@@ -124,9 +121,9 @@
         let rejouerBouton = document.getElementById("btn-rejouer");
 
         //Cherche une nouvelle partie si le bouton "rejouer" est cliqué
-        rejouerBouton.onclick = function () {
+        rejouerBouton.onclick = function() {
           socket.emit("login", pseudo, password);
-        }
+        };
       }
     </script>
   </body>

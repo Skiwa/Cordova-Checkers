@@ -13,7 +13,7 @@ class Database {
 
   // Connexion à la base de données 
   _connect() {
-    mongoose.connect(`mongodb://${server}/${database}`)
+    mongoose.connect(`mongodb://${server}/${database}`, { useNewUrlParser: true, useUnifiedTopology: true })
       .then(() => {
         console.log('La connexion à la bdd a réussi.')
       })
