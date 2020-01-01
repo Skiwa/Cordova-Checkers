@@ -54,6 +54,10 @@
             //form.onsubmit renvoie false pour empêcher le rafraîchissement de la page
             return false;
           };
+          // TODO : Gérer l'erreur avec un affichage
+          socket.on("error_login", function(err) {
+            console.log(err);
+          });
           socket.on("notReady", function(msg) {
             console.log(msg);
             //Affiche l'écran d'attente d'adversaire
