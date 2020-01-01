@@ -1,4 +1,4 @@
-// Importation de mongoose
+// <----------------- Dépendances Node/Locales ----------------->
 let mongoose = require('mongoose');
 
 // Serveur de la bdd
@@ -13,7 +13,7 @@ class Database {
 
   // Connexion à la base de données 
   _connect() {
-    mongoose.connect(`mongodb://${server}/${database}`, { useNewUrlParser: true, useUnifiedTopology: true })
+    mongoose.connect(`mongodb://${server}/${database}`, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
       .then(() => {
         console.log('La connexion à la bdd a réussi.')
       })
@@ -23,4 +23,5 @@ class Database {
   }
 }
 
+//<----------- Exports ----------->
 module.exports = new Database()
