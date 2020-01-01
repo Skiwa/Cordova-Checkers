@@ -7,6 +7,7 @@ var user_management = require("./user_management");
 var game_management = require("./game_management");
 var address_management = require("./address_management");
 var bdd_connexion = require("./bdd_connexion");
+var room = require("./room");
 
 const portServeur = 3000;
 var listeAttente = [];
@@ -32,8 +33,10 @@ io.on("connection", function (socket) {
         socket.emit("error_login", data.error);
       } else {
         // Si !erreur -> Déroulement normal Jeu
-        listeAttente = data.listeAttente;
 
+        listeAttente = data.listeAttente;
+        room.addRoom(socket);
+        
         if (listeAttente.length >= 2) {
           game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur);
           var color = game_management.selectColor();
@@ -63,8 +66,11 @@ io.on("connection", function (socket) {
   socket.on("deplacement-joueur-envoi", function (move) {
     // Appel game module pour inversion des déplacements
     var inverseMove = game_management.inverseDeplacement(move);
-    // TODO : retravailler pour eviter le broadcast
-    socket.broadcast.emit("deplacement-joueur-reception", inverseMove);
+    // Recupere la room qui contient les joueurs de la partie où le déplacement a eu lieu
+    var currentRoom = Object.keys(socket.rooms).filter(item => item!=socket.id);
+    // Envoie du déplacement aux 2 joueurs
+    socket.in(currentRoom).emit('deplacement-joueur-reception', inverseMove);
+    
   });
 
   socket.on("finPartie", function (pseudo) {
