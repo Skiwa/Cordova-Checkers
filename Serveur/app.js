@@ -23,32 +23,41 @@ io.on("connection", function (socket) {
   socket.emit("connection_ok");
   // Login du joueur entrant
   socket.on("login", function (pseudo, password) {
+    // Promesse d'addJoueur de type : data = { error:string , listeAttente: any[] }
     var obj = user_management.addJoueur(pseudo, password, socket.id);
+    obj.then(function (data) {
+      console.log("Index Object : " + JSON.stringify(data));
+      if (data.error != "") {
+        // Si erreur -> Bloque + envoie message vers client
+        socket.emit("error_login", data.error);
+      } else {
+        // Si !erreur -> Déroulement normal Jeu
+        listeAttente = data.listeAttente;
 
-    listeAttente = obj.listeAttente;
+        if (listeAttente.length >= 2) {
+          game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur);
+          var color = game_management.selectColor();
 
-    if (listeAttente.length >= 2) {
-      game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur);
-      var color = game_management.selectColor();
-
-      io.to(`${listeAttente[0].socketId}`).emit(
-        "ready",
-        JSON.stringify({
-          adversaire: listeAttente[1].nomJoueur,
-          yourColor: color.color1
-        })
-      );
-      io.to(`${listeAttente[1].socketId}`).emit(
-        "ready",
-        JSON.stringify({
-          adversaire: listeAttente[0].nomJoueur,
-          yourColor: color.color2
-        })
-      );
-      listeAttente.splice(0, 2);
-    } else {
-      socket.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
-    }
+          io.to(`${listeAttente[0].socketId}`).emit(
+            "ready",
+            JSON.stringify({
+              adversaire: listeAttente[1].nomJoueur,
+              yourColor: color.color1
+            })
+          );
+          io.to(`${listeAttente[1].socketId}`).emit(
+            "ready",
+            JSON.stringify({
+              adversaire: listeAttente[0].nomJoueur,
+              yourColor: color.color2
+            })
+          );
+          listeAttente.splice(0, 2);
+        } else {
+          socket.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
+        }
+      }
+    })
   });
 
   socket.on("deplacement-joueur-envoi", function (move) {
@@ -59,11 +68,7 @@ io.on("connection", function (socket) {
   });
 
   socket.on("finPartie", function (pseudo) {
-    // Récupère la promesse et travaille sur les données récoltés (ici _id et nbVictoire)
-    let promiseNbWin = user_management.getNbVictoires(pseudo);
-    promiseNbWin.then(function (data) {
-      console.log("Le joueur " + pseudo + " a gagné " + data[0].nbVictoire + " fois");
-    })
+    user_management.getNbVictoires(pseudo);
     user_management.addVictoire(pseudo);
   });
 
