@@ -1,9 +1,10 @@
 //<============== Service pour la gestion Utilisateur ==============>
 
-//<----------------- Dépendances Node/Locales ----------------->
+//<----------------- Dépendances Node/Locales & Modèle ----------------->
 const UserModel = require('../models/user');
-const Utilisateur = UserModel.Utilisateur;
 const bcrypt = require('bcryptjs');
+const Utilisateur = UserModel.Utilisateur;
+
 //<----------------- Fonctions ----------------->
 
 /**
@@ -30,7 +31,7 @@ async function authenticate(data) {
 }
 
 /**
- * Fonction de création d'un utilisateur
+ * Fonction de création et sauvegarde d'un utilisateur
  * @param data Informations renseignées de l'utilisateur 
  */
 async function create(data) {
