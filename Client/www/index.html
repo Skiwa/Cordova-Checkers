@@ -41,6 +41,12 @@
           //Crée et affiche le formulaire de connexion
           loginFormClass = new Login();
 
+          // TODO : Appeler score lors d'un clic + traiter/mettre en forme result: Array { _id (useless), name, nbVictoire }
+          socket.emit("score");
+          socket.on("score.result", function(result) {
+            console.log(result);
+          });
+
           //Récupère le formulaire dans le DOM
           let form = document.getElementById("theForm");
 
