@@ -32,6 +32,10 @@ function addVictoire(pseudo) {
     })
 }
 
+async function getAllUsersScore() {
+  return await userService.getAllUserScore();
+}
+
 //Fonction d'ajout d'un joueur dans la liste d'attente
 function PlayerConnected(socketId, joueur) {
   ListeAttentejoueurs.push({ socketId: socketId, nomJoueur: joueur });
@@ -68,3 +72,4 @@ exports.addJoueur = addJoueur;
 exports.PlayerDisconnected = PlayerDisconnected;
 exports.getNbVictoires = getNbVictoires;
 exports.addVictoire = addVictoire;
+exports.getAllUsersScore = getAllUsersScore;
