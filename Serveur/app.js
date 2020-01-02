@@ -38,8 +38,9 @@ io.on("connection", function (socket) {
 
         if (listeAttente.length >= 2) {
           game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur);
+          game_management.updateGagnant(listeAttente[0].nomJoueur);
           var color = game_management.selectColor();
-
+          //game_management.gagnantPartie(listeAttente[0].nomJoueur);
           io.to(`${listeAttente[0].socketId}`).emit(
             "ready",
             JSON.stringify({
@@ -76,6 +77,7 @@ io.on("connection", function (socket) {
   socket.on("finPartie", function (pseudo) {
     user_management.getNbVictoires(pseudo);
     user_management.addVictoire(pseudo);
+    game_management.updateGagnant(pseudo);
   });
 
   socket.on("score", function () {
