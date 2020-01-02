@@ -27,7 +27,7 @@ function getNbVictoires(pseudo) {
 function addVictoire(pseudo) {
   userService.updateNbVictory(pseudo)
     .then(() => {
-      console.log("Successfully Saved !")
+      console.log("Victory Successfully Updated !")
     })
 }
 
@@ -62,19 +62,24 @@ function PlayerDisconnected(socketId) {
 
 /**
  * Fonction authentification/ajout d'utilisateur dans la bdd et la liste d'attente
- * @param pseudo Nom de l'utilisateur
- * @param password Mot de passe de l'utilisateur
+ * @param data Données de l'utilisateur de type { name , password } ou { name }
  * @param socketId Id socket de l'utilisateur
+ * @param etat Etat de l'utilisateur 0 = pas authentifié, 1 = déjà authentifié
  */
-async function addJoueur(pseudo, password, socketId) {
-  const userPromise = await userService.authenticate({ name: pseudo, password: password })
-  if (userPromise.error != "") {
-    // Si erreur retournée, on attribue le message à notre variable globale
-    // console.log(userPromise.error);
-    error = userPromise.error
-  } else {
-    //Ajoute le joueur de type {socketId: socketId, nomJoueur: pseudo} à la liste d'attente
-    PlayerConnected(socketId, userPromise.profile.name)
+async function addJoueur(data, socketId, etat) {
+  if (etat == 0) {
+    const userPromise = await userService.authenticate(data)
+    if (userPromise.error != "") {
+      // Si erreur retournée, on attribue le message à notre variable globale
+      // console.log(userPromise.error);
+      error = userPromise.error
+    } else {
+      //Ajoute le joueur de type {socketId: socketId, nomJoueur: pseudo} à la liste d'attente
+      PlayerConnected(socketId, userPromise.profile.name)
+      error = "";
+    }
+  } else if (etat == 1) {
+    PlayerConnected(socketId, data.name)
     error = "";
   }
   //Retourne un objet de type { erreur(string) , notre liste d'attente }

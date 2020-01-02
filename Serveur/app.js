@@ -23,9 +23,9 @@ io.on("connection", function (socket) {
   console.log("un client s'est connecté");
   socket.emit("connection_ok");
   // Login du joueur entrant
-  socket.on("login", function (pseudo, password) {
+  socket.on("login", function (userData, etat) {
     // Promesse d'addJoueur de type : data = { error:string , listeAttente: any[] }
-    var obj = user_management.addJoueur(pseudo, password, socket.id);
+    var obj = user_management.addJoueur(userData, socket.id, etat);
     obj.then(function (data) {
       // console.log("Index Object : " + JSON.stringify(data));
       if (data.error != "") {
