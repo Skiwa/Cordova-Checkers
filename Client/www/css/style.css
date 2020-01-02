@@ -65,7 +65,7 @@ h3 {
 }
 
 
-/* Formulaire de connexion, écran d'attente et fin de partie */
+/* Style général à toutes les popup de l'appli */
 #popup-fond {
     position: fixed;
     top: 0;
@@ -99,27 +99,16 @@ h3 {
     font-family: Tahoma, Arial, sans-serif;
 }
 
-/* Bouton du formulaire de connexion */
-#submitBtn {
-    font-size: 0.8em;
-    border:solid 2px rgba(127, 72, 16, 0.7);
-    margin-top: 1vh;
-    min-width: 35px;
-    min-height: 35px;
-    width:5vmin;
-    height:5vmin;
-}
 
-
-/* Menu(popup) de fin de partie */
-div.btns-fin-jeu {
+/* Menu(popup) de début et fin de partie */
+div.btns-menu {
   display: inline-flex;
   width:100%;
   padding-left: 0%;
 
 }
 
-.btn-fin-jeu{
+.btn-menu{
 width: 50%;
 margin-top: 1em;
 border-radius: 5px;
@@ -129,19 +118,19 @@ box-shadow: 0 0.15em #999;
 border-style: outset;
 }
 
-.btn-fin-jeu:active {
+.btn-menu:active {
   box-shadow: 0 0.05em #666;
   transform: translateY(4px);
 }
 
-#btn-rejouer {
+#btn-jouer{
   background-color: rgba(127, 72, 16);
   align-self: flex-start;
   margin-right: 0.5em;
   color:rgb(240, 211, 182);
 }
 
-#btn-rejouer:hover {
+#btn-jouer:hover {
   background-color: rgb(240, 211, 182);
   color:rgba(127, 72, 16);
 }
@@ -156,4 +145,19 @@ border-style: outset;
 #btn-scores:hover {
   background-color: rgba(127, 72, 16);
   color:rgb(240, 211, 182);
+}
+
+
+/* tableau des scores */
+
+.close-btn {
+  position: absolute;
+  top:0.5em;
+  right:0;
+  background-image: url('../images/cross_svg_15x15.svg') ;
+  background-repeat: no-repeat;
+  background-color: rgb(240, 211, 182);
+  width: 2em;
+  height: 2em;
+
 }

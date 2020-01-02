@@ -16,8 +16,12 @@ class Login {
         <input type="text" placeholder="Votre pseudo" name="pseudo" required>
         <label for="password">Password</label>
         <input type="password" placeholder="Votre password" name="password" required>
-        <button type"submit" id="submitBtn">Ok</button>
+        <div class="btns-menu">
+        <button type"submit" class="btn-menu" id="btn-jouer">JOUER</button>
+        <button type="button" class="btn-menu" id="btn-scores">SCORES</button>
+        </div>
         </form>
+
         </div>
       `;
         document.getElementById("main").innerHTML = "";

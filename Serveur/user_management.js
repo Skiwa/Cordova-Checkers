@@ -24,7 +24,7 @@ function getNbVictoires(pseudo) {
     })
 }
 
-//Incrémente le nombre de victoires du joueur de pseudo "pseudo" de nbVictoires
+//Incrémente le nombre de victoires du joueur de pseudo "pseudo" de 1.
 function addVictoire(pseudo) {
   userService.updateNbVictory(pseudo)
     .then(() => {

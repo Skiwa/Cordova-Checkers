@@ -74,8 +74,8 @@ io.on("connection", function (socket) {
   });
 
   socket.on("finPartie", function (pseudo) {
-    user_management.getNbVictoires(pseudo);
     user_management.addVictoire(pseudo);
+    user_management.getNbVictoires(pseudo);
   });
 
   socket.on("disconnect", function () {

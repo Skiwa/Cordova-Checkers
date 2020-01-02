@@ -14,10 +14,9 @@ class fin_match {
         <div class="popup-conteneur">
         <h1>Partie terminée </h1>
         <h3>` + this.messageFinal(isVictoire) + `</h3>
-        <div class="btns-fin-jeu">
-        <button type="button" class="btn-fin-jeu" id="btn-rejouer">REJOUER</button>
-        <button type="button" class="btn-fin-jeu" id="btn-scores">SCORES</button>
-        </button>
+        <div class="btns-menu">
+        <button type="button" class="btn-menu" id="btn-jouer">REJOUER</button>
+        <button type="button" class="btn-menu" id="btn-scores">SCORES</button>
         </div>
         `;
         document.getElementById("main").appendChild(this.divBackground);

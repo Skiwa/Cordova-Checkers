@@ -9,11 +9,13 @@
   </head>
   <body>
     <div id="main"></div>
+    <button>SCORES</button>
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="js/Plateau.js"></script>
     <script src="js/Jeu.js"></script>
     <script src="js/Pion.js"></script>
+    <script src="js/leaderboard.js"></script>
     <script src="js/Login.js"></script>
     <script src="js/fin_match.js"></script>
     <script src="js/socket.io.js"></script>
@@ -27,6 +29,7 @@
       var loginFormClass;
       var password; //Permet de relancer une partie via emit("login",...) sans repasser par le formulaire
       var pseudo; //Idem
+      var scoreBtn; //Gère l'affichage du tableau des scores
 
       if (!modeSolo) {
         console.log(
@@ -40,7 +43,10 @@
         socket.on("connection_ok", function() {
           //Crée et affiche le formulaire de connexion
           loginFormClass = new Login();
-
+          scoreBtn = document.getElementById("btn-scores");
+          scoreBtn.onclick = function() {
+          let leaderboardScreen = new leaderboard();
+          };
           //Récupère le formulaire dans le DOM
           let form = document.getElementById("theForm");
 
@@ -122,7 +128,8 @@
 
         //Génère l'écran de fin de match
         let finPartie = new fin_match(pseudo, isVainqueur);
-        let rejouerBouton = document.getElementById("btn-rejouer");
+        let rejouerBouton = document.getElementById("btn-jouer");
+        scoreBtn = document.getElementById("btn-scores");
 
         //Cherche une nouvelle partie si le bouton "rejouer" est cliqué
         rejouerBouton.onclick = function() {
