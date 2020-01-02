@@ -45,8 +45,15 @@
           loginFormClass = new Login();
           scoreBtn = document.getElementById("btn-scores");
           scoreBtn.onclick = function() {
-          let leaderboardScreen = new leaderboard();
-          };
+            socket.emit("score");
+          }
+
+          // TODO : Appeler score lors d'un clic + traiter/mettre en forme result: Array { _id (useless), name, nbVictoire }
+          socket.on("score.result", function(result) {
+            console.log(result);
+            let leaderboardScreen = new leaderboard(result);
+          });
+
           //Récupère le formulaire dans le DOM
           let form = document.getElementById("theForm");
 
@@ -118,6 +125,10 @@
         //jeu = new Jeu(modeSolo);
       }
 
+
+
+
+
       //<------------------- Fonctions -------------------------->
       //Gère la fin de partie
       function callFinPartie(pseudo, isVainqueur) {
@@ -134,8 +145,13 @@
         //Cherche une nouvelle partie si le bouton "rejouer" est cliqué
         rejouerBouton.onclick = function() {
           socket.emit("login", pseudo, password);
-        };
+        }
+
+        scoreBtn.onclick = function() {
+          socket.emit("score");
+          }
       }
+
     </script>
   </body>
 </html>

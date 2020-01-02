@@ -17,14 +17,16 @@ function newPartie(Joueur1, Joueur2) {
     J1: Joueur1,
     J2: Joueur2
   });
+  
   // Sauvegarde de cette instance dans mongoDb
   nouvellePartie.save()
-    .then(doc => {
-      console.log(doc) // affiche ce qui vient d'être ajouté
-    })
+    // .then(doc => {
+    //   console.log(doc) // affiche ce qui vient d'être ajouté
+    // })
     .catch(err => {
       console.error(err) // affiche erreur si problème
     });
+  
 }
 
 function selectColor() {
@@ -55,7 +57,19 @@ function inverseDeplacement(deplacement) {
   return inverseMove;
 }
 
+async function updateGagnant(pseudo){
+  await Partie.findOneAndUpdate(
+    { $or: [
+      { J1: pseudo },
+      { J2: pseudo }
+    ] }, 
+    { gagnant: pseudo },    
+    { sort: {'_id' : -1 }}
+  );
+}
+
 // <----------------- Exports ----------------->
 exports.newPartie = newPartie;
 exports.selectColor = selectColor;
 exports.inverseDeplacement = inverseDeplacement;
+exports.updateGagnant = updateGagnant;

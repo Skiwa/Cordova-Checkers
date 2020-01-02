@@ -27,20 +27,20 @@ io.on("connection", function (socket) {
     // Promesse d'addJoueur de type : data = { error:string , listeAttente: any[] }
     var obj = user_management.addJoueur(pseudo, password, socket.id);
     obj.then(function (data) {
-      console.log("Index Object : " + JSON.stringify(data));
+      // console.log("Index Object : " + JSON.stringify(data));
       if (data.error != "") {
         // Si erreur -> Bloque + envoie message vers client
         socket.emit("error_login", data.error);
       } else {
         // Si !erreur -> Déroulement normal Jeu
-
         listeAttente = data.listeAttente;
         room.addRoom(socket);
-        
+
         if (listeAttente.length >= 2) {
           game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur);
+          game_management.updateGagnant(listeAttente[0].nomJoueur);
           var color = game_management.selectColor();
-
+          //game_management.gagnantPartie(listeAttente[0].nomJoueur);
           io.to(`${listeAttente[0].socketId}`).emit(
             "ready",
             JSON.stringify({
@@ -63,20 +63,30 @@ io.on("connection", function (socket) {
     })
   });
 
+
   socket.on("deplacement-joueur-envoi", function (move) {
     // Appel game module pour inversion des déplacements
     var inverseMove = game_management.inverseDeplacement(move);
     // Recupere la room qui contient les joueurs de la partie où le déplacement a eu lieu
-    var currentRoom = Object.keys(socket.rooms).filter(item => item!=socket.id);
+    var currentRoom = Object.keys(socket.rooms).filter(item => item != socket.id);
     // Envoie du déplacement aux 2 joueurs
     socket.in(currentRoom).emit('deplacement-joueur-reception', inverseMove);
-    
+
   });
 
   socket.on("finPartie", function (pseudo) {
-    user_management.addVictoire(pseudo);
     user_management.getNbVictoires(pseudo);
+    user_management.addVictoire(pseudo);
+    game_management.updateGagnant(pseudo);
   });
+
+  socket.on("score", function () {
+    user_management.getAllUsersScore()
+      .then(dataU => {
+        console.log('Index data : ' + JSON.stringify(dataU));
+        socket.emit("score.result", dataU);
+      });
+  })
 
   socket.on("disconnect", function () {
     user_management.PlayerDisconnected(socket.id);

@@ -3,7 +3,7 @@
 //<----------------- Dépendances Node/Locales ----------------->
 const UserModel = require('../models/user');
 const Utilisateur = UserModel.Utilisateur;
-
+const bcrypt = require('bcryptjs');
 //<----------------- Fonctions ----------------->
 
 /**
@@ -12,22 +12,19 @@ const Utilisateur = UserModel.Utilisateur;
  */
 async function authenticate(data) {
 
-    // Futur hash password
-
     const user = await Utilisateur.findOne({ name: data.name });
     if (!user) {
         console.log("Service : User unauthenticate")
         return await create(data);
     } else {
-        const user = await Utilisateur.findOne({ name: data.name, password: data.password });
-        if (!user) {
-            console.log("Service : User authenticate error password");
-            // Retourne un objet avec erreur et pas d'utilisateur
-            return { error: "Mdp error", profile: {} }
-        } else {
+        if (await bcrypt.compare(data.password, user.password)) {
             console.log("Service : User authenticate success ");
             // Retourne un objet sans erreur et l'utilisateur authentifié
             return { error: "", profile: user }
+        } else {
+            console.log("Service : User authenticate error password");
+            // Retourne un objet avec erreur et pas d'utilisateur
+            return { error: "Mdp error", profile: {} }
         }
     }
 }
@@ -37,14 +34,16 @@ async function authenticate(data) {
  * @param data Informations renseignées de l'utilisateur 
  */
 async function create(data) {
+    // Hash password un salt
+    const hashPassword = await bcrypt.hash(data.password, 10);
 
     const user = new Utilisateur({
         name: data.name,
-        password: data.password,
+        password: hashPassword,
         nbVictoire: 0
     })
 
-    // Futur hash password
+    // console.log(user);
 
     //save user
     await user.save();
@@ -57,8 +56,8 @@ async function create(data) {
 /**
  * Fonction de récupération de tous les Utilisateurs
  */
-async function getAllUser() {
-    return await Utilisateur.find({});
+async function getAllUserScore() {
+    return await Utilisateur.find({}, ['name', 'nbVictoire']);
 }
 
 /**
@@ -81,6 +80,6 @@ async function updateNbVictory(name) {
 
 //<----------------- Exports ----------------->
 exports.authenticate = authenticate;
-exports.getAllUser = getAllUser;
+exports.getAllUserScore = getAllUserScore;
 exports.updateNbVictory = updateNbVictory;
 exports.getUserNbVictory = getUserNbVictory
