@@ -37,25 +37,25 @@ io.on("connection", function (socket) {
         room.addRoom(socket);
 
         if (listeAttente.length >= 2) {
-          game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur);
-          game_management.updateGagnant(listeAttente[0].nomJoueur);
-          var color = game_management.selectColor();
-          //game_management.gagnantPartie(listeAttente[0].nomJoueur);
-          io.to(`${listeAttente[0].socketId}`).emit(
-            "ready",
-            JSON.stringify({
-              adversaire: listeAttente[1].nomJoueur,
-              yourColor: color.color1
+          game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur)
+            .finally(() => {
+              var color = game_management.selectColor();
+              io.to(`${listeAttente[0].socketId}`).emit(
+                "ready",
+                JSON.stringify({
+                  adversaire: listeAttente[1].nomJoueur,
+                  yourColor: color.color1
+                })
+              );
+              io.to(`${listeAttente[1].socketId}`).emit(
+                "ready",
+                JSON.stringify({
+                  adversaire: listeAttente[0].nomJoueur,
+                  yourColor: color.color2
+                })
+              );
+              listeAttente.splice(0, 2);
             })
-          );
-          io.to(`${listeAttente[1].socketId}`).emit(
-            "ready",
-            JSON.stringify({
-              adversaire: listeAttente[0].nomJoueur,
-              yourColor: color.color2
-            })
-          );
-          listeAttente.splice(0, 2);
         } else {
           socket.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
         }
