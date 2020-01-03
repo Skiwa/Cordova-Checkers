@@ -18,7 +18,8 @@ let Schema = mongoose.Schema;
 var userSchema = new Schema({
     name: { type: String, required: true },
     password: String,
-    nbVictoire: Number
+    nbVictoire: Number,
+    nbPartie: Number
 });
 
 // Création d'un modèle qui respecte le schéma définit précédemment 
