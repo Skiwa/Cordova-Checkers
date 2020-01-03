@@ -65,7 +65,7 @@
             pseudo = form.pseudo.value;
             password = form.password.value;
             console.log("on a submit ! Bienvenue " + pseudo);
-            socket.emit("login", pseudo, password);
+            socket.emit("login", { name: pseudo, password: password }, 0);
             //form.onsubmit renvoie false pour empêcher le rafraîchissement de la page
             return false;
           };
@@ -142,7 +142,7 @@
 
         //Cherche une nouvelle partie si le bouton "rejouer" est cliqué
         rejouerBouton.onclick = function() {
-          socket.emit("login", pseudo, password);
+          socket.emit("login", { name: pseudo }, 1);
         };
 
         //Affiche le tableau des scores si le bouton "scores" est cliqué
