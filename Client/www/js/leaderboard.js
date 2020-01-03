@@ -26,9 +26,9 @@ class leaderboard {
         //Trie les joueurs par nombre de victoires. Ordre décroissant.
         const resultTrie = result
             .map((_a) => {
-            var { _id } = _a, items = __rest(_a, ["_id"]);
-            return items;
-        })
+                var { _id } = _a, items = __rest(_a, ["_id"]);
+                return items;
+            })
             .sort((b, a) => a.nbVictoire - b.nbVictoire);
         //Le div englobant le tableau
         divConteneur = document.createElement("div");
@@ -58,8 +58,9 @@ class leaderboard {
         let winTitle = firstRow.insertCell(2);
         winTitle.classList.add("rightCell");
         winTitle.innerText = "Victoires";
-        //Remplissage des cases du tableau avec resultTrie
-        for (let i = 0; i < 15; i++) {
+        //Remplissage des cases du tableau avec resultTrie 
+        // !!!! Non testé avec liste très grande
+        for (let i = 0; i < resultTrie.length; i++) {
             let row = scoreTab.insertRow(i + 1);
             let tdRank = row.insertCell(0);
             tdRank.classList.add("leftCell");

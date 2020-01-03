@@ -50,7 +50,7 @@
             socket.emit("score");
           };
 
-          // TODO :  traiter/mettre en forme result: Array { _id (useless), name, nbVictoire }
+          //Affiche les résultats des joueurs
           socket.on("score.result", function(result) {
             console.log(result);
             let leaderboardScreen = new leaderboard(result);
@@ -82,9 +82,9 @@
           socket.on("decoAutreJ", function(msg, pseudo) {
             console.log(msg);
             //Appel fin de partie
-            callFinPartie(pseudo, true)
+            callFinPartie(pseudo, true);
           });
-          
+
           socket.on("ready", function(msg) {
             console.log(JSON.parse(msg));
 
