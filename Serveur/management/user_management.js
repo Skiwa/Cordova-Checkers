@@ -1,5 +1,5 @@
 // <----------------- Dépendances Node/Locales ----------------->
-var userService = require('./service/user.service');
+var userService = require('../service/user.service');
 
 //<----------------- Variable Globales ----------------->
 
@@ -45,7 +45,6 @@ async function getAllUsersScore() {
  */
 function PlayerConnected(socketId, pseudo) {
   ListeAttentejoueurs.push({ socketId: socketId, nomJoueur: pseudo });
-  // console.log("Function Player List : " + JSON.stringify(ListeAttentejoueurs));
 }
 
 /**
@@ -53,7 +52,6 @@ function PlayerConnected(socketId, pseudo) {
  * @param socketId Id socket de l'utilisateur
  */
 function PlayerDisconnected(socketId) {
-  // console.log("liste attente entrée : " + JSON.stringify(ListeAttentejoueurs));
   ListeAttentejoueurs = ListeAttentejoueurs.filter(el => {
     return el.socketId != socketId;
   });
@@ -71,7 +69,6 @@ async function addJoueur(data, socketId, etat) {
     const userPromise = await userService.authenticate(data)
     if (userPromise.error != "") {
       // Si erreur retournée, on attribue le message à notre variable globale
-      // console.log(userPromise.error);
       error = userPromise.error
     } else {
       //Ajoute le joueur de type {socketId: socketId, nomJoueur: pseudo} à la liste d'attente
