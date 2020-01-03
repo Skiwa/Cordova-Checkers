@@ -41,6 +41,8 @@ io.on("connection", function (socket) {
           game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur)
             .finally(() => {
               var color = game_management.selectColor();
+              user_management.addPartie(listeAttente[0].nomJoueur);
+              user_management.addPartie(listeAttente[1].nomJoueur);
               io.to(`${listeAttente[0].socketId}`).emit(
                 "ready",
                 JSON.stringify({
@@ -84,7 +86,7 @@ io.on("connection", function (socket) {
   socket.on("score", function () {
     user_management.getAllUsersScore()
       .then(dataU => {
-        console.log('Index data : ' + JSON.stringify(dataU));
+        // console.log('Index data : ' + JSON.stringify(dataU));
         socket.emit("score.result", dataU);
       });
   })
@@ -94,14 +96,14 @@ io.on("connection", function (socket) {
     // On cherche la partie qui contient le socket id du joueur déconnecté
     game = game_management.findGame(socket.id);
     // Si on trouve
-    if (game != undefined){
+    if (game != undefined) {
       // Si le socket id du joueur déconnecté correspond au joueur 2
-      if(socket.id == game.idJ2){
+      if (socket.id == game.idJ2) {
         // On envoie un message au joueur 1 avec la page de fin de partie
         socket.to(game.idJ1).emit("decoAutreJ", "L'autre joueur s'est déconnecté vous avez donc gagner la partie", game.J1);
       }
       // Sinon on envoie un message au joueur 2 avec la page de fin de partie
-      socket.to(game.idJ2).emit("decoAutreJ", "L'autre joueur s'est déconnecté vous avez donc gagner la partie", game.J2);  
+      socket.to(game.idJ2).emit("decoAutreJ", "L'autre joueur s'est déconnecté vous avez donc gagner la partie", game.J2);
     };
   });
 });

@@ -41,7 +41,8 @@ async function create(data) {
     const user = new Utilisateur({
         name: data.name,
         password: hashPassword,
-        nbVictoire: 0
+        nbVictoire: 0,
+        nbPPartie: 0
     })
 
     // console.log(user);
@@ -58,7 +59,7 @@ async function create(data) {
  * Fonction de récupération de tous les Utilisateurs
  */
 async function getAllUserScore() {
-    return await Utilisateur.find({}, ['name', 'nbVictoire']);
+    return await Utilisateur.find({}, ['name', 'nbVictoire', 'nbPartie']);
 }
 
 /**
@@ -79,8 +80,18 @@ async function updateNbVictory(name) {
     await Utilisateur.findOneAndUpdate({ name: name }, { $inc: { nbVictoire: 1 } }, { upsert: true });
 }
 
+/**
+ * Fonction de mise à jour du nb de parties de l'utilisateur
+ * @param name Nom de l'utilisateur
+ */
+async function updateNbGame(name) {
+    // Cherche le joueur et met à jour son compteur de partie en l'incrémentant
+    await Utilisateur.findOneAndUpdate({ name: name }, { $inc: { nbPartie: 1 } }, { upsert: true });
+}
+
 //<----------------- Exports ----------------->
 exports.authenticate = authenticate;
 exports.getAllUserScore = getAllUserScore;
 exports.updateNbVictory = updateNbVictory;
 exports.getUserNbVictory = getUserNbVictory
+exports.updateNbGame = updateNbGame;

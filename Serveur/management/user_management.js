@@ -32,6 +32,17 @@ function addVictoire(pseudo) {
 }
 
 /**
+ * Fonction qui incrémente le nombre de parties de l'utilisateur
+ * @param pseudo Nom de l'utilisateur
+ */
+function addPartie(pseudo) {
+  userService.updateNbGame(pseudo)
+    .then(() => {
+      console.log("Game Successfully Incremented");
+    })
+}
+
+/**
  * Fonction qui récupère la liste de tous les utilisateur avec leur score (nbVictoire)
  */
 async function getAllUsersScore() {
@@ -85,6 +96,7 @@ async function addJoueur(data, socketId, etat) {
 
 // <----------------- Exports ----------------->
 exports.addJoueur = addJoueur;
+exports.addPartie = addPartie;
 exports.PlayerDisconnected = PlayerDisconnected;
 exports.getNbVictoires = getNbVictoires;
 exports.addVictoire = addVictoire;
