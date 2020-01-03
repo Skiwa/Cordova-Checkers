@@ -159,5 +159,17 @@ border-style: outset;
   background-color: rgb(240, 211, 182);
   width: 2em;
   height: 2em;
+}
 
+#score-tab td {
+display:table-cell;
+width: 15em;
+}
+
+.leftCell{
+  text-align: left;
+}
+
+.rightCell {
+  text-align: right;
 }

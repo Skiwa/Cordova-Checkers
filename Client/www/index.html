@@ -43,12 +43,14 @@
         socket.on("connection_ok", function() {
           //Crée et affiche le formulaire de connexion
           loginFormClass = new Login();
+
+          //Bouton d'affichage du tableau des scores
           scoreBtn = document.getElementById("btn-scores");
           scoreBtn.onclick = function() {
             socket.emit("score");
-          }
+          };
 
-          // TODO : Appeler score lors d'un clic + traiter/mettre en forme result: Array { _id (useless), name, nbVictoire }
+          // TODO :  traiter/mettre en forme result: Array { _id (useless), name, nbVictoire }
           socket.on("score.result", function(result) {
             console.log(result);
             let leaderboardScreen = new leaderboard(result);
@@ -125,10 +127,6 @@
         //jeu = new Jeu(modeSolo);
       }
 
-
-
-
-
       //<------------------- Fonctions -------------------------->
       //Gère la fin de partie
       function callFinPartie(pseudo, isVainqueur) {
@@ -145,13 +143,13 @@
         //Cherche une nouvelle partie si le bouton "rejouer" est cliqué
         rejouerBouton.onclick = function() {
           socket.emit("login", pseudo, password);
-        }
+        };
 
+        //Affiche le tableau des scores si le bouton "scores" est cliqué
         scoreBtn.onclick = function() {
           socket.emit("score");
-          }
+        };
       }
-
     </script>
   </body>
 </html>
