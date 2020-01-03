@@ -42,7 +42,7 @@ async function create(data) {
         name: data.name,
         password: hashPassword,
         nbVictoire: 0,
-        nbPPartie: 0
+        nbPartie: 0
     })
 
     // console.log(user);
