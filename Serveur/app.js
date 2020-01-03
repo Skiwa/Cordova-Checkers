@@ -4,8 +4,8 @@ const io = require("socket.io")(server);
 
 //Dépendances locales
 var user_management = require("./management/user_management");
-var game_management = require("./management//game_management");
-var address_management = require("./management//address_management");
+var game_management = require("./management/game_management");
+var address_management = require("./management/address_management");
 var bdd_connexion = require("./bdd_connexion");
 var room = require("./room");
 
