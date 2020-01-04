@@ -27,7 +27,7 @@ function getNbVictoires(pseudo) {
 function addVictoire(pseudo) {
   userService.updateNbVictory(pseudo)
     .then(() => {
-      console.log("Victory Successfully Updated !")
+      console.log("User's victory Successfully Updated")
     })
 }
 
@@ -38,7 +38,7 @@ function addVictoire(pseudo) {
 function addPartie(pseudo) {
   userService.updateNbGame(pseudo)
     .then(() => {
-      console.log("Game Successfully Incremented");
+      console.log("User's games Successfully Updated");
     })
 }
 
@@ -51,31 +51,30 @@ async function getAllUsersScore() {
 
 /**
  * Fonction d'ajout d'un joueur dans la liste d'attente
- * @param socketId Id socket de l'utilisateur
+ * @param socket Socket de l'utilisateur
  * @param pseudo Nom de l'utilisateur
  */
-function PlayerConnected(socketId, pseudo) {
-  ListeAttentejoueurs.push({ socketId: socketId, nomJoueur: pseudo });
+function PlayerConnected(socket, pseudo) {
+  ListeAttentejoueurs.push({ socket: socket, nomJoueur: pseudo });
 }
 
 /**
  * Fonction de suppression d'un joueur dans liste d'attente
- * @param socketId Id socket de l'utilisateur
+ * @param socket Socket de l'utilisateur
  */
-function PlayerDisconnected(socketId) {
+function PlayerDisconnected(socket) {
   ListeAttentejoueurs = ListeAttentejoueurs.filter(el => {
-    return el.socketId != socketId;
+    return el.socket.id != socket.id;
   });
-  console.log("liste attente en sortie : " + JSON.stringify(ListeAttentejoueurs));
 }
 
 /**
  * Fonction authentification/ajout d'utilisateur dans la bdd et la liste d'attente
  * @param data Données de l'utilisateur de type { name , password } ou { name }
- * @param socketId Id socket de l'utilisateur
+ * @param socket Socket de l'utilisateur
  * @param etat Etat de l'utilisateur 0 = pas authentifié, 1 = déjà authentifié
  */
-async function addJoueur(data, socketId, etat) {
+async function addJoueur(data, socket, etat) {
   if (etat == 0) {
     const userPromise = await userService.authenticate(data)
     if (userPromise.error != "") {
@@ -83,11 +82,11 @@ async function addJoueur(data, socketId, etat) {
       error = userPromise.error
     } else {
       //Ajoute le joueur de type {socketId: socketId, nomJoueur: pseudo} à la liste d'attente
-      PlayerConnected(socketId, userPromise.profile.name)
+      PlayerConnected(socket, userPromise.profile.name)
       error = "";
     }
   } else if (etat == 1) {
-    PlayerConnected(socketId, data.name)
+    PlayerConnected(socket, data.name)
     error = "";
   }
   //Retourne un objet de type { erreur(string) , notre liste d'attente }

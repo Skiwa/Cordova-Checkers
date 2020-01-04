@@ -23,47 +23,49 @@ io.on("connection", function (socket) {
   console.log("un client s'est connecté");
   socket.emit("connection_ok");
   // Login du joueur entrant
-  socket.on("login", function (userData, etat) {
-    // Promesse d'addJoueur de type : data = { error:string , listeAttente: any[] }
-    var obj = user_management.addJoueur(userData, socket.id, etat);
-    obj.then(function (data) {
-      // console.log("Index Object : " + JSON.stringify(data));
-      if (data.error != "") {
-        // Si erreur -> Bloque + envoie message vers client
-        socket.emit("error_login", data.error);
-      } else {
-        // Si !erreur -> Déroulement normal Jeu
-        listeAttente = data.listeAttente;
-        room.addRoom(socket);
+  socket.on("login", async function (userData, etat) {
+    var currentRoom = Object.keys(socket.rooms).filter(item => item != socket.id);
+    // Check si le socket est dans une room en arrivant
+    if (socket.adapter.rooms[currentRoom]) {
+      socket.leave(currentRoom);
+    }
 
-        if (listeAttente.length >= 2) {
-          game_management.addList(listeAttente[0].socketId, listeAttente[0].nomJoueur, listeAttente[1].socketId, listeAttente[1].nomJoueur);
-          game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur)
-            .finally(() => {
-              var color = game_management.selectColor();
-              user_management.addPartie(listeAttente[0].nomJoueur);
-              user_management.addPartie(listeAttente[1].nomJoueur);
-              io.to(`${listeAttente[0].socketId}`).emit(
-                "ready",
-                JSON.stringify({
-                  adversaire: listeAttente[1].nomJoueur,
-                  yourColor: color.color1
-                })
-              );
-              io.to(`${listeAttente[1].socketId}`).emit(
-                "ready",
-                JSON.stringify({
-                  adversaire: listeAttente[0].nomJoueur,
-                  yourColor: color.color2
-                })
-              );
-              listeAttente.splice(0, 2);
-            })
-        } else {
-          socket.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
-        }
+    // Promesse d'addJoueur de type : data = { error:string , listeAttente: any[] }
+    var obj = await user_management.addJoueur(userData, socket, etat);
+    // console.log("Index Object : " + JSON.stringify(data));
+    if (obj.error != "") {
+      // Si erreur -> Bloque + envoie message vers client
+      socket.emit("error_login", obj.error);
+    } else {
+      // Si !erreur -> Déroulement normal Jeu
+      listeAttente = obj.listeAttente;
+      if (listeAttente.length >= 2) {
+        game_management.addList(listeAttente[0].socket.id, listeAttente[0].nomJoueur, listeAttente[1].socket.id, listeAttente[1].nomJoueur);
+        await game_management.newPartie(listeAttente[0].nomJoueur, listeAttente[1].nomJoueur);
+        var color = game_management.selectColor();
+        user_management.addPartie(listeAttente[0].nomJoueur);
+        user_management.addPartie(listeAttente[1].nomJoueur);
+        await room.addRoom(listeAttente[0].socket)
+        await room.addRoom(listeAttente[1].socket)
+        io.to(`${listeAttente[0].socket.id}`).emit(
+          "ready",
+          JSON.stringify({
+            adversaire: listeAttente[1].nomJoueur,
+            yourColor: color.color1
+          })
+        );
+        io.to(`${listeAttente[1].socket.id}`).emit(
+          "ready",
+          JSON.stringify({
+            adversaire: listeAttente[0].nomJoueur,
+            yourColor: color.color2
+          })
+        );
+        listeAttente.splice(0, 2);
+      } else {
+        socket.emit("notReady", "Nous vous cherchons un adversaire, patientez..");
       }
-    })
+    }
   });
 
 
@@ -77,10 +79,10 @@ io.on("connection", function (socket) {
 
   });
 
-  socket.on("finPartie", function (pseudo) {
+  socket.on("finPartie", async function (pseudo) {
     user_management.addVictoire(pseudo);
+    await game_management.updateGagnant(pseudo);
     user_management.getNbVictoires(pseudo);
-    game_management.updateGagnant(pseudo);
   });
 
   socket.on("score", function () {
@@ -92,7 +94,7 @@ io.on("connection", function (socket) {
   })
 
   socket.on("disconnect", function () {
-    user_management.PlayerDisconnected(socket.id);
+    user_management.PlayerDisconnected(socket);
     // On cherche la partie qui contient le socket id du joueur déconnecté
     game = game_management.findGame(socket.id);
     // Si on trouve
