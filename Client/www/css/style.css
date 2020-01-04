@@ -10,7 +10,7 @@ body {
   justify-content: center;
 }
 
-h1 {
+h1, .popup-conteneur h1 {
 font-size: calc(24px + 1vw);
 }
 
@@ -76,14 +76,15 @@ h3 {
   }
 
 .popup-conteneur {
+  overflow: auto;
     position: relative;
     margin:auto;
     margin-top: 5vh;
-    padding: 20px;
+    padding: 1.5em;
     padding-bottom: 10px;
     background: rgb(240, 211, 182);
     border-radius: 5px;
-    width: 70vw;
+    width: 80vw;
     max-width: 500px;
     text-align: center;
     border:none;
@@ -97,6 +98,7 @@ h3 {
     margin:auto;
     padding:0.5vw;
     font-family: Tahoma, Arial, sans-serif;
+    font-size: calc(8px + 1vw);
 }
 
 
@@ -161,15 +163,21 @@ border-style: outset;
   height: 2em;
 }
 
+#score-tab {
+  width: 90vw;
+
+}
+
 #score-tab td {
 display:table-cell;
-width: 15em;
+padding:0;
 }
 
-.leftCell{
-  text-align: left;
+.bigCell {
+width: 40vw;;
 }
 
-.rightCell {
-  text-align: right;
+.littleCell{
+  width: 13vw;
 }
+

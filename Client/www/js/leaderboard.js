@@ -1,12 +1,3 @@
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
-};
 class leaderboard {
     constructor(result) {
         this.divBackground = document.createElement("div"); //Element contenant la popup de tableau des scores
@@ -23,13 +14,17 @@ class leaderboard {
     afficherLeaderboard(result) {
         let divConteneur;
         let closeBtn;
-        //Trie les joueurs par nombre de victoires. Ordre décroissant.
-        const resultTrie = result
-            .map((_a) => {
-                var { _id } = _a, items = __rest(_a, ["_id"]);
-                return items;
-            })
-            .sort((b, a) => a.nbVictoire - b.nbVictoire);
+        //Trie les joueurs par nombre de victoires pondéré par taux de victoire. Ordre décroissant.
+        const resultTrie = result.sort(function (b, a) {
+            //Contrôle la division par 0
+            if (b.nbPartie == 0) {
+                return 1;
+            }
+            if (a.nbPartie == 0) {
+                return -1;
+            }
+            return a.nbVictoire * (a.nbVictoire / a.nbPartie) - b.nbVictoire * (b.nbVictoire / b.nbPartie);
+        });
         //Le div englobant le tableau
         divConteneur = document.createElement("div");
         divConteneur.classList.add("popup-conteneur");
@@ -51,25 +46,32 @@ class leaderboard {
         //La 1ère ligne du tableau contenant les titres des colonnes
         let firstRow = scoreTab.insertRow(0);
         let rankTitle = firstRow.insertCell(0);
-        rankTitle.classList.add("leftCell");
+        rankTitle.classList.add("littleCell");
         rankTitle.innerText = "Rang";
         let nameTitle = firstRow.insertCell(1);
+        nameTitle.classList.add("bigCell");
         nameTitle.innerText = "Nom";
         let winTitle = firstRow.insertCell(2);
-        winTitle.classList.add("rightCell");
+        winTitle.classList.add("littleCell");
         winTitle.innerText = "Victoires";
-        //Remplissage des cases du tableau avec resultTrie 
-        // !!!! Non testé avec liste très grande
-        for (let i = 0; i < resultTrie.length; i++) {
+        let partiesTitle = firstRow.insertCell(3);
+        partiesTitle.classList.add("littleCell");
+        partiesTitle.innerText = "Taux";
+        //Remplissage des cases du tableau avec resultTrie
+        for (let i = 0; i < resultTrie.length && i < 15; i++) {
             let row = scoreTab.insertRow(i + 1);
             let tdRank = row.insertCell(0);
-            tdRank.classList.add("leftCell");
+            tdRank.classList.add("littleCell");
             tdRank.innerText = (i + 1).toString();
             let tdName = row.insertCell(1);
+            tdName.classList.add("bigCell");
             tdName.innerText = resultTrie[i].name;
             let tdWins = row.insertCell(2);
-            tdWins.classList.add("rightCell");
+            tdWins.classList.add("littleCell");
             tdWins.innerText = resultTrie[i].nbVictoire;
+            let tdParties = row.insertCell(3);
+            tdParties.classList.add("littleCell");
+            tdParties.innerHTML = resultTrie[i].nbPartie != 0 ? ((resultTrie[i].nbVictoire / resultTrie[i].nbPartie) * 100) + "%" : "0%";
         }
         //Ajout de la fenêtre au DOM de la apge
         document.getElementById("main").appendChild(this.divBackground);
