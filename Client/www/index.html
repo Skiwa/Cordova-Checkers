@@ -82,7 +82,7 @@
           socket.on("decoAutreJ", function(msg, pseudo) {
             console.log(msg);
             //Appel fin de partie
-            callFinPartie(pseudo, true);
+            callFinPartie(pseudo,true, true);
           });
 
           socket.on("ready", function(msg) {
@@ -103,7 +103,7 @@
 
               //Vérifie si la partie est terminée
               if (jeu.isOver) {
-                callFinPartie(pseudo, true);
+                callFinPartie(pseudo, false, true);
               }
             });
 
@@ -117,7 +117,7 @@
               );
               //Vérifie si la partie est terminée
               if (jeu.isOver) {
-                callFinPartie(pseudo, false);
+                callFinPartie(pseudo,false, false);
               }
             });
           });
@@ -128,21 +128,21 @@
           "background: #222; color: #AFDA54;font-size:1.25em"
         );
         //Décommenter pour tester l'ecran de fin de partie en modeSolo
-        let finPartie = new fin_match("Bernard", false);
+        let finPartie = new fin_match(false, false);
 
         //jeu = new Jeu(modeSolo);
       }
 
       //<------------------- Fonctions -------------------------->
       //Gère la fin de partie
-      function callFinPartie(pseudo, isVainqueur) {
+      function callFinPartie(pseudo, isAbandon, isVainqueur) {
         //Uniquement le vainqueur emmet au serveur
         if (isVainqueur) {
           socket.emit("finPartie", pseudo);
         }
 
         //Génère l'écran de fin de match
-        let finPartie = new fin_match(pseudo, isVainqueur);
+        let finPartie = new fin_match(isAbandon, isVainqueur);
         let rejouerBouton = document.getElementById("btn-jouer");
         scoreBtn = document.getElementById("btn-scores");
 

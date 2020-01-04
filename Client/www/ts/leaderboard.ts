@@ -92,7 +92,7 @@ class leaderboard {
 
       let tdParties = row.insertCell(3);
       tdParties.classList.add("littleCell");
-      tdParties.innerHTML = resultTrie[i].nbPartie != 0 ? ((resultTrie[i].nbVictoire / resultTrie[i].nbPartie)*100) + "%" : "0%";
+      tdParties.innerHTML = resultTrie[i].nbPartie != 0 ? Math.round((resultTrie[i].nbVictoire / resultTrie[i].nbPartie)*100) + "%" : "0%";
 
     }
 
