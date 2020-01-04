@@ -262,6 +262,8 @@ class Jeu {
     tourSuivant() {
         this.tour++;
         this.couleurJoueurEnCours = this.couleurJoueurEnCours === "blanc" ? "noir" : "blanc";
+        //Indique aux joueurs qui a la main
+        document.getElementById("quiQuiJoue").innerHTML = "Joueur : <br> " + this.couleurJoueurEnCours.toUpperCase();
         console.log("Tour du joueur", this.couleurJoueurEnCours);
     }
     /**
@@ -310,6 +312,10 @@ class Jeu {
         plateau.appendChild(plateau_body);
         document.getElementById("main").innerHTML = "";
         document.getElementById("main").appendChild(plateau);
+        let quiQuiJoue = document.createElement("div");
+        quiQuiJoue.id = "quiQuiJoue";
+        quiQuiJoue.innerHTML = "Joueur : <br> NOIR";
+        document.getElementById("main").appendChild(quiQuiJoue);
     }
     /**
      * Mouvement d'un ennemi.

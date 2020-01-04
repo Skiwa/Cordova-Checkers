@@ -3,15 +3,35 @@ body {
   background-color: rgb(206, 185, 165);
 }
 
-#main,
-#main2 {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
+@media screen and (orientation: portrait) {
+  #main,
+  #main2 {
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+  }
 }
 
-h1, .popup-conteneur h1 {
-font-size: calc(24px + 1vw);
+@media screen and (orientation: landscape) {
+  #main,
+  #main2 {
+    height: 100vh;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+  }
+
+  /* Indicateur du joueur ayant la main */
+  #quiQuiJoue {
+    padding-top: 40vh;
+    padding-bottom: 40vh;
+  }
+}
+
+h1,
+.popup-conteneur h1 {
+  font-size: calc(24px + 1vw);
 }
 
 h3 {
@@ -22,7 +42,7 @@ h3 {
 .plateau {
   border: #55310d solid 1vmin;
   border-radius: 5px;
-  border-spacing:0px;
+  border-spacing: 0px;
 }
 
 .plateau--case {
@@ -64,60 +84,65 @@ h3 {
   filter: drop-shadow(0px 0px 5px rgba(247, 8, 32, 1));
 }
 
+/* Indicateur du joueur ayant la main */
+#quiQuiJoue {
+  font-weight: bold;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: calc(8px + 1vw);
+}
 
 /* Style général à toutes les popup de l'appli */
 #popup-fond {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(127, 72, 16, 0.6);
-  }
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(127, 72, 16, 0.6);
+}
 
 .popup-conteneur {
   overflow: auto;
-    position: relative;
-    margin:auto;
-    margin-top: 5vh;
-    padding: 1.5em;
-    padding-bottom: 10px;
-    background: rgb(240, 211, 182);
-    border-radius: 5px;
-    width: 80vw;
-    max-width: 500px;
-    text-align: center;
-    border:none;
+  position: relative;
+  margin: auto;
+  margin-top: 5vh;
+  padding: 1.5em;
+  padding-bottom: 10px;
+  background: rgb(240, 211, 182);
+  border-radius: 5px;
+  width: 80vw;
+  max-width: 500px;
+  text-align: center;
+  border: none;
 }
 
 .popup-conteneur * {
-    border: none;
-    font-weight: bold;
-    color: #333;
-    display:block;
-    margin:auto;
-    padding:0.5vw;
-    font-family: Tahoma, Arial, sans-serif;
-    font-size: calc(8px + 1vw);
+  border: none;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin: auto;
+  padding: 0.5vw;
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: calc(8px + 1vw);
 }
-
 
 /* Menu(popup) de début et fin de partie */
 div.btns-menu {
   display: inline-flex;
-  width:100%;
+  width: 100%;
   padding-left: 0%;
-
 }
 
-.btn-menu{
-width: 50%;
-margin-top: 1em;
-border-radius: 5px;
-border:solid 0.2em rgba(127, 72, 16);
-font-size: calc(16px + 1vw);
-box-shadow: 0 0.15em #999;
-border-style: outset;
+.btn-menu {
+  width: 50%;
+  margin-top: 1em;
+  border-radius: 5px;
+  border: solid 0.2em rgba(127, 72, 16);
+  font-size: calc(16px + 1vw);
+  box-shadow: 0 0.15em #999;
+  border-style: outset;
 }
 
 .btn-menu:active {
@@ -125,16 +150,16 @@ border-style: outset;
   transform: translateY(4px);
 }
 
-#btn-jouer{
+#btn-jouer {
   background-color: rgba(127, 72, 16);
   align-self: flex-start;
   margin-right: 0.5em;
-  color:rgb(240, 211, 182);
+  color: rgb(240, 211, 182);
 }
 
 #btn-jouer:hover {
   background-color: rgb(240, 211, 182);
-  color:rgba(127, 72, 16);
+  color: rgba(127, 72, 16);
 }
 
 #btn-scores {
@@ -146,17 +171,16 @@ border-style: outset;
 
 #btn-scores:hover {
   background-color: rgba(127, 72, 16);
-  color:rgb(240, 211, 182);
+  color: rgb(240, 211, 182);
 }
-
 
 /* tableau des scores */
 
 .close-btn {
   position: absolute;
-  top:0.5em;
-  right:0;
-  background-image: url('../images/cross_svg_15x15.svg') ;
+  top: 0.5em;
+  right: 0;
+  background-image: url("../images/cross_svg_15x15.svg");
   background-repeat: no-repeat;
   background-color: rgb(240, 211, 182);
   width: 2em;
@@ -165,19 +189,17 @@ border-style: outset;
 
 #score-tab {
   width: 90vw;
-
 }
 
 #score-tab td {
-display:table-cell;
-padding:0;
+  display: table-cell;
+  padding: 0;
 }
 
 .bigCell {
-width: 40vw;;
+  width: 40vw;
 }
 
-.littleCell{
+.littleCell {
   width: 13vw;
 }
-
