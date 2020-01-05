@@ -21,7 +21,7 @@
     <script>
       /* -- Options -- */
       const modeSolo = false; //jeu de dames en solo
-      const adresseServeur = "http://192.168.1.1"; //Adresse du serveur
+      const adresseServeur = "http://192.168.1.18"; //Adresse du serveur
       const portServeur = 3000; //Port du serveur, par défaut à 3000
 
       var jeu;
@@ -81,7 +81,9 @@
           socket.on("decoAutreJ", function(msg, pseudo) {
             console.log(msg);
             //Appel fin de partie
-            callFinPartie(pseudo,true, true);
+            if(!jeu.isOver){
+              callFinPartie(pseudo,true, true);
+            }
           });
 
           socket.on("ready", function(msg) {
@@ -142,6 +144,7 @@
 
         //Génère l'écran de fin de match
         let finPartie = new fin_match(isAbandon, isVainqueur);
+        
         let rejouerBouton = document.getElementById("btn-jouer");
         scoreBtn = document.getElementById("btn-scores");
 
