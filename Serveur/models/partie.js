@@ -12,8 +12,7 @@ let Schema = mongoose.Schema;
 var partieSchema = new Schema({
     J1: { type: String, required: true },
     J2: { type: String, required: true },
-    gagnant: String,
-    duree: Number
+    gagnant: String
 });
 
 // Création d'un modèle qui respecte le schéma définit précédemment 

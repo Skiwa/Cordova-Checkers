@@ -81,8 +81,8 @@
           socket.on("decoAutreJ", function(msg, pseudo) {
             console.log(msg);
             //Appel fin de partie
-            if(!jeu.isOver){
-              callFinPartie(pseudo,true, true);
+            if (!jeu.isOver) {
+              callFinPartie(pseudo, true, true);
             }
           });
 
@@ -118,7 +118,7 @@
               );
               //Vérifie si la partie est terminée
               if (jeu.isOver) {
-                callFinPartie(pseudo,false, false);
+                callFinPartie(pseudo, false, false);
               }
             });
           });
@@ -144,7 +144,7 @@
 
         //Génère l'écran de fin de match
         let finPartie = new fin_match(isAbandon, isVainqueur);
-        
+
         let rejouerBouton = document.getElementById("btn-jouer");
         scoreBtn = document.getElementById("btn-scores");
 

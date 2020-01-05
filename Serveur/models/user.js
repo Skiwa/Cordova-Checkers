@@ -16,8 +16,8 @@ let Schema = mongoose.Schema;
 
 //Definition d'un schéma pour modéliser les données (<=> à une collection)
 var userSchema = new Schema({
-    name: { type: String, required: true },
-    password: String,
+    name: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
     nbVictoire: Number,
     nbPartie: Number
 });
