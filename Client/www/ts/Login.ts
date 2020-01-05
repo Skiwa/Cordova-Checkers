@@ -16,7 +16,7 @@ class Login {
         <form id="theForm">
         <h1>Se connecter</h1>
         <label for="pseudo">Pseudo</label>
-        <input type="text" placeholder="Votre pseudo" name="pseudo" required>
+        <input type="text" placeholder="Votre pseudo" name="pseudo" maxlength="8" required>
         <label for="password">Password</label>
         <input type="password" placeholder="Votre password" name="password" required>
         <div class="btns-menu">
