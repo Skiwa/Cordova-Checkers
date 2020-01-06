@@ -24,7 +24,6 @@ class Login {
         <button type="button" class="btn-menu" id="btn-scores">SCORES</button>
         </div>
         </form>
-
         </div>
       `;
 

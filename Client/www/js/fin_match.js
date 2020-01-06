@@ -1,6 +1,6 @@
 class fin_match {
     constructor(isAbandon, isVictoire) {
-        this.divBackground = document.createElement("div"); //Elelement contenant la popup de fin de match 
+        this.divBackground = document.createElement("div"); //Element contenant la popup de fin de match 
         //Définit le style de l'élément racine de la popup
         this.divBackground.id = "popup-fond";
         //Génère et affiche la popup de fin de partie

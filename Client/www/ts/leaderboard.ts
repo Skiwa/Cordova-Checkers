@@ -18,9 +18,10 @@ class leaderboard {
   afficherLeaderboard(result) {
       let divConteneur;
       let closeBtn;
+      let self = this;
 
 
-    //Trie les joueurs par nombre de victoires pondéré par taux de victoire. Ordre décroissant.
+    //Trie les joueurs par nombre de victoires pondéré par le taux de victoire. Ordre décroissant.
     const resultTrie = result.sort(function(b, a){ 
      //Contrôle la division par 0
     if (b.nbPartie == 0){
@@ -96,10 +97,9 @@ class leaderboard {
 
     }
 
-   //Ajout de la fenêtre au DOM de la apge
+   //Ajout de la fenêtre au DOM de la page
     document.getElementById("main").appendChild(this.divBackground);
 
-    let self = this;
 
     //Event de fermeture du tableau des scores
     document.getElementById("close-leaderboard-btn").onclick = function() {

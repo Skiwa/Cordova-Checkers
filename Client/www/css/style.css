@@ -3,17 +3,15 @@ body {
   background-color: rgb(206, 185, 165);
 }
 
-
 @media screen and (orientation: portrait) {
   #main,
   #main2 {
     height: 100vh;
     display: flex;
-     flex-flow: column; 
+    flex-flow: column;
     text-align: center;
   }
 }
-
 
 @media screen and (orientation: landscape) {
   #main,
@@ -30,7 +28,6 @@ body {
     padding-bottom: 40vh;
   }
 }
-
 
 h1,
 .popup-conteneur h1 {
@@ -199,15 +196,12 @@ div.btns-menu {
   padding: 0;
   font-size: calc(7px + 0.5vw);
   overflow: hidden;
-
 }
 
 .bigCell {
   width: 40vw;
- /* max-width: 250px; */
 }
 
 .littleCell {
   width: 13vw;
- /* max-width: 83px; */
 }

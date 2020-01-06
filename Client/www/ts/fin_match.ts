@@ -1,5 +1,5 @@
 class fin_match {
-    divBackground = document.createElement("div");      //Elelement contenant la popup de fin de match 
+    divBackground = document.createElement("div");      //Element contenant la popup de fin de match 
 
     constructor(isAbandon, isVictoire) {
 

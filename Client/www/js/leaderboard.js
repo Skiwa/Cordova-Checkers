@@ -14,7 +14,8 @@ class leaderboard {
     afficherLeaderboard(result) {
         let divConteneur;
         let closeBtn;
-        //Trie les joueurs par nombre de victoires pondéré par taux de victoire. Ordre décroissant.
+        let self = this;
+        //Trie les joueurs par nombre de victoires pondéré par le taux de victoire. Ordre décroissant.
         const resultTrie = result.sort(function (b, a) {
             //Contrôle la division par 0
             if (b.nbPartie == 0) {
@@ -73,9 +74,8 @@ class leaderboard {
             tdParties.classList.add("littleCell");
             tdParties.innerHTML = resultTrie[i].nbPartie != 0 ? Math.round((resultTrie[i].nbVictoire / resultTrie[i].nbPartie) * 100) + "%" : "0%";
         }
-        //Ajout de la fenêtre au DOM de la apge
+        //Ajout de la fenêtre au DOM de la page
         document.getElementById("main").appendChild(this.divBackground);
-        let self = this;
         //Event de fermeture du tableau des scores
         document.getElementById("close-leaderboard-btn").onclick = function () {
             let main = document.getElementById("main");
