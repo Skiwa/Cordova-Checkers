@@ -32,7 +32,7 @@ io.on("connection", function (socket) {
 
     // Promesse d'addJoueur de type : data = { error:string , listeAttente: any[] }
     var obj = await user_management.addJoueur(userData, socket, etat);
-    // console.log("Index Object : " + JSON.stringify(data));
+
     if (obj.error != "") {
       // Si erreur -> Bloque + envoie message vers client
       socket.emit("error_login", obj.error);

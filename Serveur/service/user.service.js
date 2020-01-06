@@ -45,11 +45,12 @@ async function create(data) {
         nbPartie: 0
     })
 
-    // console.log(user);
-
     //save user
-    await user.save();
-    console.log("Service : User unauthenticate add success");
+    await user.save()
+        .catch(err => {
+            console.error(err);
+        })
+    console.log("Service : User unauthenticate's save success");
 
     // Retourne un objet sans erreur et l'utilisateur crée
     return { error: "", profile: user }

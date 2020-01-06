@@ -33,9 +33,6 @@ async function create(data) {
 
     // Sauvegarde de cette instance dans mongoDb
     await nouvellePartie.save()
-        // .then(doc => {
-        //   console.log(doc) // affiche ce qui vient d'être ajouté
-        // })
         .catch(err => {
             console.error(err) // affiche erreur si problème
         });
