@@ -194,6 +194,9 @@ class Plateau{
                                 }
                                 // - Si la case contient un pion
                                 else{
+                                    if (aRencontrePion) {
+                                        break;
+                                    }
                                     aRencontrePion=true;
                                 }
 

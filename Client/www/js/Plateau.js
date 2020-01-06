@@ -170,6 +170,9 @@ class Plateau {
                                     res.push({ x: positionPion.x + (k * i), y: positionPion.y + (k * j) });
                                 }
                                 else {
+                                    if (aRencontrePion) {
+                                        break;
+                                    }
                                     aRencontrePion = true;
                                 }
                                 // - Si on a rencontré un pion avant et si la case actuelle est vide
