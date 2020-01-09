@@ -44,6 +44,7 @@ function addPartie(pseudo) {
 
 /**
  * Fonction qui récupère la liste de tous les utilisateur avec leur score (nbVictoire)
+ * @return Une promesse de liste de Documents
  */
 async function getAllUsersScore() {
   return await userService.getAllUserScore();
@@ -73,6 +74,7 @@ function PlayerDisconnected(socket) {
  * @param data Données de l'utilisateur de type { name , password } ou { name }
  * @param socket Socket de l'utilisateur
  * @param etat Etat de l'utilisateur 0 = pas authentifié, 1 = déjà authentifié
+ * @return Une promesse d'un objet { error , listeAttente }
  */
 async function addJoueur(data, socket, etat) {
   if (etat == 0) {

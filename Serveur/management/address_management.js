@@ -5,6 +5,7 @@ var os = require("os");
  * Récupère les addresses du serveur.
  * Utile pour les logs et savoir à quelle addresse se connecter
  * @param portServeur Port du serveur à écouter
+ * @return Adresses IP disponibles
  */
 function getAddressesIp(portServeur) {
   var networkInterfaces = Object.values(os.networkInterfaces())

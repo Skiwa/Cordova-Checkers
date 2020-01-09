@@ -9,6 +9,7 @@ let ListGame = [];
 
 /**
  * Fonction de choix random des couleurs de jeu
+ * @return Un objet { color1 , color2 }
  */
 function selectColor() {
   var color1 = Math.random() >= 0.5 ? "noir" : "blanc";
@@ -20,6 +21,7 @@ function selectColor() {
 /**
  * Fonction d'inversion des déplacements
  * @param deplacement Un objet de type {anciennePosition:{x,y},nouvellePosition:{x,y}}
+ * @return Un objet { anciennePosition {x,y}, nouvellePosition {x,y} }
  */
 function inverseDeplacement(deplacement) {
   var inverseMove = {
@@ -60,21 +62,22 @@ async function updateGagnant(pseudo) {
  * @param socketId2 socket id du joueur 2
  * @param Joueur2 Nom du joueur 2
  */
-function addList(socketId1, Joueur1,socketId2, Joueur2){
-  var game = {idJ1: socketId1, J1: Joueur1, idJ2:socketId2, J2: Joueur2};
+function addList(socketId1, Joueur1, socketId2, Joueur2) {
+  var game = { idJ1: socketId1, J1: Joueur1, idJ2: socketId2, J2: Joueur2 };
   var obj = Object.create(game);
-  ListGame.push(obj); 
+  ListGame.push(obj);
 }
 
 /**
  * Fonction qui retrouve la partie dans laquelle se trouve le joueur qui s'est déconnecté
  * @param socketId socket id du joueur qui s'est déconnecté
+ * @return La partie en question { idJ1 , J1 , idJ2 , J2 }
  */
-function findGame(socketId){
+function findGame(socketId) {
   find1 = ListGame.find(joueur => joueur.idJ1 === socketId);
   find2 = ListGame.find(joueur => joueur.idJ2 === socketId);
-  if (find1 == undefined){
-     return find2;
+  if (find1 == undefined) {
+    return find2;
   }
   return find1;
 }

@@ -10,6 +10,7 @@ const Utilisateur = UserModel.Utilisateur;
 /**
  * Fonction d'authentification d'un utilisateur
  * @param data Informations renseignées de l'utilisateur 
+ * @return Une promesse d'un objet { error , profile }
  */
 async function authenticate(data) {
 
@@ -33,9 +34,10 @@ async function authenticate(data) {
 /**
  * Fonction de création et sauvegarde d'un utilisateur
  * @param data Informations renseignées de l'utilisateur 
+ * @return Une promesse d'un objet { error , profile }
  */
 async function create(data) {
-    // Hash password un salt
+    // Hash password avec un salt
     const hashPassword = await bcrypt.hash(data.password, 10);
 
     const user = new Utilisateur({
@@ -45,7 +47,7 @@ async function create(data) {
         nbPartie: 0
     })
 
-    //save user
+    //Sauvegarde l'utilisateur
     await user.save()
         .catch(err => {
             console.error(err);
@@ -58,6 +60,7 @@ async function create(data) {
 
 /**
  * Fonction de récupération de tous les Utilisateurs
+ * @return Une promesse de liste de Document
  */
 async function getAllUserScore() {
     return await Utilisateur.find({}, ['name', 'nbVictoire', 'nbPartie']);
@@ -66,6 +69,7 @@ async function getAllUserScore() {
 /**
  * Fonction de récupération du nb de victoires de l'utilisateur
  * @param name Nom de l'utilisateur
+ * @return Une promesse de liste de Document
  */
 async function getUserNbVictory(name) {
     return await Utilisateur.find({ name: name }, 'nbVictoire');
